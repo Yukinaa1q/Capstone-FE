@@ -13,7 +13,7 @@ Nhập môn FE :))
 const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
   return (
     <div className="w-full">
-      {/* <img src={Logo} alt="Tucour Brand Logo" className="inline"/> */}
+      <img src={Logo} alt="Tucour Brand Logo" className="inline w-10 h-10"/>
       <span>TuCour</span>
     </div>
   );
