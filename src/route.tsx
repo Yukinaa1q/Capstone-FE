@@ -2,21 +2,21 @@ import { createBrowserRouter } from "react-router";
 
 import RootLayout from "@/layouts/RootLayout";
 import Login from "@/pages/Login";
-import Signup from "@/pages/Signup";
+import Signup from "@/pages/Singup/Signup";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <RootLayout/>,
+    element: <RootLayout />,
   },
   {
     path: "/login",
-    element: <Login/>
+    element: <Login />,
   },
   {
     path: "/signup",
-    element: <Signup/>
-  }
-])
+    element: <Signup />,
+  },
+]);
 
-export default router
+export default router;
