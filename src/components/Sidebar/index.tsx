@@ -49,15 +49,23 @@ const SidebarFactory = ({ children }: SidebarFactoryProps) => {
       break;
   }
   return (
-    // <aside className="h-screen border-r-[1px] border-r-neutral-300 space-y-4 px-4">
-    //   <BrandLogo size="md"/>
-    //   {sidebarContent}
-    // </aside>
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader>
           <BrandLogo size="md" />
         </SidebarHeader>
+        {/*
+        <SidebarContent>
+          <SidebarGroup>
+            <SidebarGroupLabel>
+            <SidebarGroupContent>
+              <SidebarMenu>
+                <SidebarMenuItem>
+                  <SidebarMenuItemButton/>
+                  <SidebarMenuAction>
+            <SidebarGroupAction>
+        */}
+        {sidebarContent} {/*All sidebar content must be wrapped in <SidebarContent></SidebarContent> */}
       </Sidebar>
       <SidebarInset>
         <header className="sticky top-0 flex shrink-0 items-center gap-2 border-b bg-background px-4 py-2">

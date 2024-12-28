@@ -1,7 +1,99 @@
+import {
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+} from "@/components/ui/sidebar";
+
+import { BookIcon, ChatIcon, ClockIcon, CardIcon } from "@/assets/icons";
+import { Link } from "react-router";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible";
+import { ChevronLeft } from "lucide-react";
+
+const menuItemList = [
+  {
+    name: "Courses",
+    icon: BookIcon,
+    path: "#",
+    subMenuList: [
+      { name: "Available Courses", path: "#" },
+      { name: "Registered Courses", path: "#" },
+      { name: "My Courses", path: "#" },
+    ],
+  },
+  { name: "Schedule", icon: ClockIcon, path: "#" },
+  { name: "Payment", icon: CardIcon, path: "#" },
+  { name: "Chat Message", icon: ChatIcon, path: "#" },
+];
+
 const StudentSidebar = () => {
   return (
-    <></>
-  )
-}
+    <SidebarContent>
+      <SidebarGroup>
+        <SidebarGroupContent>
+          <SidebarMenu>
+            {menuItemList.map((menuItem, index) =>
+              menuItem.subMenuList ? (
+                <Collapsible defaultOpen className="group/collapsible">
+                  <SidebarMenuItem key={index}>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton className="h-fit">
+                        <img
+                          src={menuItem.icon}
+                          alt={menuItem.name}
+                          className="size-6"
+                        />
+                        <p>{menuItem.name}</p>
+                        <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent>
+                      <SidebarMenuSub>
+                        {menuItem.subMenuList.map((subMenuItem, index) => (
+                          <SidebarMenuSubItem key={index}>
+                            <SidebarMenuSubButton>
+                              <Link to={subMenuItem.path}>
+                                <p>{subMenuItem.name}</p>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
+              ) : (
+                <SidebarMenuItem key={index}>
+                  <SidebarMenuButton className="h-fit">
+                    <Link
+                      to={menuItem.path}
+                      className="flex items-center gap-2"
+                    >
+                      <img
+                        src={menuItem.icon}
+                        alt={menuItem.name}
+                        className="size-6"
+                      />
+                      <p>{menuItem.name}</p>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              )
+            )}
+          </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+    </SidebarContent>
+  );
+};
 
-export default StudentSidebar
+export default StudentSidebar;
