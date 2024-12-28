@@ -2,13 +2,19 @@ import { createBrowserRouter } from "react-router";
 
 import RootLayout from "@/layouts/RootLayout";
 import Login from "@/pages/Login";
-import Signup from "@/pages/Singup/Signup";
+import Signup from "@/pages/SingupPage/Signup";
+import AvailableCourses from "@/pages/AvailableCoursePage/AvailableCourses";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout/>,
-    children: []
+    children: [
+      {
+        index: true,
+        element: <AvailableCourses />
+      }
+    ]
   },
   {
     path: "/login",
