@@ -1,7 +1,7 @@
 import { createBrowserRouter } from "react-router";
 
 import RootLayout from "@/layouts/RootLayout";
-import Login from "@/pages/Login";
+import Login from "@/pages/Login/Login";
 import Signup from "@/pages/SingupPage/Signup";
 import AvailableCourses from "@/pages/AvailableCoursePage/AvailableCourses";
 
