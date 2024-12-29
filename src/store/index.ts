@@ -1,12 +1,16 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authenSlice';
 import courseReducer from './coursesSlice';
+import phaseReducer from './phaseSlice'
+import sidebarReducer from './sidebarSlice';
 
 
 const store = configureStore({
   reducer: {
     auths: authReducer,
-    courses: courseReducer
+    courses: courseReducer,
+    phases: phaseReducer,
+    sidebars: sidebarReducer,
   },  
 })
 

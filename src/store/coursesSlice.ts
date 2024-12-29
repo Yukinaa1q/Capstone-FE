@@ -1,5 +1,5 @@
 import { ICourse, ICourseP1, ICourseP2 } from '@/interfaces/ICourse';
-import {createSlice} from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 interface courseSliceState {
   coursesP1: ICourseP1[];
@@ -56,51 +56,81 @@ const initialState : courseSliceState = {
       registrationDate: "10/10/2024 - 20/10/2024",
       totalRegistration: 300,
       isRegistered: false
+    },
+    {
+      courseName: "Nhạc lý cơ bản",
+      courseId: "MUS001",
+      price: 3000000,
+      registrationDate: "10/10/2024 - 20/10/2024",
+      totalRegistration: 110,
+      isRegistered: false
     }
   ],
+  coursesP2: [
+
+  ],
   registeredCourse: [
-    // {
-    //   courseName: "Course 6",
-    //   courseId: "6",
-    //   price: 300,
-    //   registrationDate: "10/10/2024 - 20/10/2024",
-    //   totalRegistration: 250,
-    // },
-    // {
-    //   courseName: "Course 6",
-    //   courseId: "6",
-    //   price: 300,
-    //   registrationDate: "10/10/2024 - 20/10/2024",
-    //   totalRegistration: 250,
-    // },
-    // {
-    //   courseName: "Course 6",
-    //   courseId: "6",
-    //   price: 300,
-    //   registrationDate: "10/10/2024 - 20/10/2024",
-    //   totalRegistration: 250,
-    // },
-    // {
-    //   courseName: "Course 6",
-    //   courseId: "6",
-    //   price: 300,
-    //   registrationDate: "10/10/2024 - 20/10/2024",
-    //   totalRegistration: 250,
-    // },
-    // {
-    //   courseName: "Course 6",
-    //   courseId: "6",
-    //   price: 300,
-    //   registrationDate: "10/10/2024 - 20/10/2024",
-    //   totalRegistration: 250,
-    // }
+
   ]
+}
+
+interface IPayload {
+  courseId: string;
+  phase: 1 | 2;
 }
 
 const courseSlice = createSlice({
   name: "courses",
   initialState,
-  reducers: {}
+  reducers: {
+    register(state, action: PayloadAction<IPayload>) {
+      if (action.payload.phase === 1) {
+        const foundCourse = state.coursesP1.find(course => course.courseId === action.payload.courseId)
+        if (foundCourse) {
+          foundCourse.isRegistered = true
+          state.registeredCourse.push(foundCourse)
+        }
+        else {
+          console.error("Course not found")
+        }
+      } 
+      else {
+        const foundCourse = state.coursesP2.find(course => course.courseId === action.payload.courseId)
+        if (foundCourse) {
+          foundCourse.isRegistered = true
+          state.registeredCourse.push(foundCourse)
+        }
+        else {
+          console.error("Course not found")
+        }
+      }
+
+    },
+
+    unregister(state, action: PayloadAction<IPayload>) {
+      if (action.payload.phase === 1) {
+        const foundCourse = state.coursesP1.find(course => course.courseId === action.payload.courseId)
+        if (foundCourse) {
+          foundCourse.isRegistered = false
+          state.registeredCourse = state.registeredCourse.filter(course => course.courseId !== action.payload.courseId)
+        }
+        else {
+          console.error("Course not found")
+        }
+      } 
+      else {
+        const foundCourse = state.coursesP2.find(course => course.courseId === action.payload.courseId)
+        if (foundCourse) {
+          foundCourse.isRegistered = false
+          state.registeredCourse.filter(course => course.courseId !== action.payload.courseId)
+        }
+        else {
+          console.error("Course not found")
+        }
+      }
+    }
+  }
 })
 
+export const {register, unregister} = courseSlice.actions
 export default courseSlice.reducer

@@ -2,6 +2,7 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -19,15 +20,24 @@ import {
 } from "../ui/collapsible";
 import { ChevronLeft } from "lucide-react";
 
+// For demo only
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@radix-ui/react-label";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHook";
+import { togglePhase } from "@/store/phaseSlice";
+import { Link } from "react-router";
+import { changeNav } from "@/store/sidebarSlice";
+
+
 const menuItemList = [
   {
     name: "Courses",
     icon: BookIcon,
     path: "home",
     subMenuList: [
-      { name: "Available Courses", path: "/" },
-      { name: "Registered Courses", path: "/registered-courses" },
-      { name: "My Courses", path: "/my-courses" },
+      { name: "Available Courses", path: "/", navSymbol: "ac" },
+      { name: "Registered Courses", path: "/registered-courses", navSymbol: "rc" },
+      { name: "My Courses", path: "/my-courses", navSymbol: "mc" },
     ],
   },
   { name: "Schedule", icon: ClockIcon, path: "/schedule/studentid" },
@@ -38,31 +48,28 @@ const menuItemList = [
 const currentPath = window.location.pathname;
 
 function isActiveNav(checkPath: string): boolean {
-  console.log("Check Path: ", checkPath, " Current Path: ", currentPath);
-  if ( // Specifially made for Courses nav bar  
+  if (
+    // Specifially made for Courses nav bar
     menuItemList[0].subMenuList!.some((subMenuItem) =>
       currentPath.startsWith(subMenuItem.path)
     ) &&
     checkPath === "home"
   ) {
-    console.log("Check from first if")
     return true;
   } else if (checkPath === "/" && currentPath === "/") {
-    console.log("Check from second if")
     return true;
-  }
-  else if (checkPath === "/" && currentPath !== "/") {
-    console.log("Check from third if")
+  } else if (checkPath === "/" && currentPath !== "/") {
     return false;
   } else if (currentPath.startsWith(checkPath)) {
-    console.log("Check from fourth if")
     return true;
-  } 
-  console.log("Check from outside if")
+  }
   return false;
 }
 
 const StudentSidebar = () => {
+  // For demo only
+  const dispatch = useAppDispatch();
+  const nav = useAppSelector(state => state.sidebars.activeNav);
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -98,16 +105,17 @@ const StudentSidebar = () => {
                         {menuItem.subMenuList.map((subMenuItem, index) => (
                           <SidebarMenuSubItem key={index}>
                             <SidebarMenuSubButton asChild>
-                              <a
-                                href={subMenuItem.path}
+                              <Link
+                                to={subMenuItem.path}
+                                onClick={() => dispatch(changeNav(subMenuItem.navSymbol))}
                                 className={`${
-                                  isActiveNav(subMenuItem.path)
+                                  subMenuItem.navSymbol == nav //isActiveNav(subMenuItem.path)
                                     ? "active-subnav hover:text-inherit hover:bg-t_primary-100"
                                     : ""
                                 }`}
                               >
                                 <p>{subMenuItem.name}</p>
-                              </a>
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -125,10 +133,7 @@ const StudentSidebar = () => {
                         : ""
                     }`}
                   >
-                    <a
-                      href={menuItem.path}
-                      className="flex items-center gap-2"
-                    >
+                    <a href={menuItem.path} className="flex items-center gap-2">
                       <img
                         src={menuItem.icon}
                         alt={menuItem.name}
@@ -141,6 +146,15 @@ const StudentSidebar = () => {
               )
             )}
           </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>Demo Control Panel</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <Label>Switch Phase</Label><br/>
+          Phase 1
+          <Switch onCheckedChange={() => {dispatch(togglePhase())}}/>
+          Phase 2
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>
