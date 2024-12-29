@@ -19,7 +19,7 @@ const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
   let courseList = phase === 1 ? availableCourses.coursesP1 : availableCourses.coursesP2;
   return (
     <section className="mt-10 w-full">
-      <h3 className="font-semibold text-xl mb-2">{title} Registered Course Count: {availableCourses.registeredCourse.length}</h3>
+      <h3 className="font-semibold text-xl mb-2">{title}</h3>
       <Carousel
         opts={{
           align: "start",
