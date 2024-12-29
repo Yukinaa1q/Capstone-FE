@@ -1,20 +1,22 @@
-import CourseCard from "@/components/CourseCard"
-import { useAppSelector } from "@/hooks/reduxHook"
+import CourseCard from "@/components/CourseCard";
+import { useAppSelector } from "@/hooks/reduxHook";
 
 const RegisteredCoursesPage = () => {
-  const registeredCourses = useAppSelector(state => state.courses.registeredCourse)
+  const registeredCourses = useAppSelector(
+    (state) => state.courses
+  );
   return (
     <main className="mx-8 mt-4">
       <h3 className="font-semibold text-xl mb-2">Your Registered Courses</h3>
-      <div className="flex flex-wrap justify-between gap-4">
-        {
-          registeredCourses.map((course, idx) => (
-            <CourseCard key={idx} courseContent={course}/>
-          ))  
-        }
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {registeredCourses.coursesP2.map((course, idx) => (
+          <div className="max-w-full">
+            <CourseCard key={idx} courseContent={course} />
+          </div>
+        ))}
       </div>
     </main>
-  )
-}
+  );
+};
 
-export default RegisteredCoursesPage
+export default RegisteredCoursesPage;
