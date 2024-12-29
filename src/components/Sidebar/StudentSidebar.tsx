@@ -23,10 +23,10 @@ const menuItemList = [
   {
     name: "Courses",
     icon: BookIcon,
-    path: "/",
+    path: "home",
     subMenuList: [
       { name: "Available Courses", path: "/" },
-      { name: "Registered Courses", path: "/register-courses/studentid" },
+      { name: "Registered Courses", path: "/registered-courses" },
       { name: "My Courses", path: "/courses/studentid" },
     ],
   },
@@ -35,23 +35,30 @@ const menuItemList = [
   { name: "Chat Message", icon: ChatIcon, path: "/chat/studentid" },
 ];
 
-console.log(window.location.pathname);
 const currentPath = window.location.pathname;
 
 function isActiveNav(checkPath: string): boolean {
-  if (checkPath === "/" && currentPath === "/") {
-    return true;
-  } else if (
+  console.log("Check Path: ", checkPath, " Current Path: ", currentPath);
+  if ( // Specifially made for Courses nav bar  
     menuItemList[0].subMenuList!.some((subMenuItem) =>
       currentPath.startsWith(subMenuItem.path)
     ) &&
-    checkPath === "/"
+    checkPath === "home"
   ) {
-  } else if (checkPath !== "/" && currentPath === "/") {
-    return false;
-  } else if (currentPath.startsWith(checkPath)) {
+    console.log("Check from first if")
+    return true;
+  } else if (checkPath === "/" && currentPath === "/") {
+    console.log("Check from second if")
     return true;
   }
+  else if (checkPath === "/" && currentPath !== "/") {
+    console.log("Check from third if")
+    return false;
+  } else if (currentPath.startsWith(checkPath)) {
+    console.log("Check from fourth if")
+    return true;
+  } 
+  console.log("Check from outside if")
   return false;
 }
 
@@ -91,8 +98,8 @@ const StudentSidebar = () => {
                         {menuItem.subMenuList.map((subMenuItem, index) => (
                           <SidebarMenuSubItem key={index}>
                             <SidebarMenuSubButton asChild>
-                              <NavLink
-                                to={subMenuItem.path}
+                              <a
+                                href={subMenuItem.path}
                                 className={`${
                                   isActiveNav(subMenuItem.path)
                                     ? "active-subnav hover:text-inherit hover:bg-t_primary-100"
@@ -100,7 +107,7 @@ const StudentSidebar = () => {
                                 }`}
                               >
                                 <p>{subMenuItem.name}</p>
-                              </NavLink>
+                              </a>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -118,8 +125,8 @@ const StudentSidebar = () => {
                         : ""
                     }`}
                   >
-                    <NavLink
-                      to={menuItem.path}
+                    <a
+                      href={menuItem.path}
                       className="flex items-center gap-2"
                     >
                       <img
@@ -128,7 +135,7 @@ const StudentSidebar = () => {
                         className="size-6"
                       />
                       <p>{menuItem.name}</p>
-                    </NavLink>
+                    </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )

@@ -6,7 +6,10 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import CourseCard from "@/components/CourseCard";
+
 import { ICourse, ICourseP2 } from "@/interfaces/ICourse";
+import { useAppSelector } from "@/hooks/reduxHook";
+
 
 interface RecomCoursesLayoutProps {
   title: string;
@@ -111,7 +114,7 @@ const courseListP2: ICourseP2[] = [
 
 const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
   // const [api, setApi] = React.useState<CarouselApi>();
-
+  const availableCourses = useAppSelector(state => state.courses)
   return (
     <section className="mt-10 w-full">
       <h3 className="font-semibold text-xl mb-2">{title}</h3>
@@ -122,8 +125,10 @@ const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
         className="mx-auto w-[1000px]"
       >
         <CarouselContent>
-          {courseList.map((courseContent, index) => (
+
+          {availableCourses.coursesP2.map((courseContent, index) => (
             <CarouselItem key={index} className="lg:basis-1/4 scale-90 hover:scale-100 hover:transition-transform transition-transform">
+
               <CourseCard courseContent={courseContent} />
             </CarouselItem>
           ))}

@@ -113,7 +113,9 @@ export default function Notification() {
         >
           <Bell size={16} strokeWidth={2} aria-hidden="true" />
           {unreadCount > 0 && (
+
             <Badge className="absolute -top-2 left-full -translate-x-1/2 text-sx p-1 text-white text-center size-6 rounded-full">
+
               <p className="mx-auto">{unreadCount > 99 ? "99+" : unreadCount}</p>
             </Badge>
           )}
