@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 
 import { BookIcon, ChatIcon, ClockIcon, CardIcon } from "@/assets/icons";
-import { NavLink } from "react-router";
+// import { NavLink } from "react-router";
 import {
   Collapsible,
   CollapsibleContent,
@@ -27,7 +27,7 @@ const menuItemList = [
     subMenuList: [
       { name: "Available Courses", path: "/" },
       { name: "Registered Courses", path: "/registered-courses" },
-      { name: "My Courses", path: "/courses/studentid" },
+      { name: "My Courses", path: "/my-courses" },
     ],
   },
   { name: "Schedule", icon: ClockIcon, path: "/schedule/studentid" },

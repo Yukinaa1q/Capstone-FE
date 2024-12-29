@@ -19,7 +19,7 @@ interface CourseCardProps {
 
 const CourseCardP2 = ({ courseContent }: CourseCardProps) => {
   return (
-    <Card className="w-72">
+    <Card className="min-w-72">
       <CardHeader>
         <img src="" alt="" className="aspect-video bg-slate-400 rounded-md" />
         <CardTitle className="mt-1 text-lg">
