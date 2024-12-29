@@ -11,6 +11,7 @@ Nhập môn FE :))
 */
 
 const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
+
   const imgSizeClasses = {
     sm: "w-6 h-6",
     md: "w-10 h-10",
@@ -31,6 +32,7 @@ const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
         className={`inline ${imgSizeClasses[size]}`}
       />
       <span className={`font-logo font-bold ${textSizeClasses[size]}`}>TuCour</span>
+
     </div>
   );
 };
