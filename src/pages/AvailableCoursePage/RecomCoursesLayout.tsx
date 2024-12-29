@@ -6,7 +6,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import CourseCard from "@/components/CourseCard";
-import { ICourse } from "@/interfaces/ICourse";
+import { ICourse, ICourseP2 } from "@/interfaces/ICourse";
 
 interface RecomCoursesLayoutProps {
   title: string;
@@ -58,12 +58,63 @@ const courseList: ICourse[] = [
   },
 ];
 
+const courseListP2: ICourseP2[] = [
+  {
+    courseName: "Course 1",
+    courseId: "1",
+    price: 100,
+    tutor: "Tutor 1",
+    classNumber: "30/50",
+    studyTime: "2-4-6 | 18:00 - 20:00",
+  },
+  {
+    courseName: "Course 1",
+    courseId: "1",
+    price: 100,
+    tutor: "Tutor 1",
+    classNumber: "30/50",
+    studyTime: "2-4-6 | 18:00 - 20:00",
+  },
+  {
+    courseName: "Course 1",
+    courseId: "1",
+    price: 100,
+    tutor: "Tutor 1",
+    classNumber: "30/50",
+    studyTime: "2-4-6 | 18:00 - 20:00",
+  },
+  {
+    courseName: "Course 1",
+    courseId: "1",
+    price: 100,
+    tutor: "Tutor 1",
+    classNumber: "30/50",
+    studyTime: "2-4-6 | 18:00 - 20:00",
+  },
+  {
+    courseName: "Course 1",
+    courseId: "1",
+    price: 100,
+    tutor: "Tutor 1",
+    classNumber: "30/50",
+    studyTime: "2-4-6 | 18:00 - 20:00",
+  },
+  {
+    courseName: "Course 1",
+    courseId: "1",
+    price: 100,
+    tutor: "Tutor 1",
+    classNumber: "30/50",
+    studyTime: "2-4-6 | 18:00 - 20:00",
+  },
+];
+
 const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
   // const [api, setApi] = React.useState<CarouselApi>();
 
   return (
     <section className="mt-10 w-full">
-      <h3 className="font-semibold text-xl mb-4">{title}</h3>
+      <h3 className="font-semibold text-xl mb-2">{title}</h3>
       <Carousel
         opts={{
           align: "start",
@@ -72,7 +123,7 @@ const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
       >
         <CarouselContent>
           {courseList.map((courseContent, index) => (
-            <CarouselItem key={index} className="lg:basis-64">
+            <CarouselItem key={index} className="lg:basis-1/4 scale-90 hover:scale-100 hover:transition-transform transition-transform">
               <CourseCard courseContent={courseContent} />
             </CarouselItem>
           ))}

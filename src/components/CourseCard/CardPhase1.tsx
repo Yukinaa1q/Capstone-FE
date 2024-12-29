@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { ICourseP1 } from "@/interfaces/ICourse";
 import { Button } from "../ui/button";
+import toVND from "@/utils/currencyFormat";
 
 interface CourseCardProps {
   courseContent: ICourseP1;
@@ -18,10 +19,10 @@ interface CourseCardProps {
 
 const CourseCardP1 = ({ courseContent }: CourseCardProps) => {
   return (
-    <Card>
+    <Card className="w-72">
       <CardHeader>
         <img src="" alt="" className="aspect-video bg-slate-400 rounded-md" />
-        <CardTitle className="text-[1.125rem] leading-3">
+        <CardTitle className="mt-1 text-lg">
           {courseContent.courseName.toUpperCase()}
         </CardTitle>
         <CardDescription className="flex justify-between">
@@ -32,17 +33,17 @@ const CourseCardP1 = ({ courseContent }: CourseCardProps) => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex gap-2">
-          <img src={RegistrationDateIcon} alt="registration-deadline" />
+        <div className="flex gap-2 items-center">
+          <img src={RegistrationDateIcon} alt="registration-deadline" className="size-5"/>
           <p>{courseContent.registrationDate}</p>
         </div>
-        <div className="flex gap-2">
-          <img src={RegistrationTotalIcon} alt="registration-total" />
+        <div className="flex gap-2 items-center">
+          <img src={RegistrationTotalIcon} alt="registration-total" className="size-5"/>
           <p>{courseContent.totalRegistration}</p>
         </div>
-        <div className="flex gap-2 mt-4 font-semibold text-lg">
-          <img src={PriceIcon} alt="price" />
-          <p>{courseContent.price}</p>
+        <div className="flex items-center gap-2 mt-4 font-semibold text-lg">
+          <img src={PriceIcon} alt="price" className="size-5"/>
+          <p className="text-lg">{toVND(courseContent.price)}</p>
         </div>
 
       </CardContent>

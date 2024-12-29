@@ -64,12 +64,13 @@
   }
   * {
     font-family: "Montserrat", serif;
+    @apply lg:text-[14px] 2xl:text-[16px];
   }
 }
 
 @layer utilities {
   .active-subnav {
-    @apply bg-t_primary-200 rounded-md;
+    @apply bg-t_primary-100 hover:bg-t_primary-100 rounded-md;
   }
   .active-nav {
     @apply bg-t_primary-700 text-white font-semibold data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white;
