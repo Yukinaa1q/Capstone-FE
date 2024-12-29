@@ -21,7 +21,7 @@ const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
   const textSizeClasses = {
     sm: "text-sm",
     md: "text-lg",
-    lg: "text-xl",
+    lg: "text-3xl",
   }
 
   return (
