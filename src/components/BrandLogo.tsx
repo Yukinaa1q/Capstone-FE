@@ -11,12 +11,6 @@ Nhập môn FE :))
 */
 
 const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
-<<<<<<< Updated upstream
-  return (
-    <div className="w-full">
-      <img src={Logo} alt="Tucour Brand Logo" className="inline w-10 h-10"/>
-      <span>TuCour</span>
-=======
   const imgSizeClasses = {
     sm: "w-6 h-6",
     md: "w-10 h-10",
@@ -37,7 +31,6 @@ const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
         className={`inline ${imgSizeClasses[size]}`}
       />
       <span className={`font-logo font-bold ${textSizeClasses[size]}`}>TuCour</span>
->>>>>>> Stashed changes
     </div>
   );
 };
