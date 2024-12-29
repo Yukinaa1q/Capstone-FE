@@ -8,134 +8,92 @@ interface courseSliceState {
 }
 
 const initialState : courseSliceState = {
-  coursesP1: [{
-    courseName: "Course 1",
-    courseId: "1",
-    price: 100,
-    registrationDate: "10/10/2024 - 20/10/2024",
-    totalRegistration: 100,
-  },
-  {
-    courseName: "Course 2",
-    courseId: "2",
-    price: 200,
-    registrationDate: "10/10/2024 - 20/10/2024",
-    totalRegistration: 200,
-  },
-  {
-    courseName: "Course 3",
-    courseId: "3",
-    price: 300,
-    registrationDate: "10/10/2024 - 20/10/2024",
-    totalRegistration: 50,
-  },
-  {
-    courseName: "Course 4",
-    courseId: "4",
-    price: 300,
-    registrationDate: "10/10/2024 - 20/10/2024",
-    totalRegistration: 250,
-  },
-  {
-    courseName: "Course 5",
-    courseId: "5",
-    price: 300,
-    registrationDate: "10/10/2024 - 20/10/2024",
-    totalRegistration: 250,
-  },
-  {
-    courseName: "Course 6",
-    courseId: "6",
-    price: 300,
-    registrationDate: "10/10/2024 - 20/10/2024",
-    totalRegistration: 250,
-  }],
-  coursesP2: [
+  coursesP1: [
     {
-      courseName: "Course 1",
-      courseId: "1",
-      price: 100,
-      tutor: "Tutor 1",
-      classNumber: "30/50",
-      studyTime: "2-4-6 | 18:00 - 20:00",
+      courseName: "Toán 11 Cơ bản",
+      courseId: "MATH001",
+      price: 1200000,
+      registrationDate: "10/10/2024 - 20/10/2024",
+      totalRegistration: 250,
+      isRegistered: false
     },
     {
-      courseName: "Course 1",
-      courseId: "1",
-      price: 100,
-      tutor: "Tutor 1",
-      classNumber: "30/50",
-      studyTime: "2-4-6 | 18:00 - 20:00",
+      courseName: "Vật Lý 10 Nâng Cao",
+      courseId: "PHYS001",
+      price: 2100000,
+      registrationDate: "10/10/2024 - 20/10/2024",
+      totalRegistration: 200,
+      isRegistered: false
     },
     {
-      courseName: "Course 1",
-      courseId: "1",
-      price: 100,
-      tutor: "Tutor 1",
-      classNumber: "30/50",
-      studyTime: "2-4-6 | 18:00 - 20:00",
+      courseName: "Luyện thi THPT Hoá Học",
+      courseId: "CHEM002",
+      price: 1500000,
+      registrationDate: "10/10/2024 - 20/10/2024",
+      totalRegistration: 100,
+      isRegistered: false
     },
     {
-      courseName: "Course 1",
-      courseId: "1",
-      price: 100,
-      tutor: "Tutor 1",
-      classNumber: "30/50",
-      studyTime: "2-4-6 | 18:00 - 20:00",
+      courseName: "IELTS 6.0 - 7.0",
+      courseId: "IELT012",
+      price: 5000000,
+      registrationDate: "10/10/2024 - 20/10/2024",
+      totalRegistration: 250,
+      isRegistered: false
     },
     {
-      courseName: "Course 1",
-      courseId: "1",
-      price: 100,
-      tutor: "Tutor 1",
-      classNumber: "30/50",
-      studyTime: "2-4-6 | 18:00 - 20:00",
+      courseName: "Toán 12 Nâng Cao",
+      courseId: "MATH002",
+      price: 2000000,
+      registrationDate: "10/10/2024 - 20/10/2024",
+      totalRegistration: 80,
+      isRegistered: false
     },
     {
-      courseName: "Course 1",
-      courseId: "1",
-      price: 100,
-      tutor: "Tutor 1",
-      classNumber: "30/50",
-      studyTime: "2-4-6 | 18:00 - 20:00",
-    },
+      courseName: "Nhập Môn Hội Hoạ",
+      courseId: "ART001",
+      price: 1750000,
+      registrationDate: "10/10/2024 - 20/10/2024",
+      totalRegistration: 300,
+      isRegistered: false
+    }
   ],
   registeredCourse: [
-    {
-      courseName: "Course 6",
-      courseId: "6",
-      price: 300,
-      registrationDate: "10/10/2024 - 20/10/2024",
-      totalRegistration: 250,
-    },
-    {
-      courseName: "Course 6",
-      courseId: "6",
-      price: 300,
-      registrationDate: "10/10/2024 - 20/10/2024",
-      totalRegistration: 250,
-    },
-    {
-      courseName: "Course 6",
-      courseId: "6",
-      price: 300,
-      registrationDate: "10/10/2024 - 20/10/2024",
-      totalRegistration: 250,
-    },
-    {
-      courseName: "Course 6",
-      courseId: "6",
-      price: 300,
-      registrationDate: "10/10/2024 - 20/10/2024",
-      totalRegistration: 250,
-    },
-    {
-      courseName: "Course 6",
-      courseId: "6",
-      price: 300,
-      registrationDate: "10/10/2024 - 20/10/2024",
-      totalRegistration: 250,
-    }
+    // {
+    //   courseName: "Course 6",
+    //   courseId: "6",
+    //   price: 300,
+    //   registrationDate: "10/10/2024 - 20/10/2024",
+    //   totalRegistration: 250,
+    // },
+    // {
+    //   courseName: "Course 6",
+    //   courseId: "6",
+    //   price: 300,
+    //   registrationDate: "10/10/2024 - 20/10/2024",
+    //   totalRegistration: 250,
+    // },
+    // {
+    //   courseName: "Course 6",
+    //   courseId: "6",
+    //   price: 300,
+    //   registrationDate: "10/10/2024 - 20/10/2024",
+    //   totalRegistration: 250,
+    // },
+    // {
+    //   courseName: "Course 6",
+    //   courseId: "6",
+    //   price: 300,
+    //   registrationDate: "10/10/2024 - 20/10/2024",
+    //   totalRegistration: 250,
+    // },
+    // {
+    //   courseName: "Course 6",
+    //   courseId: "6",
+    //   price: 300,
+    //   registrationDate: "10/10/2024 - 20/10/2024",
+    //   totalRegistration: 250,
+    // }
   ]
 }
 
