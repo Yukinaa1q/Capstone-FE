@@ -13,6 +13,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <AvailableCourses />
+      },
+      {
+        path: "/registered-courses",
+        element: <></>
       }
     ]
   },

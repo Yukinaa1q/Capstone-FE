@@ -11,19 +11,28 @@ Nhập môn FE :))
 */
 
 const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
-  const sizeClasses = {
-    sm: "w-6 h-6 text-sm",
-    md: "w-10 h-10 text-base",
-    lg: "w-16 h-16 text-lg",
+
+  const imgSizeClasses = {
+    sm: "w-6 h-6",
+    md: "w-10 h-10",
+    lg: "w-16 h-16",
   };
+
+  const textSizeClasses = {
+    sm: "text-sm",
+    md: "text-lg",
+    lg: "text-xl",
+  }
+
   return (
-    <div className="w-full">
+    <div className="w-full flex items-center gap-2">
       <img
         src={Logo}
         alt="Tucour Brand Logo"
-        className={`inline ${sizeClasses[size]}`}
+        className={`inline ${imgSizeClasses[size]}`}
       />
-      <span className={`font-logo ${sizeClasses[size]}`}>TuCour</span>
+      <span className={`font-logo font-bold ${textSizeClasses[size]}`}>TuCour</span>
+
     </div>
   );
 };
