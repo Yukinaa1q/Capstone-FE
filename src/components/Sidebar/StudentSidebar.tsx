@@ -80,7 +80,7 @@ const StudentSidebar = () => {
                       <SidebarMenuButton
                         className={`h-fit ${
                           isActiveNav(menuItem.path)
-                            ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white"
+                            ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:bg-t_primary-70 hover:text-white"
                             : ""
                         }`}
                       >
@@ -102,7 +102,7 @@ const StudentSidebar = () => {
                                 href={subMenuItem.path}
                                 className={`${
                                   isActiveNav(subMenuItem.path)
-                                    ? "active-subnav hover:bg-t_primary-200 hover:text-inherit"
+                                    ? "active-subnav hover:text-inherit hover:bg-t_primary-100"
                                     : ""
                                 }`}
                               >
