@@ -52,7 +52,7 @@ const initialState : courseSliceState = {
   }],
   coursesP2: [
     {
-      courseName: "Course 1",
+      courseName: "A Vevry very very long long long course name",
       courseId: "1",
       price: 100,
       tutor: "Tutor 1",

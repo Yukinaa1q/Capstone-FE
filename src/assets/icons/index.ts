@@ -12,6 +12,8 @@ import RegistrationDateIcon from "./registration.svg";
 import GoogleIcon from "./google icon button.svg";
 import XIcon from "./twitter icon button.svg";
 import ClassroomIcon from "./classroom.svg";
+import MoreDetailIcon from "./view-detail.svg";
+import RegisterIcon from "./register.svg"
 
 export {
   BookIcon,
@@ -27,5 +29,7 @@ export {
   RegistrationDateIcon,
   GoogleIcon,
   XIcon,
-  ClassroomIcon
+  ClassroomIcon,
+  MoreDetailIcon,
+  RegisterIcon
 };

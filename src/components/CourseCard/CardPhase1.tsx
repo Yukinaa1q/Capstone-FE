@@ -19,7 +19,7 @@ interface CourseCardProps {
 
 const CourseCardP1 = ({ courseContent }: CourseCardProps) => {
   return (
-    <Card className="min-w-72">
+    <Card className="">
       <CardHeader>
         <img src="" alt="" className="aspect-video bg-slate-400 rounded-md" />
         <CardTitle className="mt-1 text-lg">
@@ -48,8 +48,8 @@ const CourseCardP1 = ({ courseContent }: CourseCardProps) => {
 
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <Button size="sm" className="bg-t_tertiary-200 hover:bg-t_tertiary-300 text-black">View Detail</Button>
-        <Button size="sm" className="bg-green-400 hover:bg-green-500 text-black">Pre-register</Button>
+        <Button className="bg-t_tertiary-200 hover:bg-t_tertiary-300 text-black">View Detail</Button>
+        <Button className="bg-green-400 hover:bg-green-500 text-black">Pre-register</Button>
       </CardFooter>
     </Card>
   );
