@@ -14,13 +14,13 @@ const BrandLogo = ({ size = "md" }: BrandLogoProps) => {
 
   const imgSizeClasses = {
     sm: "w-6 h-6",
-    md: "w-10 h-10",
+    md: "w-12 h-12",
     lg: "w-16 h-16",
   };
 
   const textSizeClasses = {
     sm: "text-sm",
-    md: "text-lg",
+    md: "text-xl",
     lg: "text-3xl",
   }
 

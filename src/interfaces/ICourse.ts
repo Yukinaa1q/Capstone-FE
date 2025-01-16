@@ -1,6 +1,8 @@
 type ICourse = ICourseP1 | ICourseP2;
 
-interface ICourseP1 {
+// type ICourse = ICourseP1 | ICourseP2;
+
+interface ICourseP1{
   courseName: string;
   courseId: string;
   price: number;
@@ -8,7 +10,7 @@ interface ICourseP1 {
   totalRegistration: number;
 }
 
-interface ICourseP2 {
+interface ICourseP2{
   courseName: string;
   courseId: string;
   price: number;
@@ -17,9 +19,5 @@ interface ICourseP2 {
   studyTime: string;
 }
 
-function isCourseP1(course: ICourse): course is ICourseP1 {
-  return (course as ICourseP1).registrationDate !== undefined;
-}
 
-
-export { type ICourse, type ICourseP1, type ICourseP2, isCourseP1 };
+export type { ICourseP1, ICourseP2, ICourse };

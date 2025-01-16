@@ -6,6 +6,7 @@ import Signup from "@/pages/SingupPage/Signup";
 import AvailableCourses from "@/pages/AvailableCoursePage/AvailableCourses";
 import RegisteredCoursesPage from "@/pages/RegisteredCoursesPage/RegisteredCoursesPage";
 import MyCoursesPage from "@/pages/MyCoursesPage/MyCoursesPage";
+import TestPage from "./pages/TestPage/TestPage";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
     path: "/signup",
     element: <Signup />,
   },
+  {
+    path: "/test",
+    element: <TestPage/>
+  }
 ]);
 
 export default router;

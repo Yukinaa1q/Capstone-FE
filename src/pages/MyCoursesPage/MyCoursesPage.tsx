@@ -73,7 +73,7 @@ const myCoursesList: IClass[] = [
 
 const MyCoursesPage = () => {
   return (
-    <main className="mx-8 mt-4">
+    <main className="px-8 pt-4">
       <div className="flex items-center gap-4">
         <h3 className="font-semibold text-xl">Your Courses</h3>
         <Select>
@@ -88,7 +88,7 @@ const MyCoursesPage = () => {
           </SelectContent>
         </Select>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mt-4">
         {myCoursesList.map((course, index) => (
           <div className="max-w-full">
             <ClassCard key={index} classInfo={course} />
