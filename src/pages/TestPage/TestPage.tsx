@@ -5,6 +5,7 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel";
 import { useAppSelector } from "@/hooks/reduxHook";
+import { GraduationCapIcon } from "lucide-react";
 
 const TestPage = () => {
   const courseList = useAppSelector((state) => state.courses.coursesP2);
@@ -20,6 +21,7 @@ const TestPage = () => {
           ))}
         </CarouselContent>
       </Carousel>
+      <GraduationCapIcon size={64}/>
     </div>
   );
 };

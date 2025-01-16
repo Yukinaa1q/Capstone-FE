@@ -1,5 +1,5 @@
 import { IClass } from '@/interfaces/IClass';
-import { ICourse, ICourseP1, ICourseP2 } from '@/interfaces/ICourse';
+import { ICourseP1, ICourseP2 } from '@/interfaces/ICourse';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 interface courseSliceState {
@@ -71,7 +71,7 @@ const initialState : courseSliceState = {
   ],
   coursesP2: [
     {
-      courseName: "Toán 11 Cơ bản",
+      courseName: "Toán 11 Cơ bản asdf asdjti9c 4iiu4 ci8rdn tydinb 43eiugsb",
       courseId: "MATH001",
       price: 1200000,
       classNumber: "30/40",
