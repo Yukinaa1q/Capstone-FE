@@ -2,7 +2,6 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -19,15 +18,6 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { ChevronLeft } from "lucide-react";
-import { useState } from "react";
-
-// For demo only
-import { Switch } from "@/components/ui/switch"
-import { Label } from "@radix-ui/react-label";
-import { useAppDispatch, useAppSelector } from "@/hooks/reduxHook";
-import { togglePhase } from "@/store/phaseSlice";
-import { Link } from "react-router";
-import { changeNav } from "@/store/sidebarSlice";
 
 
 const menuItemList = [
@@ -107,9 +97,8 @@ const StudentSidebar = () => {
                         {menuItem.subMenuList.map((subMenuItem, index) => (
                           <SidebarMenuSubItem key={index}>
                             <SidebarMenuSubButton asChild>
-                              <Link
-                                to={subMenuItem.path}
-                                onClick={() => dispatch(changeNav(subMenuItem.navSymbol))}
+                              <a
+                                href={subMenuItem.path}
                                 className={`${
                                   isActiveNav(subMenuItem.path)
                                     ? "active-subnav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-inherit hover:bg-t_primary-100"
@@ -118,7 +107,7 @@ const StudentSidebar = () => {
                                 }`}
                               >
                                 <p>{subMenuItem.name}</p>
-                              </Link>
+                              </a>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -149,15 +138,6 @@ const StudentSidebar = () => {
               )
             )}
           </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarGroup>
-      <SidebarGroup>
-        <SidebarGroupLabel>Demo Control Panel</SidebarGroupLabel>
-        <SidebarGroupContent>
-          <Label>Switch Phase</Label><br/>
-          Phase 1
-          <Switch onCheckedChange={() => {dispatch(togglePhase())}}/>
-          Phase 2
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>
