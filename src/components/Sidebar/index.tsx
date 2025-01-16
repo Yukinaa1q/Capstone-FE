@@ -69,7 +69,7 @@ const SidebarFactory = ({ children }: SidebarFactoryProps) => {
         {/*All sidebar content must be wrapped in <SidebarContent></SidebarContent> */}
       </Sidebar>
       {/* I don't know why but setting w-1 make the carousel not expand out of the container size  */}
-      <SidebarInset className="w-0">
+      <SidebarInset className="w-0 md:max-lg:w-screen">
         <header className="sticky z-50 top-0 flex items-center gap-2 border-b bg-background px-4 py-2">
           <SidebarTrigger />
           <Separator orientation="vertical" className="mr-2 h-4" />

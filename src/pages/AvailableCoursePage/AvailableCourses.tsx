@@ -6,6 +6,8 @@ const AvailableCourses = () => {
     <main className="px-8 pt-4 w-full">
       <SearchInput />
       <RecomCoursesLayout title="Upcoming Courses"/>
+      <RecomCoursesLayout title="Upcoming Courses"/>
+      <RecomCoursesLayout title="Upcoming Courses"/>
     </main>
   );
 };

@@ -1,7 +1,4 @@
-import {
-  MoreDetailIcon,
-  RegisterIcon,
-} from "@/assets/icons";
+import { MoreDetailIcon, RegisterIcon } from "@/assets/icons";
 import {
   Card,
   CardContent,
@@ -12,11 +9,7 @@ import {
 } from "../ui/card";
 import { Badge } from "@/components/ui/badge";
 
-import {
-  ICourse,
-  ICourseP1,
-  ICourseP2,
-} from "@/interfaces/ICourse";
+import { ICourse, ICourseP1, ICourseP2 } from "@/interfaces/ICourse";
 import CourseCardP1 from "./CardPhase1";
 import CourseCardP2 from "./CardPhase2";
 import { useAppSelector } from "@/hooks/reduxHook";
@@ -36,20 +29,21 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
           alt=""
           className="aspect-video bg-slate-400 rounded-md object-cover"
         />
-        <CardTitle className="w-full truncate">
-          {courseContent.courseName.toUpperCase()}
-        </CardTitle>
-        <CardDescription className="flex justify-between text-xs">
-          <p>{courseContent.courseId}</p>
+        <CardTitle className="flex justify-between items-center gap-4">
+          <p className="truncate">{courseContent.courseName.toUpperCase()}</p>
           {phase === 1 ? (
-            <Badge className="bg-t_secondary-500 hover:bg-t_secondary-500 text-white text-xs">
+            <Badge className="bg-t_secondary-500 hover:bg-t_secondary-500 text-white text-xs w-40">
               Phase 1
             </Badge>
           ) : (
-            <Badge className="bg-t_primary-500 hover:bg-t_primary-500 text-white text-xs">
+            <Badge className="bg-t_primary-500 hover:bg-t_primary-500 text-white text-xs shrink-0 w-fit h-fit">
               Phase 2
             </Badge>
           )}
+        </CardTitle>
+        <CardDescription className="flex justify-between text-xs">
+          <p>{courseContent.courseId}</p>
+          
         </CardDescription>
       </CardHeader>
       <CardContent className="text-sm w-full">
