@@ -44,7 +44,8 @@ function isActiveNav(checkPath: string): boolean {
   if (currentPath === "") {
     if (path === "home" || path === "") return true;
   } else {
-    if (path.startsWith(currentPath)) return true; //  the normal case
+    if (path !== "" && currentPath.startsWith(path))
+      return true; //  the normal case
     else if (
       path === "home" &&
       (currentPath.startsWith("registered-courses") ||
@@ -56,6 +57,11 @@ function isActiveNav(checkPath: string): boolean {
 }
 
 const TutorSidebar = () => {
+  const isOpen =
+    isActiveNav("/") ||
+    isActiveNav("/registered-courses") ||
+    isActiveNav("/my-courses");
+
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -67,6 +73,7 @@ const TutorSidebar = () => {
                   defaultOpen
                   className="group/collapsible"
                   key={index}
+                  open={isOpen}
                 >
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
@@ -76,9 +83,7 @@ const TutorSidebar = () => {
                             ? "active-nav hover:bg-t_primary-700 active:bg-t_tertiary-700 active:text-white hover:text-white data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white data-[active=true]:hover:bg-t_primary-700"
                             : ""
                         }`}
-                        onClick={() => {
-                          console.log("Clicked");
-                        }}
+                        onClick={() => {location.replace("/")}}
                       >
                         <img
                           src={menuItem.icon}

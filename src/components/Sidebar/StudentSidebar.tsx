@@ -18,51 +18,50 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
 
 const menuItemList = [
   {
     name: "Courses",
     icon: BookIcon,
-    path: "home",
+    path: "/home",
     subMenuList: [
       { name: "Available Courses", path: "/" },
       { name: "Registered Courses", path: "/registered-courses" },
       { name: "My Courses", path: "/my-courses" },
     ],
   },
-  { name: "Schedule", icon: ClockIcon, path: "/schedule/studentid" },
-  { name: "Payment", icon: CardIcon, path: "/payment/studentid" },
-  { name: "Chat Message", icon: ChatIcon, path: "/chat/studentid" },
+  { name: "Schedule", icon: ClockIcon, path: "/schedule" },
+  { name: "Payment", icon: CardIcon, path: "/payment" },
+  { name: "Chat Message", icon: ChatIcon, path: "/chat" },
 ];
 
-const currentPath = window.location.pathname;
+const currentPath = window.location.pathname.slice(1);
 
 function isActiveNav(checkPath: string): boolean {
   console.log("Check Path: ", checkPath, " Current Path: ", currentPath);
-  if ( // Specifially made for Courses nav bar  
-    menuItemList[0].subMenuList!.some((subMenuItem) =>
-      currentPath.startsWith(subMenuItem.path)
-    ) &&
-    checkPath === "home"
-  ) {
-    console.log("Check from first if")
-    return true;
-  } else if (checkPath === "/" && currentPath === "/") {
-    console.log("Check from second if")
-    return true;
+  const path = checkPath.slice(1);
+  // handle the case when the current path is the root path
+  if (currentPath === "") {
+    if (path === "home" || path === "") return true;
+  } else {
+    if (path !== "" && currentPath.startsWith(path))
+      return true; //  the normal case
+    else if (
+      path === "home" &&
+      (currentPath.startsWith("registered-courses") ||
+        currentPath.startsWith("my-courses"))
+    )
+      return true;
   }
-  else if (checkPath === "/" && currentPath !== "/") {
-    console.log("Check from third if")
-    return false;
-  } else if (currentPath.startsWith(checkPath)) {
-    console.log("Check from fourth if")
-    return true;
-  } 
-  console.log("Check from outside if")
   return false;
 }
 
 const StudentSidebar = () => {
+  const isOpen =
+    isActiveNav("/") ||
+    isActiveNav("/registered-courses") ||
+    isActiveNav("/my-courses");
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -71,7 +70,7 @@ const StudentSidebar = () => {
             {menuItemList.map((menuItem, index) =>
               menuItem.subMenuList ? (
                 <Collapsible
-                  defaultOpen
+                  open={isOpen}
                   className="group/collapsible"
                   key={index}
                 >
@@ -83,6 +82,7 @@ const StudentSidebar = () => {
                             ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:bg-t_primary-70 hover:text-white"
                             : ""
                         }`}
+                        onClick={() => {location.replace("/")}}
                       >
                         <img
                           src={menuItem.icon}
@@ -102,7 +102,7 @@ const StudentSidebar = () => {
                                 href={subMenuItem.path}
                                 className={`${
                                   isActiveNav(subMenuItem.path)
-                                    ? "active-subnav hover:text-inherit hover:bg-t_primary-100"
+                                    ? "active-subnav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-inherit hover:bg-t_primary-100"
                                     : ""
                                 }`}
                               >
@@ -121,14 +121,11 @@ const StudentSidebar = () => {
                     asChild
                     className={`h-fit ${
                       isActiveNav(menuItem.path)
-                        ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white"
+                        ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-white hover:bg-t_primary-700"
                         : ""
                     }`}
                   >
-                    <a
-                      href={menuItem.path}
-                      className="flex items-center gap-2"
-                    >
+                    <a href={menuItem.path} className="flex items-center gap-2">
                       <img
                         src={menuItem.icon}
                         alt={menuItem.name}
