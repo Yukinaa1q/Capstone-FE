@@ -8,6 +8,7 @@ interface ICourseP1{
   price: number;
   registrationDate: string;
   totalRegistration: number;
+  isRegistered: boolean;
 }
 
 interface ICourseP2{
@@ -17,6 +18,7 @@ interface ICourseP2{
   tutor: string;
   classNumber: string;
   studyTime: string;
+  isRegistered: boolean;
 }
 
 

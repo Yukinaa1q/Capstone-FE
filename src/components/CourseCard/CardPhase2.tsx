@@ -5,6 +5,7 @@ import {
   TutorIcon,
 } from "@/assets/icons";
 
+
 import { ICourseP2 } from "@/interfaces/ICourse";
 import toVND from "@/utils/currencyFormat";
 
@@ -13,13 +14,20 @@ interface CourseCardProps {
 }
 
 const CourseCardP2 = ({ courseContent }: CourseCardProps) => {
+  const dispatch = useAppDispatch();
+  const handleRegister = () => {
+    dispatch(register({ courseId: courseContent.courseId, phase: 2 }));
+  };
+  const handleUnregister = () => {
+    dispatch(unregister({ courseId: courseContent.courseId, phase: 1 }));
+  };
+
   return (
     <>
       <div className="flex gap-2 items-center w-full">
         <img src={TutorIcon} alt="tutor-icon" className="size-5" />
         <p className="text-sm">{courseContent.tutor}</p>
       </div>
-
       <div className="flex gap-2 items-center">
         <img src={ClassMemberIcon} alt="class-member-icon" className="size-5" />
         <p>{courseContent.classNumber}</p>

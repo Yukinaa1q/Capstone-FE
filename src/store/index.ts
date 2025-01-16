@@ -1,7 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authenSlice';
 import courseReducer from './coursesSlice';
-import phaseReducer from './phaseSlice';
+import phaseReducer from './phaseSlice'
 
 
 const store = configureStore({

@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/carousel";
 import CourseCard from "@/components/CourseCard";
 import { useAppSelector } from "@/hooks/reduxHook";
+
 interface RecomCoursesLayoutProps {
   title: string;
   // courseList:

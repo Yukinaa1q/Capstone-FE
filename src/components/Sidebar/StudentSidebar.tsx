@@ -2,6 +2,7 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -20,15 +21,24 @@ import {
 import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 
+// For demo only
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@radix-ui/react-label";
+import { useAppDispatch, useAppSelector } from "@/hooks/reduxHook";
+import { togglePhase } from "@/store/phaseSlice";
+import { Link } from "react-router";
+import { changeNav } from "@/store/sidebarSlice";
+
+
 const menuItemList = [
   {
     name: "Courses",
     icon: BookIcon,
     path: "/home",
     subMenuList: [
-      { name: "Available Courses", path: "/" },
-      { name: "Registered Courses", path: "/registered-courses" },
-      { name: "My Courses", path: "/my-courses" },
+      { name: "Available Courses", path: "/", navSymbol: "ac" },
+      { name: "Registered Courses", path: "/registered-courses", navSymbol: "rc" },
+      { name: "My Courses", path: "/my-courses", navSymbol: "mc" },
     ],
   },
   { name: "Schedule", icon: ClockIcon, path: "/schedule" },
@@ -39,7 +49,6 @@ const menuItemList = [
 const currentPath = window.location.pathname.slice(1);
 
 function isActiveNav(checkPath: string): boolean {
-  console.log("Check Path: ", checkPath, " Current Path: ", currentPath);
   const path = checkPath.slice(1);
   // handle the case when the current path is the root path
   if (currentPath === "") {
@@ -98,16 +107,18 @@ const StudentSidebar = () => {
                         {menuItem.subMenuList.map((subMenuItem, index) => (
                           <SidebarMenuSubItem key={index}>
                             <SidebarMenuSubButton asChild>
-                              <a
-                                href={subMenuItem.path}
+                              <Link
+                                to={subMenuItem.path}
+                                onClick={() => dispatch(changeNav(subMenuItem.navSymbol))}
                                 className={`${
                                   isActiveNav(subMenuItem.path)
                                     ? "active-subnav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-inherit hover:bg-t_primary-100"
+
                                     : ""
                                 }`}
                               >
                                 <p>{subMenuItem.name}</p>
-                              </a>
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -138,6 +149,15 @@ const StudentSidebar = () => {
               )
             )}
           </SidebarMenu>
+        </SidebarGroupContent>
+      </SidebarGroup>
+      <SidebarGroup>
+        <SidebarGroupLabel>Demo Control Panel</SidebarGroupLabel>
+        <SidebarGroupContent>
+          <Label>Switch Phase</Label><br/>
+          Phase 1
+          <Switch onCheckedChange={() => {dispatch(togglePhase())}}/>
+          Phase 2
         </SidebarGroupContent>
       </SidebarGroup>
     </SidebarContent>
