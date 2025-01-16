@@ -1,6 +1,5 @@
-import React from 'react'
-
 const TutorsPage = () => {
+  console.log("render tutors page")
   return (
     <div>TutorsPage</div>
   )

@@ -107,17 +107,25 @@ export default function Notification() {
       <PopoverTrigger asChild>
         <Button
           size="icon"
-          variant="outline"
+          variant="ghost"
           className="relative"
           aria-label="Open notifications"
         >
-          <Bell size={16} strokeWidth={2} aria-hidden="true" />
+          <Bell
+            size={24}
+            strokeWidth={1.5}
+            aria-hidden="true"
+            style={{ width: "24px", height: "24px" }}
+          />
           {unreadCount > 0 && (
+            <>
+              <span className="animate-ping size-2 bg-blue-500 rounded-full absolute top-1 right-1"></span>
+              <span className="size-2 bg-blue-500 rounded-full absolute top-1 right-1"></span>
+            </>
+            // <Badge className="absolute -top-2 left-full -translate-x-1/2 text-sx p-1 text-white text-center size-6 rounded-full">
 
-            <Badge className="absolute -top-2 left-full -translate-x-1/2 text-sx p-1 text-white text-center size-6 rounded-full">
-
-              <p className="mx-auto">{unreadCount > 99 ? "99+" : unreadCount}</p>
-            </Badge>
+            //   {/* <p className="mx-auto">{unreadCount > 99 ? "99+" : unreadCount}</p> */}
+            // </Badge>
           )}
         </Button>
       </PopoverTrigger>

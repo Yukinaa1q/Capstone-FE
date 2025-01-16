@@ -13,6 +13,8 @@ import {
   GraduationCapIcon,
   PresentationIcon,
 } from "lucide-react";
+import { useState } from "react";
+import { Link } from "react-router";
 
 const menuItemList = [
   {
@@ -32,7 +34,6 @@ const menuItemList = [
 const currentPath = window.location.pathname.slice(1);
 
 function isActiveNav(checkPath: string): boolean {
-  console.log("Check Path: ", checkPath, " Current Path: ", currentPath);
   const path = checkPath.slice(1);
   // handle the case when the current path is the root path
   if (currentPath === "") {
@@ -51,6 +52,8 @@ function isActiveNav(checkPath: string): boolean {
 }
 
 const AcademicAffairSidebar = () => {
+  const [activeMenuItem, setActiveMenuItem] = useState<number>(NaN);
+  console.log("Rerender AcademicAffairSidebar");
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -59,19 +62,20 @@ const AcademicAffairSidebar = () => {
             {menuItemList.map((menuItem, index) => (
               <SidebarMenuItem key={index}>
                 <SidebarMenuButton asChild>
-                  <a
-                    href={menuItem.path}
+                  <Link
+                    to={menuItem.path}
+                    onClick={() => setActiveMenuItem(index)}
                     className={cn(
                       "flex items-center gap-2 h-fit",
-                      isActiveNav(menuItem.path) &&
-                        "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:bg-t_primary-700 hover:text-white"
+                      activeMenuItem == index &&
+                        "active-nav active:bg-t_primary-700 active:text-white data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:bg-t_primary-700 hover:text-white"
                     )}
                   >
                     <menuItem.icon
                       style={{ width: "1.5rem", height: "1.5rem" }}
                     />
                     <p>{menuItem.name}</p>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
