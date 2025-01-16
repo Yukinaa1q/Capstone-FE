@@ -19,6 +19,7 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { ChevronLeft } from "lucide-react";
+import { useState } from "react";
 
 // For demo only
 import { Switch } from "@/components/ui/switch"
@@ -33,43 +34,43 @@ const menuItemList = [
   {
     name: "Courses",
     icon: BookIcon,
-    path: "home",
+    path: "/home",
     subMenuList: [
       { name: "Available Courses", path: "/", navSymbol: "ac" },
       { name: "Registered Courses", path: "/registered-courses", navSymbol: "rc" },
       { name: "My Courses", path: "/my-courses", navSymbol: "mc" },
     ],
   },
-  { name: "Schedule", icon: ClockIcon, path: "/schedule/studentid" },
-  { name: "Payment", icon: CardIcon, path: "/payment/studentid" },
-  { name: "Chat Message", icon: ChatIcon, path: "/chat/studentid" },
+  { name: "Schedule", icon: ClockIcon, path: "/schedule" },
+  { name: "Payment", icon: CardIcon, path: "/payment" },
+  { name: "Chat Message", icon: ChatIcon, path: "/chat" },
 ];
 
-const currentPath = window.location.pathname;
+const currentPath = window.location.pathname.slice(1);
 
 function isActiveNav(checkPath: string): boolean {
-  if (
-    // Specifially made for Courses nav bar
-    menuItemList[0].subMenuList!.some((subMenuItem) =>
-      currentPath.startsWith(subMenuItem.path)
-    ) &&
-    checkPath === "home"
-  ) {
-    return true;
-  } else if (checkPath === "/" && currentPath === "/") {
-    return true;
-  } else if (checkPath === "/" && currentPath !== "/") {
-    return false;
-  } else if (currentPath.startsWith(checkPath)) {
-    return true;
+  const path = checkPath.slice(1);
+  // handle the case when the current path is the root path
+  if (currentPath === "") {
+    if (path === "home" || path === "") return true;
+  } else {
+    if (path !== "" && currentPath.startsWith(path))
+      return true; //  the normal case
+    else if (
+      path === "home" &&
+      (currentPath.startsWith("registered-courses") ||
+        currentPath.startsWith("my-courses"))
+    )
+      return true;
   }
   return false;
 }
 
 const StudentSidebar = () => {
-  // For demo only
-  const dispatch = useAppDispatch();
-  const nav = useAppSelector(state => state.sidebars.activeNav);
+  const isOpen =
+    isActiveNav("/") ||
+    isActiveNav("/registered-courses") ||
+    isActiveNav("/my-courses");
   return (
     <SidebarContent>
       <SidebarGroup>
@@ -78,7 +79,7 @@ const StudentSidebar = () => {
             {menuItemList.map((menuItem, index) =>
               menuItem.subMenuList ? (
                 <Collapsible
-                  defaultOpen
+                  open={isOpen}
                   className="group/collapsible"
                   key={index}
                 >
@@ -90,6 +91,7 @@ const StudentSidebar = () => {
                             ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:bg-t_primary-70 hover:text-white"
                             : ""
                         }`}
+                        onClick={() => {location.replace("/")}}
                       >
                         <img
                           src={menuItem.icon}
@@ -109,8 +111,9 @@ const StudentSidebar = () => {
                                 to={subMenuItem.path}
                                 onClick={() => dispatch(changeNav(subMenuItem.navSymbol))}
                                 className={`${
-                                  subMenuItem.navSymbol == nav //isActiveNav(subMenuItem.path)
-                                    ? "active-subnav hover:text-inherit hover:bg-t_primary-100"
+                                  isActiveNav(subMenuItem.path)
+                                    ? "active-subnav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-inherit hover:bg-t_primary-100"
+
                                     : ""
                                 }`}
                               >
@@ -129,7 +132,7 @@ const StudentSidebar = () => {
                     asChild
                     className={`h-fit ${
                       isActiveNav(menuItem.path)
-                        ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white"
+                        ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-white hover:bg-t_primary-700"
                         : ""
                     }`}
                   >

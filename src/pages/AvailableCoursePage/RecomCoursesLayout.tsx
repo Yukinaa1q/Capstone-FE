@@ -15,29 +15,31 @@ interface RecomCoursesLayoutProps {
 
 const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
   const availableCourses = useAppSelector((state) => state.courses);
-  const phase = useAppSelector((state) => state.phases.phase);
-  let courseList = phase === 1 ? availableCourses.coursesP1 : availableCourses.coursesP2;
   return (
-    <section className="mt-10 w-full">
-      <h3 className="font-semibold text-xl mb-2">{title}</h3>
+    <section className="mt-4 w-full">
+      <h3 className="font-semibold text-xl mb-2 w-fit">{title}</h3>
+
       <Carousel
         opts={{
           align: "start",
         }}
-        className="mx-auto w-[1000px]"
+        className="w-full"
       >
-        <CarouselContent>
-          {courseList.map((courseContent, index) => (
+        <CarouselContent className="w-full">
+          {availableCourses.coursesP2.map((courseContent, index) => (
             <CarouselItem
               key={index}
-              className="lg:basis-1/4 scale-90 hover:scale-100 hover:transition-transform transition-transform"
+              className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xxl:basis-1/5"
             >
               <CourseCard courseContent={courseContent} />
+             
             </CarouselItem>
           ))}
+          
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+
+        <CarouselPrevious className="-left-4" />
+        <CarouselNext className="-right-4" />
       </Carousel>
     </section>
   );

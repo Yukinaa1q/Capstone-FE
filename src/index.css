@@ -64,7 +64,8 @@
   }
   * {
     font-family: "Montserrat", serif;
-    @apply lg:text-[14px] 2xl:text-[16px];
+    box-sizing: border-box;
+    /* @apply lg:text-[14px] 2xl:text-[16px]; */
   }
 }
 
@@ -73,18 +74,56 @@
     @apply bg-t_primary-100 hover:bg-t_primary-100 rounded-md;
   }
   .active-nav {
-    @apply bg-t_primary-700 text-white font-semibold data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white;
+    @apply bg-t_primary-700 hover:bg-t_primary-700 text-white font-semibold data-[active=true]:hover:bg-t_primary-700 data-[active=true]:hover:text-white;
   }
 
   .active-nav img {
     filter: invert(1);
   }
 
-  /* button ~ a.active {
-    @apply bg-t_primary-200 rounded-md;
+  .animate-register-btn {
+    width: 2.25rem;
+    @apply bg-green-400;
+    transition: all 0.2s ease-in;
   }
 
-  a.active {
-    @apply bg-t_primary-700 text-white font-semibold;
-  } */
+  .animate-register-btn p {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+  }
+
+  .animate-register-btn:hover {
+    width: 6.25rem;
+    @apply bg-green-500;
+    transition: all 0.2s ease-in;
+  }
+
+  .animate-register-btn:hover p {
+    opacity: 100%;
+    transition: opacity 0.2s ease-in;
+  }
+
+
+  .animate-detail-btn {
+    width: 2.25rem;
+    @apply bg-t_secondary-300;
+    transition: all 0.2s ease-in;
+  }
+
+  .animate-detail-btn p {
+    opacity: 0;
+    transition: opacity 0.2s ease-in;
+  }
+
+  .animate-detail-btn:hover {
+    width: 5.25rem;
+    @apply bg-t_secondary-400;
+    transition: width 0.2s ease-in;
+  }
+
+  .animate-detail-btn:hover p {
+    opacity: 100%;
+    transition: opacity 0.2s ease-in;
+  }
+
 }

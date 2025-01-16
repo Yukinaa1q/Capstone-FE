@@ -2,7 +2,6 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from './authenSlice';
 import courseReducer from './coursesSlice';
 import phaseReducer from './phaseSlice'
-import sidebarReducer from './sidebarSlice';
 
 
 const store = configureStore({
@@ -10,7 +9,6 @@ const store = configureStore({
     auths: authReducer,
     courses: courseReducer,
     phases: phaseReducer,
-    sidebars: sidebarReducer,
   },  
 })
 
