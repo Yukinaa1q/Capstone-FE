@@ -16,14 +16,15 @@ import {
 } from "../ui/collapsible";
 import { ChevronLeft } from "lucide-react";
 
-import { BookIcon, ChatIcon, ClockIcon, CardIcon } from "@/assets/icons";
-import { cn } from "@/lib/utils";
+import { BookIcon, ChatIcon, ClockIcon } from "@/assets/icons";
+import { useState } from "react";
+import { Link } from "react-router";
 
 const menuItemList = [
   {
     name: "Courses",
     icon: BookIcon,
-    path: "/home",
+    path: "/",
     subMenuList: [
       { name: "Available Courses", path: "/" },
       { name: "Registered Courses", path: "/registered-courses" },
@@ -31,36 +32,13 @@ const menuItemList = [
     ],
   },
   { name: "Schedule", icon: ClockIcon, path: "/schedule" },
-  { name: "Payment", icon: CardIcon, path: "/payment" },
   { name: "Chat Message", icon: ChatIcon, path: "/chat" },
 ];
 
-const currentPath = window.location.pathname.slice(1);
-
-function isActiveNav(checkPath: string): boolean {
-  console.log("Check Path: ", checkPath, " Current Path: ", currentPath);
-  const path = checkPath.slice(1);
-  // handle the case when the current path is the root path
-  if (currentPath === "") {
-    if (path === "home" || path === "") return true;
-  } else {
-    if (path !== "" && currentPath.startsWith(path))
-      return true; //  the normal case
-    else if (
-      path === "home" &&
-      (currentPath.startsWith("registered-courses") ||
-        currentPath.startsWith("my-courses"))
-    )
-      return true;
-  }
-  return false;
-}
 
 const TutorSidebar = () => {
-  const isOpen =
-    isActiveNav("/") ||
-    isActiveNav("/registered-courses") ||
-    isActiveNav("/my-courses");
+  const [activeMenuItem, setActiveMenuItem] = useState<number[]>([0, 0]);
+  const [isOpen, setIsOpen] = useState<boolean>(true);
 
   return (
     <SidebarContent>
@@ -78,37 +56,47 @@ const TutorSidebar = () => {
                   <SidebarMenuItem>
                     <CollapsibleTrigger asChild>
                       <SidebarMenuButton
+                        asChild
                         className={`h-fit ${
-                          isActiveNav(menuItem.path)
-                            ? "active-nav hover:bg-t_primary-700 active:bg-t_tertiary-700 active:text-white hover:text-white data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white data-[active=true]:hover:bg-t_primary-700"
+                          activeMenuItem[0] === index
+                            ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:bg-t_primary-70 hover:text-white"
                             : ""
                         }`}
-                        onClick={() => {location.replace("/")}}
                       >
-                        <img
-                          src={menuItem.icon}
-                          alt={menuItem.name}
-                          className="size-6"
-                        />
-                        <p>{menuItem.name}</p>
-                        <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
+                        <Link
+                          to={menuItem.path}
+                          onClick={() => {
+                            setIsOpen(true);
+                            setActiveMenuItem([index, 0]);
+                          }}
+                          className="flex items-center gap-2"
+                        >
+                          <img
+                            src={menuItem.icon}
+                            alt={menuItem.name}
+                            className="size-6"
+                          />
+                          <p>{menuItem.name}</p>
+                          <ChevronLeft className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:-rotate-90" />
+                        </Link>
                       </SidebarMenuButton>
                     </CollapsibleTrigger>
                     <CollapsibleContent className="peer">
                       <SidebarMenuSub>
-                        {menuItem.subMenuList.map((subMenuItem, index) => (
-                          <SidebarMenuSubItem key={index}>
+                        {menuItem.subMenuList.map((subMenuItem, idx) => (
+                          <SidebarMenuSubItem key={idx}>
                             <SidebarMenuSubButton asChild>
-                              <a
-                                href={subMenuItem.path}
+                              <Link
+                                onClick={() => setActiveMenuItem([index, idx])}
+                                to={subMenuItem.path}
                                 className={`${
-                                  isActiveNav(subMenuItem.path)
-                                    ? "active-subnav hover:text-inherit hover:bg-t_primary-100"
+                                  activeMenuItem[1] === idx
+                                    ? "active-subnav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-inherit hover:bg-t_primary-100"
                                     : ""
                                 }`}
                               >
                                 <p>{subMenuItem.name}</p>
-                              </a>
+                              </Link>
                             </SidebarMenuSubButton>
                           </SidebarMenuSubItem>
                         ))}
@@ -118,14 +106,21 @@ const TutorSidebar = () => {
                 </Collapsible>
               ) : (
                 <SidebarMenuItem key={index}>
-                  <SidebarMenuButton asChild className={`h-fit`}>
-                    <a
-                      href={menuItem.path}
-                      className={cn(
-                        "flex items-center gap-2",
-                        isActiveNav(menuItem.path) &&
-                          "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:bg-t_primary-700 hover:text-white"
-                      )}
+                  <SidebarMenuButton
+                    asChild
+                    className={`h-fit ${
+                      activeMenuItem[0] === index
+                        ? "active-nav data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white hover:text-white hover:bg-t_primary-700"
+                        : ""
+                    }`}
+                  >
+                    <Link
+                      to={menuItem.path}
+                      onClick={() => {
+                        setIsOpen(false);
+                        setActiveMenuItem([index, 0]);
+                      }}
+                      className="flex items-center gap-2"
                     >
                       <img
                         src={menuItem.icon}
@@ -133,7 +128,7 @@ const TutorSidebar = () => {
                         className="size-6"
                       />
                       <p>{menuItem.name}</p>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               )

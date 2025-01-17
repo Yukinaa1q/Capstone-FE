@@ -31,26 +31,6 @@ const menuItemList = [
   { name: "Student", icon: BackpackIcon, path: "/students" },
 ];
 
-const currentPath = window.location.pathname.slice(1);
-
-function isActiveNav(checkPath: string): boolean {
-  const path = checkPath.slice(1);
-  // handle the case when the current path is the root path
-  if (currentPath === "") {
-    if (path === "home" || path === "") return true;
-  } else {
-    if (path !== "" && currentPath.startsWith(path))
-      return true; //  the normal case
-    else if (
-      path === "home" &&
-      (currentPath.startsWith("registered-courses") ||
-        currentPath.startsWith("my-courses"))
-    )
-      return true;
-  }
-  return false;
-}
-
 const AcademicAffairSidebar = () => {
   const [activeMenuItem, setActiveMenuItem] = useState<number>(NaN);
   console.log("Rerender AcademicAffairSidebar");
