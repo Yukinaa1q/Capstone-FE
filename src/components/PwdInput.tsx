@@ -7,9 +7,10 @@ import { useState } from "react";
 
 interface PwdInputProps {
   label: string;
+  placeholder: string;
 }
 
-export default function PwdInput({label}: PwdInputProps) {
+export default function PwdInput({label, placeholder = ""}: PwdInputProps) {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   const toggleVisibility = () => setIsVisible((prevState) => !prevState);
@@ -21,7 +22,7 @@ export default function PwdInput({label}: PwdInputProps) {
         <Input
           id="input-23"
           className="pe-9"
-          placeholder="Password"
+          placeholder={placeholder}
           type={isVisible ? "text" : "password"}
         />
         <button
