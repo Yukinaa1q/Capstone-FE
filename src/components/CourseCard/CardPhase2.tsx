@@ -14,14 +14,6 @@ interface CourseCardProps {
 }
 
 const CourseCardP2 = ({ courseContent }: CourseCardProps) => {
-  const dispatch = useAppDispatch();
-  const handleRegister = () => {
-    dispatch(register({ courseId: courseContent.courseId, phase: 2 }));
-  };
-  const handleUnregister = () => {
-    dispatch(unregister({ courseId: courseContent.courseId, phase: 1 }));
-  };
-
   return (
     <>
       <div className="flex gap-2 items-center w-full">

@@ -10,6 +10,10 @@ import TestPage from "./pages/TestPage/TestPage";
 import SchedulePage from "./pages/SchedulePage.tsx/SchedulePage";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ChatPage from "./pages/ChatPage/ChatPage";
+import CoursesPage from "./pages/CoursesPage/CoursesPage";
+import ClassesPage from "./pages/ClassesPage/ClassesPage";
+import TutorsPage from "./pages/TutorsPage/TutorsPage";
+import StudentsPage from "./pages/StudentsPage/StudentsPage";
 
 const router = createBrowserRouter([
   {
@@ -39,6 +43,22 @@ const router = createBrowserRouter([
       {
         path: "chat",
         element: <ChatPage />,
+      },
+      {
+        path: "courses",
+        element: <CoursesPage />,
+      },
+      {
+        path: "classes",
+        element: <ClassesPage />,
+      },
+      {
+        path: "tutors",
+        element: <TutorsPage />,
+      },
+      {
+        path: "students",
+        element: <StudentsPage />,
       },
     ],
   },

@@ -3,35 +3,15 @@ import {
   RegistrationDateIcon,
   RegistrationTotalIcon,
 } from "@/assets/icons";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "../ui/button";
 
 import { ICourseP1 } from "@/interfaces/ICourse";
 import toVND from "@/utils/currencyFormat";
-import { useAppDispatch } from "@/hooks/reduxHook";
-import { register, unregister } from "@/store/coursesSlice";
 
 interface CourseCardProps {
   courseContent: ICourseP1;
 }
 
 const CourseCardP1 = ({ courseContent }: CourseCardProps) => {
-  const dispatch = useAppDispatch();
-  const handleRegister = () => {
-    dispatch(register({ courseId: courseContent.courseId, phase: 1 }));
-  };
-  const handleUnregister = () => {
-    dispatch(unregister({ courseId: courseContent.courseId, phase: 1 }));
-  };
-
   return (
     <>
       <div className="flex gap-2 items-center">
