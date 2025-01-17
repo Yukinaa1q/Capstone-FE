@@ -32,7 +32,7 @@ const menuItemList = [
 ];
 
 const AcademicAffairSidebar = () => {
-  const [activeMenuItem, setActiveMenuItem] = useState<number>(NaN);
+  const [activeMenuItem, setActiveMenuItem] = useState<number>([0][0]);
   console.log("Rerender AcademicAffairSidebar");
   return (
     <SidebarContent>
