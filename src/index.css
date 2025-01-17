@@ -127,3 +127,30 @@
   }
 
 }
+
+#dob-calendar .rdp-caption_dropdowns .rdp-vhidden {
+  display: none;
+}
+
+#dob-calendar .rdp-caption_dropdowns .rdp-dropdown_month div {
+  display: none;
+}
+
+#dob-calendar .rdp-caption_dropdowns .rdp-dropdown_year div {
+  display: none;
+}
+
+#dob-calendar > div > div > div {
+  justify-content: left;
+}
+
+#dob-calendar .rdp-caption_dropdowns {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+#dob-calendar .rdp-caption_dropdowns select {
+  border-radius: 4px;
+  border-bottom: 2px solid #e2e8f0;
+}

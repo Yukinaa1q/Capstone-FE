@@ -1,83 +1,50 @@
-import { Label } from "./ui/label";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./ui/select";
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { useState } from "react";
 
-const month = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+interface DOBInputProps {
+  onSelect: (...event: any[]) => void;
+  value: Date;
+}
 
-const currentYear = new Date().getFullYear();
+const DOBInput = ({ onSelect, value }: DOBInputProps) => {
 
-const DOBInput = () => {
   return (
-    <div>
-      <Label htmlFor="dob">Date of Birth</Label>
-      <div className="flex gap-2">
-        {/* Day select */}
-        <Select>
-          <SelectTrigger className="">
-            <SelectValue placeholder="Day" />
-          </SelectTrigger>
-          <SelectContent>
-            {Array.from({ length: 31 }, (_, i) => i + 1).map((d) => (
-              <SelectItem key={d} value={String(d)}>
-                {d}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-
-
-        {/* Month select */}
-        <Select>
-          <SelectTrigger className="">
-            <SelectValue placeholder="Month" />
-          </SelectTrigger>
-          <SelectContent>
-            {month.map((m) => (
-              <SelectItem key={m} value={m}>
-                {m}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-
-
-        {/* Year select */}
-        <Select>
-          <SelectTrigger className="">
-            <SelectValue placeholder="Year" />
-          </SelectTrigger>
-          <SelectContent>
-            {
-              Array.from({ length: 100 }, (_, i) => currentYear - 30 - (50 - i)).map((y) => (
-                <SelectItem key={y} value={String(y)}>
-                  {y}
-                </SelectItem>
-              ))
-            }
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "justify-start text-left font-normal w-full",
+            !value && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon />
+          {value ? format(value, "PPP") : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-fit p-0" align="start">
+        <Calendar
+          id="dob-calendar"
+          mode="single"
+          selected={value}
+          onSelect={onSelect}
+          captionLayout="dropdown"
+          fromYear={new Date().getFullYear() - 100}
+          toYear={new Date().getFullYear()}
+          initialFocus
+        />
+      </PopoverContent>
+    </Popover>
   );
 };
 

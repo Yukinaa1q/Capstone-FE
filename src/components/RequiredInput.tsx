@@ -1,19 +1,28 @@
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { FormControl, FormItem, FormLabel, FormMessage } from "./ui/form";
+import { cn } from "@/lib/utils";
 
 interface RequiredInputProps {
   label: string;
-  type: string;
-  placeholder: string;
+  orientation?: "horizontal" | "vertical";
+  isRequired?: boolean;
+  children: React.ReactNode;
 }
 
-export default function RequiredInput({label, type, placeholder}: RequiredInputProps) {
+export default function RequiredInput({
+  label,
+  children,
+  isRequired = true,
+  orientation = "vertical",
+}: RequiredInputProps) {
   return (
-    <div>
-      <Label htmlFor="input-02">
-        {label} <span className="text-destructive">*</span>
-      </Label>
-      <Input id="input-02" placeholder={placeholder} type={type} required />
-    </div>
+    <FormItem>
+      <div className={cn(orientation === "horizontal" && "flex gap-8")}>
+        <FormLabel>
+          {label} {isRequired && <span className="text-destructive">*</span>}
+        </FormLabel>
+        <FormControl>{children}</FormControl>
+      </div>
+      <FormMessage />
+    </FormItem>
   );
 }
