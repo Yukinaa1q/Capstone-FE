@@ -1,10 +1,15 @@
 import DataTable from "@/components/DataTable";
 import toVND from "@/utils/currencyFormat";
 import { ColumnDef } from "@tanstack/react-table";
+import { MoreHorizontal, SquarePlus } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
-import { MoreHorizontal } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,6 +18,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router";
 
 // 1 Define type and data
 
@@ -97,6 +103,19 @@ const columns: ColumnDef<CourseOverview>[] = [
 const CoursesPage = () => {
   return (
     <section className="px-8 pt-4">
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild className="">
+            <Link to="new" className={buttonVariants({variant: "outline", size: "icon"})} >
+              <SquarePlus
+                strokeWidth={1.5}
+                style={{ width: "1.25rem", height: "1.25rem" }}
+              />
+            </Link>
+          </TooltipTrigger>
+          <TooltipContent>Add new course</TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       <DataTable columns={columns} data={courseList} />
     </section>
   );

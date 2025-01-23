@@ -2,10 +2,25 @@ import { GoogleIcon, XIcon } from "@/assets/icons";
 import PwdInput from "@/components/PwdInput";
 import RequiredInput from "@/components/RequiredInput";
 import { Button } from "@/components/ui/button";
-import { Link, useNavigate } from "react-router";
+import { Form, FormField } from "@/components/ui/form";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
+import PhoneInp from "@/components/PhoneInput";
+
+const loginSchema = yup.object(
+  {
+    phone: yup.string().required("Phone number is required"),
+    password: yup.string().required("Password is required"),
+  }
+).required();
 
 const LoginForm = () => {
-  const navigate = useNavigate();
+  const form = useForm({resolver: yupResolver(loginSchema),defaultValues: {email: "", password: ""}});
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
   return (
     <div className="space-y-4 w-2/5 my-auto">
       <div>
@@ -15,21 +30,42 @@ const LoginForm = () => {
           <span className="font-bold text-cyan-400 text-xl"> Tucour</span>
         </h2>
       </div>
-      <form action="" className="space-y-2">
-        <RequiredInput label="Email" type="text" placeholder="Email" />
-        <PwdInput label="Password" />
-        <div className="">
-          <Link
-            to="#"
-            className="block ml-auto text-right text-sm underline text-t_primary-400 hover:text-t_primary-500 right-0"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <FormField
+            name="phone"
+            control={form.control}
+            render={({ field }) => (
+              <RequiredInput label="Phone Number" isRequired={false}>
+                <PhoneInp onChange={field.onChange} value={field.value} />
+              </RequiredInput>
+            )}
+          />
+          <FormField
+            name="password"
+            control={form.control}
+            render={({ field }) => (
+              <RequiredInput label="Password" isRequired={false}>
+                <PwdInput onChange={field.onChange} value={field.value} />
+              </RequiredInput>
+            )}
+          />
+          <div className="">
+            <Link
+              to="#"
+              className="block ml-auto text-right text-sm underline text-t_primary-400 hover:text-t_primary-500 right-0"
+            >
+              Forgot password
+            </Link>
+          </div>
+          <Button
+            onClick={() => {}}
+            className="bg-t_primary-400 hover:bg-t_primary-500 w-full"
           >
-            Forgot password
-          </Link>
-        </div>
-        <Button onClick={() => { navigate("/") }} className="bg-t_primary-400 hover:bg-t_primary-500 w-full">
-          Log In
-        </Button>
-      </form>
+            Log In
+          </Button>
+        </form>
+      </Form>
       <div className="flex items-center space-x-4">
         <div className="flex-1 border-t border-black"></div>
         <span className="text-black text-md font-sans">Or With</span>
@@ -47,7 +83,7 @@ const LoginForm = () => {
         Dont't have an account?{" "}
         <span>
           <Link
-            to="#"
+            to="/signup"
             className="underline text-t_primary-400 hover:text-t_primary-500 text-sm"
           >
             Create Now

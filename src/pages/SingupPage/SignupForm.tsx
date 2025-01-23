@@ -7,11 +7,13 @@ import { Link } from "react-router";
 import { useForm } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import PhoneInp from "@/components/PhoneInput";
 
 interface SignUpData {
   role: string;
   fullname: string;
   email: string;
+  phone: string;
   dob: Date;
   pwd: string;
   repwd: string;
@@ -23,17 +25,23 @@ const SignupForm = () => {
       fullname: "",
       role: "",
       email: "",
+      phone: "",
       pwd: "",
       repwd: "",
     },
   });
   const handleSubmit = (formData: SignUpData) => {
     console.log(formData);
-    console.log("Date: ", formData.dob.getDay(), formData.dob.getMonth(), formData.dob.getFullYear());
+    console.log(
+      "Date: ",
+      formData.dob.getDay(),
+      formData.dob.getMonth(),
+      formData.dob.getFullYear()
+    );
   };
 
   return (
-    <div className="mt-8 w-full md:w-2/3 lg:w-2/5">
+    <div className="w-full md:w-2/3 lg:w-2/5">
       <div>
         <h1 className="font-bold text-3xl">Sign Up Now!</h1>
         <h2 className="font-medium">To not miss our latest features</h2>
@@ -76,11 +84,11 @@ const SignupForm = () => {
             )}
           />
           <FormField
-            name="dob"
+            name="phone"
             control={form.control}
             render={({ field }) => (
-              <RequiredInput label="Date of Birth" isRequired={false}>
-                <DOBInput onSelect={field.onChange} value={field.value}/>
+              <RequiredInput label="Phone Number">
+                <PhoneInp onChange={field.onChange} value={field.value}/>
               </RequiredInput>
             )}
           />
@@ -111,7 +119,7 @@ const SignupForm = () => {
         Already has an account?{" "}
         <span>
           <Link
-            to="#"
+            to="/login"
             className="underline text-t_primary-400 hover:text-t_primary-500"
           >
             Log In Now
