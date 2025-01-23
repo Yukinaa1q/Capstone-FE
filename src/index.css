@@ -67,6 +67,15 @@
     box-sizing: border-box;
     /* @apply lg:text-[14px] 2xl:text-[16px]; */
   }
+
+  input[type="file"]::-webkit-file-upload-button {
+    height: 100%;
+    padding: 0 1rem;
+    font-weight: 600;
+    margin-right: 1rem;
+    @apply bg-t_secondary-100
+  }
+
 }
 
 @layer utilities {
@@ -103,7 +112,6 @@
     transition: opacity 0.2s ease-in;
   }
 
-
   .animate-detail-btn {
     width: 2.25rem;
     @apply bg-t_secondary-300;
@@ -125,5 +133,31 @@
     opacity: 100%;
     transition: opacity 0.2s ease-in;
   }
+}
 
+#dob-calendar .rdp-caption_dropdowns .rdp-vhidden {
+  display: none;
+}
+
+#dob-calendar .rdp-caption_dropdowns .rdp-dropdown_month div {
+  display: none;
+}
+
+#dob-calendar .rdp-caption_dropdowns .rdp-dropdown_year div {
+  display: none;
+}
+
+#dob-calendar > div > div > div {
+  justify-content: left;
+}
+
+#dob-calendar .rdp-caption_dropdowns {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+}
+
+#dob-calendar .rdp-caption_dropdowns select {
+  border-radius: 4px;
+  border-bottom: 2px solid #e2e8f0;
 }

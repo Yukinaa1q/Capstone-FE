@@ -4,37 +4,122 @@ import RequiredInput from "@/components/RequiredInput";
 import RoleInput from "@/components/RoleInput";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
+import { useForm } from "react-hook-form";
+import { Form, FormField } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import PhoneInp from "@/components/PhoneInput";
+
+interface SignUpData {
+  role: string;
+  fullname: string;
+  email: string;
+  phone: string;
+  dob: Date;
+  pwd: string;
+  repwd: string;
+}
 
 const SignupForm = () => {
+  const form = useForm<SignUpData>({
+    defaultValues: {
+      fullname: "",
+      role: "",
+      email: "",
+      phone: "",
+      pwd: "",
+      repwd: "",
+    },
+  });
+  const handleSubmit = (formData: SignUpData) => {
+    console.log(formData);
+    console.log(
+      "Date: ",
+      formData.dob.getDay(),
+      formData.dob.getMonth(),
+      formData.dob.getFullYear()
+    );
+  };
+
   return (
-    <div className="space-y-4 w-2/5">
+    <div className="w-full md:w-2/3 lg:w-2/5">
       <div>
         <h1 className="font-bold text-3xl">Sign Up Now!</h1>
         <h2 className="font-medium">To not miss our latest features</h2>
       </div>
-      <form action="" className="space-y-2">
-        <div className="flex gap-4">
-          <p className="font-medium text-sm">You are</p>
-          <RoleInput />
-        </div>
-        <RequiredInput
-          label="Full Name"
-          type="text"
-          placeholder="Your Full Name"
-        />
-        <RequiredInput label="Email" type="email" placeholder="Email" />
-        <DOBInput />
-        <PwdInput label="Password" />
-        <PwdInput label="Re-enter Password" />
-        <Button className="bg-t_primary-400 hover:bg-t_primary-500 w-full">
-          Register
-        </Button>
-      </form>
-      <p className="text-xs text-center">
+      <Form {...form}>
+        <form
+          className="mt-4 space-y-4"
+          onSubmit={form.handleSubmit(handleSubmit)}
+        >
+          {/* FormField is actually a Controller in react hook form */}
+          <FormField
+            name="role"
+            control={form.control}
+            // defaultValue={"student"}
+            render={({ field }) => (
+              <RequiredInput label="You are" orientation="horizontal">
+                <RoleInput
+                  onChange={(val) => field.onChange(val)}
+                  value={field.value}
+                />
+              </RequiredInput>
+            )}
+          />
+          <FormField
+            name="fullname"
+            control={form.control}
+            render={({ field }) => (
+              <RequiredInput label="Full Name">
+                <Input type="text" {...field} />
+              </RequiredInput>
+            )}
+          />
+          <FormField
+            name="email"
+            control={form.control}
+            render={({ field }) => (
+              <RequiredInput label="Email">
+                <Input type="email" {...field} />
+              </RequiredInput>
+            )}
+          />
+          <FormField
+            name="phone"
+            control={form.control}
+            render={({ field }) => (
+              <RequiredInput label="Phone Number">
+                <PhoneInp onChange={field.onChange} value={field.value}/>
+              </RequiredInput>
+            )}
+          />
+          <FormField
+            name="pwd"
+            control={form.control}
+            render={({ field }) => (
+              <RequiredInput label="Password">
+                <PwdInput onChange={field.onChange} value={field.value} />
+              </RequiredInput>
+            )}
+          />
+          <FormField
+            name="repwd"
+            control={form.control}
+            render={({ field }) => (
+              <RequiredInput label="Re-enter Password">
+                <PwdInput onChange={field.onChange} value={field.value} />
+              </RequiredInput>
+            )}
+          />
+          <Button className="bg-t_primary-400 hover:bg-t_primary-500 w-full">
+            Register
+          </Button>
+        </form>
+      </Form>
+      <p className="text-sm text-center mt-2">
         Already has an account?{" "}
         <span>
           <Link
-            to="#"
+            to="/login"
             className="underline text-t_primary-400 hover:text-t_primary-500"
           >
             Log In Now
