@@ -17,12 +17,12 @@ interface ParagraphElement {
 }
 
 interface Heading1Element {
-  type: "h2";
+  type: "h1";
   children: CustomText[];
 }
 
 interface Heading2Element {
-  type: "h1";
+  type: "h2";
   children: CustomText[];
 }
 
@@ -35,14 +35,6 @@ interface Heading4Element {
   type: "h4";
   children: CustomText[];
 }
-
-// interface OrderedListElement {
-//   type: "ordered-list";
-//   latestNumber: number;
-//   children: OrderedListItemElement[];
-// }
-
-// List of custom Text Node types
 
 
 export type {CustomElement, CustomText, CustomEditor};
