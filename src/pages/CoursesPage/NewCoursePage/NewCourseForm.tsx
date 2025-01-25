@@ -1,9 +1,9 @@
+import CourseOutlineInput from "@/components/CourseOutlineInput";
 import RequiredInput from "@/components/RequiredInput";
 import TextEditor from "@/components/TextEditor/TextEditor";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
@@ -67,7 +67,7 @@ const NewCourseForm = ({ className }: { className?: string }) => {
           name="courseOutline"
           render={({ field }) => (
             <RequiredInput label="Course Outline">
-              <Textarea {...field} />
+              <CourseOutlineInput/>
             </RequiredInput>
           )}
         />
