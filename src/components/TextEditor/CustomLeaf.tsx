@@ -1,6 +1,6 @@
 import { RenderLeafProps } from "slate-react";
 
-const FormatText = ({ attributes, children, leaf }: RenderLeafProps) => {
+const TextNode = ({ attributes, children, leaf }: RenderLeafProps) => {
   return (
     <span
       {...attributes}
@@ -16,5 +16,5 @@ const FormatText = ({ attributes, children, leaf }: RenderLeafProps) => {
 };
 
 export default function buildLeaf(props: RenderLeafProps) {
-  return <FormatText {...props} />;
+  return <TextNode {...props} />;
 }

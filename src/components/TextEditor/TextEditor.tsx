@@ -1,15 +1,15 @@
-// Import React dependencies.
-import { LegacyRef, useCallback, useRef, useState } from "react";
-// Import the Slate editor factory.
-import { createEditor, Descendant, Editor } from "slate";
-// Import the Slate components and React plugin.
+import { useCallback, useState } from "react";
+import { createEditor, Descendant, Editor, Node } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
+import { ImmerReducer, useImmerReducer } from "use-immer";
 import { CustomElement, CustomText, CustomEditor } from "./type";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { Bold, Italic, Underline } from "lucide-react";
+import { Separator } from "../ui/separator";
 import buildElement from "./CustomElement";
 import buildLeaf from "./CustomLeaf";
 import handleTextEditor from "./handleTextEditor";
+import TextFormatter from "./Formatter/TextFormatter";
+import HeadingFormatter from "./Formatter/HeadingFormatter";
+import TextEditorCtx, { EditorAction, EditorFormat } from "./EditorContext";
 
 declare module "slate" {
   interface CustomTypes {
@@ -26,117 +26,106 @@ const initialValue: Descendant[] = [
   },
 ];
 
+const reducer: ImmerReducer<EditorFormat, EditorAction> = (state, action) => {
+  switch (action.type) {
+    case "TOGGLE_BOLD":
+      state.textFormat.bold = !state.textFormat.bold;
+      return state;
+    case "TOGGLE_ITALIC":
+      state.textFormat.italic = !state.textFormat.italic;
+      return state;
+    case "TOGGLE_UNDERLINE":
+      state.textFormat.underline = !state.textFormat.underline;
+      return state;
+    case "UPDATE_TEXT_FORMAT":
+      state.textFormat = action.payload;
+      return state;
+    case "CHANGE_TEXT_STYLE":
+      state.textStyle.type = action.payload;
+      return state;
+    default:
+      return state;
+  }
+};
+
 const TextEditor = () => {
   // Create a Slate editor object that won't change across renders.
   const [editor] = useState<Editor>(() => withReact(createEditor()));
-  const [activeMark, setActiveMark] = useState<Omit<CustomText, "text">>({
-    bold: false,
-    italic: false,
-    underline: false,
-  });
+  const [state, dispatch] = useImmerReducer<EditorFormat, EditorAction>(
+    reducer,
+    {
+      textFormat: {
+        bold: false,
+        italic: false,
+        underline: false,
+      },
+      textStyle: {
+        type: "p",
+      },
+    }
+  );
 
   const renderElement = useCallback(buildElement, []);
   const renderLeaf = useCallback(buildLeaf, []);
 
-  const setValue = () => {
-    let mark: keyof Omit<CustomText, "text">;
-    const arrRes = [];
-    console.log("activeMark", activeMark);
-    for (mark in activeMark) {
-      if (activeMark[mark]) {
-        arrRes.push(mark);
-      }
-    }
-    console.log(arrRes);
-    return arrRes;
-  };
-
   const updateState = () => {
     let mark: keyof Omit<CustomText, "text">;
     const newMarkState: Omit<CustomText, "text"> = {};
-    for (mark in activeMark) {
+    for (mark in state.textFormat) {
       const isActive = handleTextEditor.isMarked(editor, mark);
-      console.log(`${mark}: ${isActive}`);
       newMarkState[mark] = isActive;
     }
-    setActiveMark(newMarkState);
+    dispatch({ type: "UPDATE_TEXT_FORMAT", payload: newMarkState });
   };
-
-  const editorRef = useRef<
-    HTMLDivElement | undefined
-  >() as LegacyRef<HTMLDivElement>;
+  const editableContent = document.querySelector("div[role=textbox]") as HTMLElement;
 
   return (
-    // Add a toolbar with buttons that call the same methods.
-    <Slate editor={editor} initialValue={initialValue}>
-      <div className="border border-gray-300/70 shadow-sm p-4 rounded-md space-y-4 has-[:focus-visible]:border-t_primary-400">
-        <div>
-          <ToggleGroup type="multiple" variant="outline" value={setValue()}>
-            <ToggleGroupItem
-              value="bold"
-              tabIndex={-1}
-              onClick={(e) => {
-                e.preventDefault();
-                handleTextEditor.toggleMark(editor, "bold");
-                setActiveMark((prev) => ({ ...prev, bold: !prev.bold }));
-                // Focus the text editor
-                const editorEle = document.querySelector(
-                  "div[role=textbox]"
-                ) as HTMLElement;
-                editorEle?.focus();
-              }}
-            >
-              <Bold />
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="italic"
-              onClick={() => {
-                handleTextEditor.toggleMark(editor, "italic");
-                setActiveMark((prev) => ({ ...prev, italic: !prev.italic }));
-                // Focus the text editor
-                const editorEle = document.querySelector(
-                  "div[role=textbox]"
-                ) as HTMLElement;
-                editorEle?.focus();
-              }}
-            >
-              <Italic />
-            </ToggleGroupItem>
-            <ToggleGroupItem
-              value="underline"
-              onClick={() => {
-                handleTextEditor.toggleMark(editor, "underline");
-                setActiveMark((prev) => ({
-                  ...prev,
-                  underline: !prev.underline,
-                }));
-                // Focus the text editor
-                const editorEle = document.querySelector(
-                  "div[role=textbox]"
-                ) as HTMLElement;
-                editorEle?.focus();
-              }}
-            >
-              <Underline />
-            </ToggleGroupItem>
-          </ToggleGroup>
+    <TextEditorCtx.Provider value={{ state, dispatch }}>
+      <Slate editor={editor} initialValue={initialValue}>
+        <div id="textEditor" onClickCapture={() => editableContent.focus()} className="border border-gray-300/70 shadow-sm p-4 rounded-md space-y-4 has-[:focus-visible]:border-t_primary-400 w-full h-fit">
+          <div className="flex gap-2 items-center h-fit">
+            <TextFormatter editor={editor} />
+            <Separator orientation="vertical" className="h-5" />
+            <HeadingFormatter editor={editor} />
+          </div>
+          <Editable
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            className="bg-gray-100 focus-visible:outline-none rounded-md p-2 min-h-40 space-y-2"
+            onKeyUp={() => {
+              updateState();
+              // Update text style size when user select text
+              const currentParagraph = Node.parent(
+                editor,
+                editor.selection?.anchor.path!
+              ) as CustomElement;
+              dispatch({
+                type: "CHANGE_TEXT_STYLE",
+                payload: currentParagraph.type,
+              });
+            }}
+            onMouseUp={() => {
+              updateState();
+              // Update text style size when user select text
+              const currentParagraph = Node.parent(
+                editor,
+                editor.selection?.anchor.path!
+              ) as CustomElement;
+              dispatch({
+                type: "CHANGE_TEXT_STYLE",
+                payload: currentParagraph.type,
+              });
+              // get the editablecontent editor
+              const editorEle = document.querySelector(
+                "div[role=textbox]"
+              ) as HTMLTextAreaElement;
+              console.log(editorEle);
+              console.log(editorEle.selectionStart);
+            }}
+          />
         </div>
-        <Editable
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          ref={editorRef}
-          className="bg-gray-100 focus-visible:outline-none rounded-md p-2 min-h-40 space-y-2"
-          onKeyUp={(e) => {
-            e.preventDefault();
-            updateState();
-          }}
-          onMouseUp={(e) => {
-            e.preventDefault();
-            updateState();
-          }}
-        />
-      </div>
-    </Slate>
+      </Slate>
+    </TextEditorCtx.Provider>
   );
 };
 

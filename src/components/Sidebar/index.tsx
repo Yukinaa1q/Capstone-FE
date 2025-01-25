@@ -24,7 +24,7 @@ interface SidebarFactoryProps {
 // Factor Method design pattern, maybe?
 const SidebarFactory = ({ children }: SidebarFactoryProps) => {
   const userRole = useAppSelector((state) => state.auths.role);
-  let sidebarContent: JSX.Element;
+  let sidebarContent: React.ReactNode;
   switch (userRole) {
     case "admin":
       sidebarContent = <AdminSidebar />;

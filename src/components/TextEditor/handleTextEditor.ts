@@ -1,5 +1,5 @@
-import { Editor } from "slate";
-import { CustomText } from "./type";
+import { Editor, Transforms } from "slate";
+import { CustomText, CustomElement } from "./type";
 
 export default  {
   isMarked(editor: Editor, mark: keyof Omit<CustomText, "text">) {
@@ -13,5 +13,9 @@ export default  {
     } else {
       Editor.addMark(editor, mark, true);
     }
+  },
+  setTextStyle(editor: Editor, type: CustomElement["type"]) {
+    Transforms.setNodes(editor, { type });
+    Editor.addMark(editor, "style", type);
   }
 }
