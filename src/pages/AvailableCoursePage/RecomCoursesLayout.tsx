@@ -26,7 +26,7 @@ const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
         className="w-full"
       >
         <CarouselContent className="w-full">
-          {availableCourses.coursesP2.map((courseContent, index) => (
+          {availableCourses.coursesP1.map((courseContent, index) => (
             <CarouselItem
               key={index}
               className="sm:basis-1/2 md:basis-1/3 lg:basis-1/4 xxl:basis-1/5"
