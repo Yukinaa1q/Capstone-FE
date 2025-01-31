@@ -82,7 +82,7 @@ const TextEditor = () => {
   return (
     <TextEditorCtx.Provider value={{ state, dispatch }}>
       <Slate editor={editor} initialValue={initialValue}>
-        <div id="textEditor" onClickCapture={() => editableContent.focus()} className="border border-gray-300/70 shadow-sm p-4 rounded-md space-y-4 has-[:focus-visible]:border-t_primary-400 w-full h-fit">
+        <div id="textEditor" onClickCapture={() => editableContent.focus()} className="border border-gray-300/70 shadow-xs p-4 rounded-md space-y-4 has-focus-visible:border-t_primary-400 w-full h-fit">
           <div className="flex gap-2 items-center h-fit">
             <TextFormatter editor={editor} />
             <Separator orientation="vertical" className="h-5" />
@@ -91,7 +91,7 @@ const TextEditor = () => {
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
-            className="bg-gray-100 focus-visible:outline-none rounded-md p-2 min-h-40 space-y-2"
+            className="bg-gray-100 focus-visible:outline-hidden rounded-md p-2 min-h-40 space-y-2"
             onKeyUp={() => {
               updateState();
               // Update text style size when user select text
