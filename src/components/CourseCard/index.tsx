@@ -32,7 +32,7 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
         <CardTitle className="flex justify-between items-center gap-4">
           <p className="truncate">{courseContent.courseName.toUpperCase()}</p>
           {phase === 1 ? (
-            <Badge className="bg-t_secondary-500 hover:bg-t_secondary-500 text-white text-xs w-40">
+            <Badge className="bg-t_secondary-500 hover:bg-t_secondary-500 text-white text-xs shrink-0 w-fit">
               Phase 1
             </Badge>
           ) : (

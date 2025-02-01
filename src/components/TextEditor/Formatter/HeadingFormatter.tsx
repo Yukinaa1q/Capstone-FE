@@ -45,7 +45,7 @@ const HeadingFormatter = ({ editor }: { editor: ReactEditor }) => {
       }}
     >
       <SelectTrigger
-        className="focus:outline-none w-fit"
+        className="focus:outline-hidden w-fit"
       >
         {currentTextStyle}
       </SelectTrigger>

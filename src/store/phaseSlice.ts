@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const phaseSlice = createSlice({
   name: "phase",
   initialState: {
-    phase: 2
+    phase: 1
   },
   reducers: {
     togglePhase: (state) => {
