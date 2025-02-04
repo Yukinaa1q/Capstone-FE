@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
 @plugin 'tailwindcss-animate';
 
@@ -102,15 +102,6 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
-@layer base {
-  *,
-  ::after,
-  ::before,
-  ::backdrop,
-  ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
-  }
-}
 
 @utility active-subnav {
   @apply bg-t_primary-100 hover:bg-t_primary-100 rounded-md;
@@ -169,7 +160,7 @@
 }
 
 @utility background-dim {
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5));
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5));
 }
 
 @layer base {
@@ -234,26 +225,11 @@
   }
   * {
     font-family: "Montserrat", serif;
-    box-sizing: border-box;
-    /* @apply lg:text-[14px] 2xl:text-[16px]; */
   }
 
-  input[type="file"]::-webkit-file-upload-button {
-    height: 100%;
-    padding: 0 1rem;
-    font-weight: 600;
-    margin-right: 1rem;
-    @apply bg-t_secondary-100;
-  }
-
-  h1,
-  h2 {
-    @apply font-semibold;
-  }
-
-  h3,
-  h4 {
-    @apply font-medium;
+  input[type="file"] {
+    font-style: italic;
+    color: var(--color-gray-500);
   }
 }
 
