@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { createEditor, Descendant, Editor, Node } from "slate";
 import { Slate, Editable, withReact } from "slate-react";
 import { ImmerReducer, useImmerReducer } from "use-immer";
@@ -10,6 +10,8 @@ import handleTextEditor from "./handleTextEditor";
 import TextFormatter from "./Formatter/TextFormatter";
 import HeadingFormatter from "./Formatter/HeadingFormatter";
 import TextEditorCtx, { EditorAction, EditorFormat } from "./EditorContext";
+import ListFormatter from "./Formatter/ListFormatter";
+import { Textarea } from "../ui/textarea";
 
 declare module "slate" {
   interface CustomTypes {
@@ -41,9 +43,12 @@ const reducer: ImmerReducer<EditorFormat, EditorAction> = (state, action) => {
       state.textFormat = action.payload;
       return state;
     case "CHANGE_TEXT_STYLE":
+      console.log("Trigger CHANGE_TEXT_STYLE");
+      console.log("Action payload: ", action.payload);
       state.textStyle.type = action.payload;
       return state;
     default:
+      console.log("Default case");
       return state;
   }
 };
@@ -68,7 +73,8 @@ const TextEditor = () => {
   const renderElement = useCallback(buildElement, []);
   const renderLeaf = useCallback(buildLeaf, []);
 
-  const updateState = () => {
+  const updateTextFormatState = () => {
+    console.log("updateTextFormatState() run");
     let mark: keyof Omit<CustomText, "text">;
     const newMarkState: Omit<CustomText, "text"> = {};
     for (mark in state.textFormat) {
@@ -77,55 +83,40 @@ const TextEditor = () => {
     }
     dispatch({ type: "UPDATE_TEXT_FORMAT", payload: newMarkState });
   };
-  const editableContent = document.querySelector("div[role=textbox]") as HTMLElement;
 
   return (
     <TextEditorCtx.Provider value={{ state, dispatch }}>
-      <Slate editor={editor} initialValue={initialValue}>
-        <div id="textEditor" onClickCapture={() => editableContent.focus()} className="border border-gray-300/70 shadow-xs p-4 rounded-md space-y-4 has-focus-visible:border-t_primary-400 w-full h-fit">
-          <div className="flex gap-2 items-center h-fit">
-            <TextFormatter editor={editor} />
-            <Separator orientation="vertical" className="h-5" />
-            <HeadingFormatter editor={editor} />
-          </div>
+      <Slate editor={editor} initialValue={initialValue} onSelectionChange={() => {console.log("selection change")}}>
+        <div
+          id="textEditor"
+          className="border border-gray-300/70 shadow-xs p-4 rounded-md space-y-4 has-focus-visible:border-t_primary-400 w-full h-fit"
+        >
+          <FormatToolbar/>
           <Editable
             renderElement={renderElement}
             renderLeaf={renderLeaf}
-            className="bg-gray-100 focus-visible:outline-hidden rounded-md p-2 min-h-40 space-y-2"
-            onKeyUp={() => {
-              updateState();
-              // Update text style size when user select text
-              const currentParagraph = Node.parent(
-                editor,
-                editor.selection?.anchor.path!
-              ) as CustomElement;
-              dispatch({
-                type: "CHANGE_TEXT_STYLE",
-                payload: currentParagraph.type,
-              });
-            }}
-            onMouseUp={() => {
-              updateState();
-              // Update text style size when user select text
-              const currentParagraph = Node.parent(
-                editor,
-                editor.selection?.anchor.path!
-              ) as CustomElement;
-              dispatch({
-                type: "CHANGE_TEXT_STYLE",
-                payload: currentParagraph.type,
-              });
-              // get the editablecontent editor
-              const editorEle = document.querySelector(
-                "div[role=textbox]"
-              ) as HTMLTextAreaElement;
-              console.log(editorEle);
-              console.log(editorEle.selectionStart);
-            }}
+            className="bg-gray-100/40 focus-visible:outline-hidden rounded-md p-2 min-h-40 space-y-2"
+            // onMouseUp={() => {
+            //   console.log("On mouse up");
+            //   updateTextFormatState();
+            // }}
           />
         </div>
       </Slate>
     </TextEditorCtx.Provider>
+  );
+};
+
+const FormatToolbar = () => {
+  return (
+    <div
+      className="flex gap-2 items-center h-fit"
+    >
+      <TextFormatter />
+      <Separator orientation="vertical" className="h-5" />
+      {/* <ListFormatter editor={editor} /> */}
+      <HeadingFormatter />
+    </div>
   );
 };
 

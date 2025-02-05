@@ -16,6 +16,14 @@ const Heading3Node = ({ attributes, children }: RenderElementProps) => {
   return <h3 {...attributes} className="font-medium text-lg mb-2">{children}</h3>;
 }
 
+const UnorderedListNode = ({ attributes, children }: RenderElementProps) => {
+  return <ul {...attributes} className="list-disc">{children}</ul>;
+}
+
+const OrderedListNode = ({ attributes, children }: RenderElementProps) => {
+  return <ol {...attributes} className="list-decimal">{children}</ol>;
+}
+
 export default function buildElement(props: RenderElementProps) {
   switch (props.element.type) {
     case "p":
@@ -26,6 +34,12 @@ export default function buildElement(props: RenderElementProps) {
       return <Heading2Node {...props} />;
     case "h3":
       return <Heading3Node {...props} />;
+    case "list-unordered":
+      return <UnorderedListNode {...props} />;
+    case "list-ordered":
+      return <OrderedListNode {...props} />;
+    case "list-item":
+      return <li {...props.attributes} className="ml-10">{props.children}</li>;
     default:
       return <ParagraphNode {...props} />;
   }

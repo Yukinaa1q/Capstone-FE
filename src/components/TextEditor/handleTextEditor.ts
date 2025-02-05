@@ -1,4 +1,4 @@
-import { Editor, Transforms } from "slate";
+import { Editor, Element, Transforms } from "slate";
 import { CustomText, CustomElement } from "./type";
 
 export default  {
@@ -16,6 +16,19 @@ export default  {
   },
   setTextStyle(editor: Editor, type: CustomElement["type"]) {
     Transforms.setNodes(editor, { type });
-    Editor.addMark(editor, "style", type);
-  }
+  },
+  toggleList(editor: Editor, listType: ("list-ordered" | "list-unordered")) {
+    const [match] = Editor.nodes(editor, {
+      match: node => (node as CustomElement).type === listType,
+    });   
+
+    Transforms.setNodes(
+      editor, 
+      { type: !match ? listType : (match[0] as CustomElement) .type },
+      { match: n => Element.isElement(n) && Editor.isBlock(editor, n) }
+    );
+    editor.insertNode({ type: "list-item", children: [{ text: "a list item" }] }, {
+      at: editor.selection?.focus!.path
+    })
+  },
 }

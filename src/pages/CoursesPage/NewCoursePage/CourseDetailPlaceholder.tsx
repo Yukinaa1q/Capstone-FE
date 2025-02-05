@@ -1,6 +1,5 @@
 import { Button } from "@/components/ui/button";
 import { ReactNode, useState } from "react";
-import { useParams } from "react-router";
 
 import {
   Accordion,
@@ -10,7 +9,6 @@ import {
 } from "@/components/ui/accordion";
 
 const CourseDetailPlaceholder = ({ url }: { url: string }) => {
-  const [showFull, setShowFull] = useState(false);
   return (
     <section
       className="h-96 overflow-y-scroll w-full"
@@ -60,11 +58,11 @@ const CourseDetailPlaceholder = ({ url }: { url: string }) => {
             </p>
           </div>
           <Button
+            type="button"
             variant="link"
             className="p-0 text-t_primary-400"
-            onClick={() => setShowFull((old) => !old)}
           >
-            {!showFull ? "See More" : "See Less"}
+            See More
           </Button>
         </CourseInfo>
         <CourseInfo title="Course Outline">
