@@ -1,45 +1,25 @@
 import { List, ListOrdered } from "lucide-react";
-import { CustomEditor } from "../type";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import handleTextEditor from "../handleTextEditor";
-import { useContext } from "react";
-import TextEditorCtx from "../EditorContext";
+import { ReactEditor, useSlate } from "slate-react";
 
-const ListFormatter = ({ editor }: { editor: CustomEditor }) => {
-  const {
-    state: { textStyle },
-    dispatch,
-  } = useContext(TextEditorCtx);
-  let currentTextStyle =
-    textStyle.type === "list-ordered"
-      ? "ordered"
-      : textStyle.type === "list-unordered"
-      ? "unordered"
-      : "nothing but a string of text";
-  console.log(currentTextStyle);
-  console.log("Rendering ListFormatter");
+const ListFormatter = () => {
+  const editor = useSlate();
   return (
     <ToggleGroup
       type="single"
       variant="outline"
-      value={currentTextStyle}
+      value={handleTextEditor.isActiveBlock(editor, "list-ordered") ? "ordered" : handleTextEditor.isActiveBlock(editor, "list-unordered") ? "unordered" : "p"}
       onValueChange={(value) => {
-        console.log("onValueChange")
         if (value == "ordered") {
-          console.log("Detect ordered list clicked");
           handleTextEditor.toggleList(editor, "list-ordered");
-          dispatch({ type: "CHANGE_TEXT_STYLE", payload: "list-ordered" });
+          ReactEditor.focus(editor);
         } else if (value == "unordered") {
-          console.log("Detect unordered list clicked");
           handleTextEditor.toggleList(editor, "list-unordered");
-          dispatch({ type: "CHANGE_TEXT_STYLE", payload: "list-unordered" });
+          ReactEditor.focus(editor);
         } else {
-          console.log("none type detected");
-          handleTextEditor.toggleList(
-            editor,
-            textStyle.type! as "list-ordered" | "list-unordered"
-          );
-          dispatch({ type: "CHANGE_TEXT_STYLE", payload: "p" });
+
+          handleTextEditor.setTextStyle(editor, "p")
         }
       }}
     >
