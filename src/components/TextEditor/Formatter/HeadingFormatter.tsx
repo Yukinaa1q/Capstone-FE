@@ -3,53 +3,45 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Heading1, Heading2, Heading3, TypeIcon } from "lucide-react";
 
-import { ReactEditor, useFocused } from "slate-react";
-import TextEditorCtx from "../EditorContext";
-import React, { useContext } from "react";
+import { ReactEditor, useSlate } from "slate-react";
+import React from "react";
 import handleTextEditor from "../handleTextEditor";
 import { CustomElement } from "../type";
 
-const HeadingFormatter = ({ editor }: { editor: ReactEditor }) => {
-  const {
-    state: { textStyle },
-    dispatch,
-  } = useContext(TextEditorCtx);
+const HeadingFormatter = () => {
+  const editor = useSlate();
   let currentTextStyle: React.ReactNode;
-  switch (textStyle.type) {
-    case "h1":
-      currentTextStyle = <Heading1 size={16} className="mr-2" />;
-      break;
-    case "h2":
-      currentTextStyle = <Heading2 size={16} className="mr-2" />;
-      break;
-    case "h3":
-      currentTextStyle = <Heading3 size={16} className="mr-2" />;
-      break;
-    default:
-      currentTextStyle = <TypeIcon size={16} className="mr-2" />;
+  let value = "p";
+  if (handleTextEditor.isActiveBlock(editor, "h1")) {
+    value = "h1";
+    currentTextStyle = <Heading1 size={16} className="mr-2" />;
+  } else if (handleTextEditor.isActiveBlock(editor, "h2")) {
+    currentTextStyle = <Heading2 size={16} className="mr-2" />;
+    value = "h2";
+  } else if (handleTextEditor.isActiveBlock(editor, "h3")) {
+    currentTextStyle = <Heading3 size={16} className="mr-2" />;
+    value = "h3";
+  } else {
+    currentTextStyle = <TypeIcon size={16} className="mr-2" />;
+    value = "p";
   }
 
-  // const useFocused();
-  const editableContent = document.querySelector(
-    "div[role=textbox]"
-  ) as HTMLElement;
   return (
     <Select
-      value={textStyle.type}
+      value={value}
       onValueChange={(value) => {
         handleTextEditor.setTextStyle(editor, value as CustomElement["type"]);
-        dispatch({ type: "CHANGE_TEXT_STYLE", payload: value });
+        ReactEditor.focus(editor);
       }}
     >
-      <SelectTrigger
-        className="focus:outline-hidden w-fit"
-      >
+      <SelectTrigger type="button" className="focus:outline-hidden w-fit">
         {currentTextStyle}
       </SelectTrigger>
-      <SelectContent >
+      <SelectContent>
         <SelectItem value="h1">Heading 1</SelectItem>
         <SelectItem value="h2">Heading 2</SelectItem>
         <SelectItem value="h3">Heading 3</SelectItem>

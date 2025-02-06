@@ -1,0 +1,8 @@
+# What i have learned from designing the TextEditor
+
+1. **Read ALL the documentation**
+
+- Try to read all the documentation of the library you are using, if you don't have time, skim it, or search for keyword.
+- Why? Because it may contains the solution for the problems you are facing.
+- Example 1: I try to focus the Editable components they provide by using useRef, they provide the `ReactEditor.focus()`
+- Example 2: Passing editor down to lower components using props, they provide the `useSlate()` hook.

@@ -5,8 +5,11 @@ type CustomElement =
   ParagraphElement | 
   Heading1Element  | 
   Heading2Element  | 
-  Heading3Element;
-type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean;};
+  Heading3Element  |
+  OrderedListElement |
+  UnorderedListElement | 
+  ItemElement;
+type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean; list?: boolean };
 type CustomEditor = BaseEditor & ReactEditor;
 
 // List of custom Element Node types
@@ -28,6 +31,21 @@ interface Heading2Element {
 interface Heading3Element {
   type: "h3";
   children: CustomText[];
+}
+
+interface ItemElement {
+  type: "list-item";
+  children: CustomText[];
+}
+
+interface OrderedListElement {
+  type: "list-ordered";
+  children: ItemElement[];
+}
+
+interface UnorderedListElement {
+  type: "list-unordered";
+  children: ItemElement[];
 }
 
 
