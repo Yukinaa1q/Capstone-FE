@@ -34,10 +34,9 @@ const CourseDetailPlaceholder = ({ url }: { url: string }) => {
       <section className="p-4 bg-white">
         <CourseInfo title="Course Description">
           <div
-            className={`relative ${
-              !showFull &&
-              "line-clamp-5 before:absolute before:w-full before:bottom-0 before:h-full before:bg-linear-to-b before:to-white"
-            }`}
+            className={
+              "relative line-clamp-5 before:absolute before:w-full before:bottom-0 before:h-full before:bg-linear-to-b before:to-white"
+            }
           >
             <p className="text-sm">
               Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aperiam
