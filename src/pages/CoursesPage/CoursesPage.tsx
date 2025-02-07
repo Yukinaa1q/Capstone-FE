@@ -25,8 +25,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router";
-import { Input } from "@/components/ui/input";
-import { J } from "node_modules/react-router/dist/development/fog-of-war-ClXvjZ4E.d.mts";
 import ClearableSearch from "@/components/ClearableSearch";
 import { cn } from "@/lib/utils";
 
@@ -122,10 +120,10 @@ const columns: ColumnDef<CourseOverview>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>Copy payment ID</DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>View Detail</DropdownMenuItem>
+            <DropdownMenuItem>Class List</DropdownMenuItem>
+            <DropdownMenuItem>Student List</DropdownMenuItem>
+            <DropdownMenuItem>Tutor List</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
