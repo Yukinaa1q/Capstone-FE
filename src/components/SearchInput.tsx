@@ -1,8 +1,14 @@
 import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
 
-export default function SearchInput() {
+export default function SearchInput({ className }: { className?: string }) {
   return (
-    <div className="relative w-full md:w-3/4 lg:w-1/2 left-1/2 -translate-x-1/2">
+    <div
+      className={cn(
+        "relative w-full md:w-3/4 lg:w-1/2 left-1/2 -translate-x-1/2",
+        className
+      )}
+    >
       <Input
         id="input-25"
         className="pe-11 rounded-full"

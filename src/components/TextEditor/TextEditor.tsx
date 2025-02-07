@@ -7,8 +7,7 @@ import buildElement from "./CustomElement";
 import buildLeaf from "./CustomLeaf";
 import TextFormatter from "./Formatter/TextFormatter";
 import HeadingFormatter from "./Formatter/HeadingFormatter";
-import ListFormatter from "./Formatter/ListFormatter";import HTMLConverter from "./HTMLConverter";
-;
+import ListFormatter from "./Formatter/ListFormatter";
 
 declare module "slate" {
   interface CustomTypes {

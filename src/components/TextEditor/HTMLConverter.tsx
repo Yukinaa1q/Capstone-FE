@@ -1,6 +1,5 @@
 import { cn } from "@/lib/utils";
 import escapeHTML from "escape-html";
-import React from "react";
 import { Descendant, Text } from "slate";
 
 const HTMLConverter = ({ nodeList }: { nodeList: Descendant[] }) => {
@@ -26,11 +25,23 @@ const HTMLConverter = ({ nodeList }: { nodeList: Descendant[] }) => {
         const childEle = <HTMLConverter nodeList={node.children} />;
         switch (node.type) {
           case "h1":
-            return <h1 className="text-2xl" key={index}>{childEle}</h1>;
+            return (
+              <h1 className="text-2xl" key={index}>
+                {childEle}
+              </h1>
+            );
           case "h2":
-            return <h2 className="text-xl" key={index}>{childEle}</h2>;
+            return (
+              <h2 className="text-xl" key={index}>
+                {childEle}
+              </h2>
+            );
           case "h3":
-            return <h3 className="text-lg" key={index}>{childEle}</h3>;
+            return (
+              <h3 className="text-lg" key={index}>
+                {childEle}
+              </h3>
+            );
           case "p":
             return <p key={index}>{childEle}</p>;
           case "list-unordered":
@@ -46,7 +57,11 @@ const HTMLConverter = ({ nodeList }: { nodeList: Descendant[] }) => {
               </ol>
             );
           case "list-item":
-            return <li className="ml-8" key={index}>{childEle}</li>;
+            return (
+              <li className="ml-8" key={index}>
+                {childEle}
+              </li>
+            );
           default:
             return <p key={index}>{childEle}</p>;
         }
