@@ -9,7 +9,7 @@ type CustomElement =
   OrderedListElement |
   UnorderedListElement | 
   ItemElement;
-type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean; list?: boolean };
+type CustomText = { text: string; bold?: boolean; italic?: boolean; underline?: boolean };
 type CustomEditor = BaseEditor & ReactEditor;
 
 // List of custom Element Node types

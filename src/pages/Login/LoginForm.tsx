@@ -5,22 +5,47 @@ import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router";
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import PhoneInp from "@/components/PhoneInput";
+import { Input } from "@/components/ui/input";
+import TucourApi, { ENV } from "@/utils/http";
 
-const loginSchema = yup.object(
-  {
-    phone: yup.string().required("Phone number is required"),
+const tucourApi = new TucourApi(ENV.DEV);
+
+interface LoginForm {
+  email: string;
+  password: string;
+}
+
+const loginSchema = yup
+  .object({
+    email: yup.string().required("Email is required"),
     password: yup.string().required("Password is required"),
-  }
-).required();
+  })
+  .required();
 
 const LoginForm = () => {
-  const form = useForm({resolver: yupResolver(loginSchema),defaultValues: {email: "", password: ""}});
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const form = useForm<LoginForm>({
+    resolver: yupResolver<LoginForm>(loginSchema),
+    defaultValues: { email: "", password: "" },
+  });
+
+  const onSubmit = async (data: LoginForm) => {
+    try {
+      const res = await tucourApi.call({
+        url: "/authentication/login",
+        method: "POST",
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      window.localStorage.setItem("token", res.token);
+    } catch (err) {
+      console.log(err);
+    }
   };
+
   return (
     <div className="space-y-4 w-2/5 my-auto">
       <div>
@@ -33,11 +58,12 @@ const LoginForm = () => {
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField
-            name="phone"
+            name="email"
             control={form.control}
             render={({ field }) => (
-              <RequiredInput label="Phone Number" isRequired={false}>
-                <PhoneInp onChange={field.onChange} value={field.value} />
+              <RequiredInput label="Email" isRequired={false}>
+                {/* <PhoneInp onChange={field.onChange} value={field.value} /> */}
+                <Input type="email" {...field} />
               </RequiredInput>
             )}
           />

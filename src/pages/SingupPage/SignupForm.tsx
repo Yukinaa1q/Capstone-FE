@@ -1,4 +1,3 @@
-import DOBInput from "@/components/DOBInput";
 import PwdInput from "@/components/PwdInput";
 import RequiredInput from "@/components/RequiredInput";
 import RoleInput from "@/components/RoleInput";
@@ -8,36 +7,54 @@ import { useForm } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PhoneInp from "@/components/PhoneInput";
+import axios from "axios";
+import { yupResolver } from "@hookform/resolvers/yup"
+import * as yup from "yup"
 
 interface SignUpData {
   role: string;
-  fullname: string;
+  name: string;
   email: string;
   phone: string;
-  dob: Date;
-  pwd: string;
+  password: string;
   repwd: string;
 }
+
+const signupSchema = yup.object({
+  role: yup.string().required("Role is required"),
+  name: yup.string().required("Full name is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  phone: yup.string().required("Phone number is required"),
+  password: yup.string().required("Password is required"),
+  repwd: yup.string().required("Re-enter password is required").oneOf([yup.ref("password")], "Passwords must match")
+}).required();
 
 const SignupForm = () => {
   const form = useForm<SignUpData>({
     defaultValues: {
-      fullname: "",
+      name: "",
       role: "",
       email: "",
       phone: "",
-      pwd: "",
+      password: "",
       repwd: "",
     },
+    resolver: yupResolver<SignUpData>(signupSchema),
   });
-  const handleSubmit = (formData: SignUpData) => {
+  const handleSubmit = async (formData: SignUpData) => {
     console.log(formData);
-    console.log(
-      "Date: ",
-      formData.dob.getDay(),
-      formData.dob.getMonth(),
-      formData.dob.getFullYear()
-    );
+    try {
+      const res = await axios.post("http://localhost:8000/authentication/signup", formData)
+      if (res.status === 201) {
+        console.log(res.data);
+      }
+      else {
+        console.log("some thing went wrong");
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -66,7 +83,7 @@ const SignupForm = () => {
             )}
           />
           <FormField
-            name="fullname"
+            name="name"
             control={form.control}
             render={({ field }) => (
               <RequiredInput label="Full Name">
@@ -93,7 +110,7 @@ const SignupForm = () => {
             )}
           />
           <FormField
-            name="pwd"
+            name="password"
             control={form.control}
             render={({ field }) => (
               <RequiredInput label="Password">

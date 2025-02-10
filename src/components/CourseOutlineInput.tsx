@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/accordion";
 import { Input } from "./ui/input";
 import { Updater, useImmer } from "use-immer";
+import { useEffect } from "react";
 
-interface CourseOutline {
+export interface CourseOutline {
   sectionTitle: string;
   isEditing: boolean;
   subsections: Subsection[];
@@ -21,8 +22,17 @@ interface Subsection {
   isEditing: boolean;
 }
 
-const CourseOutlineInput = () => {
+const CourseOutlineInput = ({
+  onCourseOutlineChange,
+}: {
+  onCourseOutlineChange: (courseOutline: CourseOutline[]) => void;
+}) => {
+  console.log("Render courseoutlineinput");
   const [courseOutline, setCourseOutline] = useImmer<CourseOutline[]>([]);
+  // onCourseOutlineChange(courseOutline);
+  useEffect(() => {
+    onCourseOutlineChange(courseOutline);
+  }, [courseOutline]);
   return (
     <div>
       <Accordion
@@ -35,12 +45,14 @@ const CourseOutlineInput = () => {
         {courseOutline.map((section, sectionIdx) =>
           section.isEditing ? (
             <SectionInput
+              key={sectionIdx}
               section={section}
               setCourseOutline={setCourseOutline}
               sectionIdx={sectionIdx}
             />
           ) : (
             <SectionDisplay
+              key={sectionIdx}
               section={section}
               setCourseOutline={setCourseOutline}
               sectionIdx={sectionIdx}
@@ -240,7 +252,10 @@ const CourseOutlineSubsection = ({
         </Button>
       </div>
     ) : (
-      <div className="w-full p-2 border rounded-md flex items-center gap-2">
+      <div
+        key={subsectionIdx}
+        className="w-full p-2 border rounded-md flex items-center gap-2"
+      >
         <p>{subsection.subsectionTitle}</p>
         <div className="ml-auto">
           <Button

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/popover";
 import { Check, ChevronDown } from "lucide-react";
 import { useId, useState } from "react";
+import { ControllerRenderProps, FieldValues } from "react-hook-form";
 
 const subjects = [
   {
@@ -47,13 +48,12 @@ const subjects = [
     value: "english",
     label: "English",
   },
-
 ];
 
-export default function SearchSelect() {
+export default function SearchSelect(props: ControllerRenderProps) {
   const id = useId();
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string>("");
+  const [value, setValue] = useState<string>(props?.value);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -93,6 +93,7 @@ export default function SearchSelect() {
                   value={subject.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
+                    props?.onChange(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
