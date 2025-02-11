@@ -1,3 +1,4 @@
+import SearchSelect, { ListItem } from "@/components/SearchSelect";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -13,7 +14,35 @@ const classFormSchema = object({
 
 const initValue = {
   courseTitle: "",
+  courseCode: "",
 };
+
+const courseList: ListItem = [
+  {
+    value: "MT1002",
+    label: "MT1002",
+    display: {
+      courseTitle: "Toan 12 nang cao",
+      courseCode: "MT1002",
+    }
+  },
+  {
+    value: "CH2003",
+    label: "CH2003",
+    display: {
+      courseTitle: "Hoa 12 nang cao",
+      courseCode: "CH2003",
+    }
+  },
+  {
+    value: "PHYS1001",
+    label: "PHYS1001",
+    display: {
+      courseTitle: "Ly 10 co ban",
+      courseCode: "PHYS1001",
+    }
+  }
+]
 
 const ClassForm = ({
   className,
@@ -48,7 +77,7 @@ const ClassForm = ({
           control={form.control}
           name="courseCode"
           render={({ field }) => (
-            
+            <SearchSelect {...field} list={} placeholder="Search" renderChild={}/>
           )}
         />
         <Button type="submit">Submit</Button>

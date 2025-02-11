@@ -16,7 +16,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Check, ChevronDown } from "lucide-react";
-import { useId, useState } from "react";
+import React, { useId, useState } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 
 const subjects = [
@@ -50,11 +50,23 @@ const subjects = [
   },
 ];
 
-export default function SearchSelect(props: ControllerRenderProps) {
+export interface ListItem {
+  value: string;
+  label: string;
+  display?: any;
+}
+
+export default function SearchSelect(
+  props: ControllerRenderProps & {
+    list: ListItem[];
+    placeholder: string;
+    renderChild: (item: ListItem, value: string) => React.ReactNode;
+    searchString: string;
+  }
+) {
   const id = useId();
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>(props?.value);
-
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
@@ -67,8 +79,8 @@ export default function SearchSelect(props: ControllerRenderProps) {
         >
           <span className={cn("truncate", !value && "text-muted-foreground")}>
             {value
-              ? subjects.find((subject) => subject.value === value)?.label
-              : "Select subject"}
+              ? props.list.find((item) => item.value === value)?.label
+              : props.placeholder}
           </span>
           <ChevronDown
             size={16}
@@ -87,20 +99,21 @@ export default function SearchSelect(props: ControllerRenderProps) {
           <CommandList>
             <CommandEmpty>No subject found.</CommandEmpty>
             <CommandGroup>
-              {subjects.map((subject) => (
+              {props.list.map((item) => (
                 <CommandItem
-                  key={subject.value}
-                  value={subject.value}
+                  key={item.value}
+                  value={item.value}
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     props?.onChange(currentValue === value ? "" : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {subject.label}
-                  {value === subject.value && (
+                  {props.renderChild(item, value)}
+                  {/* {item.label}
+                  {value === item.value && (
                     <Check size={16} strokeWidth={2} className="ml-auto" />
-                  )}
+                  )} */}
                 </CommandItem>
               ))}
             </CommandGroup>
