@@ -1,3 +1,4 @@
+import ClearableSearch from "@/components/ClearableSearch";
 import DataTable from "@/components/DataTable";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -18,6 +19,7 @@ import {
   ColumnDef,
   createColumnHelper,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
@@ -202,10 +204,13 @@ const AcademicView = () => {
     data,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: "includesString",
   });
   return (
     <section className="px-8 py-4">
       <AddNewClass />
+      <ClearableSearch handleChange={(e) => {table.setGlobalFilter(e.target.value)}} className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-2"/>
       <DataTable columns={defaultColumns} table={table} />
     </section>
   );

@@ -17,7 +17,7 @@ import { Descendant } from "slate";
 import { CourseOutline } from "@/components/CourseOutlineInput";
 
 interface IClassDetail {
-  courseSubject: string;
+  courseTitle: string;
   courseCode: string;
   learningDuration: string;
   registrationDuration: string;
