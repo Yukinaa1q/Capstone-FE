@@ -112,14 +112,14 @@ const columns: ColumnDef<CourseOverview>[] = [
     cell: ({ row }) => {
       return (
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="">
               <MoreHorizontal />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>View Detail</DropdownMenuItem>
+            <DropdownMenuItem><Link to={"/courses/"+row.getValue("courseId")}>View Detail</Link></DropdownMenuItem>
             <DropdownMenuItem>Class List</DropdownMenuItem>
             <DropdownMenuItem>Student List</DropdownMenuItem>
             <DropdownMenuItem>Tutor List</DropdownMenuItem>

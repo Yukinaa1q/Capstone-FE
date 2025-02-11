@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { ReactNode, useState } from "react";
-import { useParams } from "react-router";
+import { Link, useParams } from "react-router";
 
 import {
   Accordion,
@@ -8,39 +8,59 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Edit, Trash2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const CourseDetail = () => {
   const params = useParams();
   console.log(params);
   const [showFull, setShowFull] = useState(false);
   return (
-    <>
-      <section
-        className="p-10 text-white bg-fixed"
-        style={{
-          background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/5184957/pexels-photo-5184957.jpeg?auto=compress&cs=tinysrgb&w=600')`,
-          backgroundPosition: "center",
-          backgroundSize: "cover",
-          backgroundAttachment: "fixed",
-        }}
-      >
-        <h1 className="text-2xl font-semibold">Calculus 1</h1>
-        <h2>MT1002 | 2024 - 2025</h2>
-        <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
-          <div>Learning Duration</div>
-          <div className="font-semibold">23/8/2024 - 23/12/2024</div>
-          <div>Pre-registraiton Duration</div>
-          <div className="font-semibold">23/8/2024 - 23/12/2024</div>
-          <div>Pre-registraiton Number</div>
-          <div className="font-semibold">200</div>
+    <section
+      className="text-white bg-fixed"
+      style={{
+        background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/5184957/pexels-photo-5184957.jpeg?auto=compress&cs=tinysrgb&w=600')`,
+        backgroundPosition: "center",
+        backgroundSize: "cover",
+        backgroundAttachment: "fixed",
+      }}
+    >
+      <section className="p-10 flex justify-between">
+        <div>
+          <h1 className="text-2xl font-semibold">Calculus 1</h1>
+          <h2>MT1002 | 2024 - 2025</h2>
+          <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
+            <div>Learning Duration</div>
+            <div className="font-semibold">23/8/2024 - 23/12/2024</div>
+            <div>Pre-registraiton Duration</div>
+            <div className="font-semibold">23/8/2024 - 23/12/2024</div>
+            <div>Pre-registraiton Number</div>
+            <div className="font-semibold">200</div>
+          </div>
+        </div>
+        <div>
+          <Link
+            to={"/courses/MT1003/edit"}
+            className={cn(
+              buttonVariants({ variant: "default" }),
+              "bg-t_primary-600 hover:bg-t_primary-700 w-24"
+            )}
+          >
+            <Edit />
+            Edit
+          </Link>
+          <Button variant="destructive" className="w-24 ml-4">
+            <Trash2 />
+            Delete
+          </Button>
         </div>
       </section>
-      <section className="p-4">
+      <section className="p-10 bg-white text-black">
         <CourseInfo title="Course Description">
           <div
             className={`relative ${
               !showFull &&
-              "line-clamp-5 before:absolute before:w-full before:bottom-0 before:h-full before:bg-linear-to-b before:to-white"
+              "line-clamp-6 before:absolute before:w-full before:bottom-0 before:h-full before:bg-linear-to-b before:to-white"
             }`}
           >
             <p className="text-sm">
@@ -118,7 +138,7 @@ const CourseDetail = () => {
           </Accordion>
         </CourseInfo>
       </section>
-    </>
+    </section>
   );
 };
 

@@ -25,8 +25,10 @@ const initialValue: Descendant[] = [
 ];
 
 const TextEditor = ({
+  initValue,
   onTextEditorChange,
 }: {
+  initValue: Descendant[];
   onTextEditorChange: (tree: Descendant[]) => void;
 }) => {
   // Create a Slate editor object that won't change across renders.
@@ -38,7 +40,7 @@ const TextEditor = ({
   return (
     <Slate
       editor={editor}
-      initialValue={initialValue}
+      initialValue={initValue}
       onChange={(tree) => onTextEditorChange(tree)}
     >
       <div

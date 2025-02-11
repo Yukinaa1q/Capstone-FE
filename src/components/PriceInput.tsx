@@ -6,10 +6,12 @@ import { Separator } from "./ui/separator";
 
 export default function PriceInput({
   handleFormChange,
+  initValue,
 }: {
+  initValue: number;
   handleFormChange: (value: number | undefined) => void;
 }) {
-  const [value, setValue] = React.useState<string>("");
+  const [value, setValue] = React.useState<string>(initValue.toString());
   const formattedNumber =
     value.length === 0 ? "" : parseInt(value, 10).toLocaleString();
   return (

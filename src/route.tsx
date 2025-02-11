@@ -1,9 +1,7 @@
 import { createBrowserRouter } from "react-router";
-
 import RootLayout from "@/layouts/RootLayout";
 import Login from "@/pages/Login/Login";
 import Signup from "@/pages/SingupPage/Signup";
-import AvailableCourses from "@/pages/AvailableCoursePage/AvailableCourses";
 import RegisteredCoursesPage from "@/pages/RegisteredCoursesPage/RegisteredCoursesPage";
 import MyCoursesPage from "@/pages/MyCoursesPage/MyCoursesPage";
 import TestPage from "./pages/TestPage/TestPage";
@@ -16,6 +14,8 @@ import TutorsPage from "./pages/TutorsPage/TutorsPage";
 import StudentsPage from "./pages/StudentsPage/StudentsPage";
 import NewCoursePage from "./pages/CoursesPage/NewCoursePage/NewCoursePage";
 import CourseDetail from "./pages/CoursesPage/CourseDetail/CourseDetail";
+import MainSection from "./layouts/MainSection";
+import EditCoursePage from "./pages/CoursesPage/EditCoursePage/EditCoursePage";
 
 const router = createBrowserRouter([
   {
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <AvailableCourses />,
+        element:  <MainSection />,
       },
       {
         path: "/registered-courses",
@@ -53,6 +53,10 @@ const router = createBrowserRouter([
       {
         path: "courses/:id",
         element: <CourseDetail />,
+      },
+      {
+        path: "courses/:id/edit",
+        element: <EditCoursePage />,
       },
       {
         path: "courses/new",

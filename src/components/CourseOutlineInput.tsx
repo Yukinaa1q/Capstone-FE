@@ -23,12 +23,14 @@ interface Subsection {
 }
 
 const CourseOutlineInput = ({
+  initValue,
   onCourseOutlineChange,
 }: {
+  initValue: CourseOutline[];
   onCourseOutlineChange: (courseOutline: CourseOutline[]) => void;
 }) => {
   console.log("Render courseoutlineinput");
-  const [courseOutline, setCourseOutline] = useImmer<CourseOutline[]>([]);
+  const [courseOutline, setCourseOutline] = useImmer<CourseOutline[]>(initValue);
   // onCourseOutlineChange(courseOutline);
   useEffect(() => {
     onCourseOutlineChange(courseOutline);
@@ -142,7 +144,7 @@ const SectionDisplay = ({
         data-state="open"
         className="border p-2 rounded-md"
       >
-        <AccordionTrigger className="no-underline hover:no-underline">
+        <div className="no-underline hover:no-underline">
           <div className="flex items-center gap-2 w-full justify-between">
             <p>{section.sectionTitle.toUpperCase()}</p>
             <div>
@@ -172,7 +174,7 @@ const SectionDisplay = ({
               </Button>
             </div>
           </div>
-        </AccordionTrigger>
+        </div>
         <AccordionContent className="space-y-2">
           <CourseOutlineSubsection
             section={section}

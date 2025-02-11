@@ -23,7 +23,7 @@ import CourseDetailPlaceholder from "./CourseDetailPlaceholder";
 import PriceInput from "@/components/PriceInput";
 import { Descendant } from "slate";
 
-interface ICourse {
+interface ICourseForm {
   courseTitle: string;
   courseCode: string;
   courseSubject: string;
@@ -34,7 +34,7 @@ interface ICourse {
   courseImage?: File;
 }
 
-const courseFormSchema: yup.ObjectSchema<ICourse> = yup
+const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
   .object({
     courseTitle: yup.string().required("Course title is required"),
     courseCode: yup.string().required("Course code is required"),
@@ -52,17 +52,26 @@ const courseFormSchema: yup.ObjectSchema<ICourse> = yup
   })
   .required();
 
-const NewCourseForm = ({ className }: { className?: string }) => {
+const defaultForm: ICourseForm = {
+  courseTitle: "",
+  courseCode: "",
+  courseSubject: "",
+  courseLevel: "",
+  coursePrice: 0,
+  courseDescription: [{ type: "p", children: [{ text: "" }] }],
+  courseOutline: [],
+}
+
+const CourseForm = ({ className, initialData = defaultForm }: { className?: string, initialData?: ICourseForm }) => {
   console.log("Render NewCourseForm");
 
-  const form = useForm({ resolver: yupResolver(courseFormSchema) });
+  const form = useForm({defaultValues: initialData, resolver: yupResolver(courseFormSchema) });
   const [imagePreview, setImagePreview] = useState<string>("");
 
   return (
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit((data) => {
-          console.log("Submit data");
           console.log(data);
         })}
         className={cn(className, "space-y-4")}
@@ -71,7 +80,7 @@ const NewCourseForm = ({ className }: { className?: string }) => {
           name="courseTitle"
           render={({ field }) => (
             <RequiredInput label="Course Title">
-              <Input value={field.value} onChange={field.onChange} />
+              <Input {...field} />
             </RequiredInput>
           )}
         />
@@ -142,6 +151,7 @@ const NewCourseForm = ({ className }: { className?: string }) => {
               render={({ field }) => (
                 <RequiredInput label="Price">
                   <PriceInput
+                    initValue={field.value}
                     handleFormChange={(value) => field.onChange(value)}
                   />
                 </RequiredInput>
@@ -161,7 +171,7 @@ const NewCourseForm = ({ className }: { className?: string }) => {
           name="courseDescription"
           render={({ field }) => (
             <RequiredInput label="Course Description">
-              <TextEditor onTextEditorChange={(tree) => field.onChange(tree)} />
+              <TextEditor initValue={field.value} onTextEditorChange={(tree) => field.onChange(tree)} />
             </RequiredInput>
           )}
         />
@@ -170,6 +180,7 @@ const NewCourseForm = ({ className }: { className?: string }) => {
           render={({ field }) => (
             <RequiredInput label="Course Outline">
               <CourseOutlineInput
+                initValue={field.value}
                 onCourseOutlineChange={(courseOutline) =>
                   field.onChange(courseOutline)
                 }
@@ -191,4 +202,4 @@ const NewCourseForm = ({ className }: { className?: string }) => {
   );
 };
 
-export default NewCourseForm;
+export default CourseForm;
