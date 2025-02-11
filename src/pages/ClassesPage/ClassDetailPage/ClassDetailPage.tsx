@@ -11,10 +11,38 @@ import {
 import { Edit, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Descendant } from "slate";
+import { CourseOutline } from "@/components/CourseOutlineInput";
 
-const CourseDetail = () => {
+interface IClassDetail {
+  courseSubject: string;
+  courseCode: string;
+  learningDuration: string;
+  registrationDuration: string;
+  tutor: string;
+  tutorId: string;
+  courseDescription: Descendant[];
+  courseOutline: CourseOutline[];
+  coursePrice: number;
+  classSession: string;
+  classShift: string;
+  learningType: string;
+  classCode: string;
+  classStudents: number;
+  classMaxStudents: number;
+  studentList: StudentBrief[];
+}
+
+interface StudentBrief {
+  studentName: string;
+  studentId: string;
+  avatarLink: string;
+}
+
+const ClassDetail = () => {
   const params = useParams();
-  console.log(params);
   const [showFull, setShowFull] = useState(false);
   return (
     <section
@@ -33,15 +61,15 @@ const CourseDetail = () => {
           <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
             <div>Learning Duration</div>
             <div className="font-semibold">23/8/2024 - 23/12/2024</div>
-            <div>Pre-registraiton Duration</div>
+            <div>Registration Duration</div>
             <div className="font-semibold">23/8/2024 - 23/12/2024</div>
-            <div>Pre-registraiton Number</div>
-            <div className="font-semibold">200</div>
+            <div>Tutor</div>
+            <Link to="" className="font-semibold hover:underline">Tran Van Ba</Link>
           </div>
         </div>
         <div>
           <Link
-            to={"/courses/MT1003/edit"}
+            to={"/classes/MT1003/edit"}
             className={cn(
               buttonVariants({ variant: "default" }),
               "bg-t_primary-600 hover:bg-t_primary-700 w-24"
@@ -56,7 +84,7 @@ const CourseDetail = () => {
           </Button>
         </div>
       </section>
-      <section className="p-10 bg-white text-black flex gap-10">
+      <section className="p-10 bg-white text-black flex gap-4">
         <div>
           <CourseInfo title="Course Description">
             <div
@@ -141,9 +169,43 @@ const CourseDetail = () => {
             </Accordion>
           </CourseInfo>
         </div>
-        <div className="border rounded-lg h-fit p-4 w-48 shrink-0">
-          <h3 className="text-sm">Price</h3>
-          <p className="font-bold text-xl">{toVND(1300000)} </p>
+        <div className="shrink-0 space-y-4">
+          <div className="border rounded-lg h-fit p-4">
+            <h3 className="text-sm">Price</h3>
+            <p className="font-bold text-xl">{toVND(1300000)} </p>
+          </div>
+
+          <div className="border rounded-lg h-fit p-4 grid grid-cols-2 gap-y-2 gap-x-4">
+            <h3 className="text-sm">Session</h3>
+            <p className="font-semibold text-sm">2-4-6</p>
+            <h3 className="text-sm">Study Shift</h3>
+            <p className="font-semibold text-sm">19h45 - 21h00</p>
+            <h3 className="text-sm">Learning Type</h3>
+            <p className="font-semibold text-sm">Offline</p>
+            <h3 className="text-sm">Class Code</h3>
+            <p className="font-semibold text-sm">CC15</p>
+            <h3 className="text-sm">No. Students</h3>
+            <p className="font-semibold text-sm">30/50</p>
+          </div>
+
+          <ScrollArea type="hover" className="p-4 border rounded-md h-[280px]">
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+              <Link
+                key={i}
+                to=""
+                className="flex items-center text-sm gap-2 hover:bg-t_tertiary-100 p-2"
+              >
+                <Avatar>
+                  <AvatarImage src="https://github.com/shadcn.png" />
+                  <AvatarFallback>CN</AvatarFallback>
+                </Avatar>
+                <div>
+                  <p>Student Name</p>
+                  <p>2153718</p>
+                </div>
+              </Link>
+            ))}
+          </ScrollArea>
         </div>
       </section>
     </section>
@@ -165,4 +227,4 @@ const CourseInfo = ({
   );
 };
 
-export default CourseDetail;
+export default ClassDetail;
