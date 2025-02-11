@@ -11,6 +11,19 @@ import {
 import { Edit, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
+import { Descendant } from "slate";
+import { CourseOutline } from "@/components/CourseOutlineInput";
+
+interface ICourseDetail {
+  courseSubject: string;
+  courseCode: string;
+  learningDuration: string;
+  preregistrationDuration: string;
+  preregistrationNumber: number;
+  courseDescription: Descendant[];
+  courseOutline: CourseOutline[];
+  coursePrice: number;
+}
 
 const CourseDetail = () => {
   const params = useParams();
