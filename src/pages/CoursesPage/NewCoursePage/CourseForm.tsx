@@ -2,7 +2,7 @@ import CourseOutlineInput, {
   CourseOutline,
 } from "@/components/CourseOutlineInput";
 import RequiredInput from "@/components/RequiredInput";
-import SearchSelect from "@/components/SearchSelect";
+import SearchSelect, { ListItem } from "@/components/SearchSelect";
 import TextEditor from "@/components/TextEditor/TextEditor";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
@@ -22,6 +22,7 @@ import * as yup from "yup";
 import CourseDetailPlaceholder from "./CourseDetailPlaceholder";
 import PriceInput from "@/components/PriceInput";
 import { Descendant } from "slate";
+import { Check } from "lucide-react";
 
 interface ICourseForm {
   courseTitle: string;
@@ -60,12 +61,52 @@ const defaultForm: ICourseForm = {
   coursePrice: 0,
   courseDescription: [{ type: "p", children: [{ text: "" }] }],
   courseOutline: [],
-}
+};
 
-const CourseForm = ({ className, initialData = defaultForm }: { className?: string, initialData?: ICourseForm }) => {
+const subjectList: ListItem[] = [
+  {
+    value: "math",
+    label: "Math",
+  },
+  {
+    value: "physic",
+    label: "Physic",
+  },
+  {
+    value: "chemistry",
+    label: "Chemistry",
+  },
+  {
+    value: "geography",
+    label: "Geography",
+  },
+  {
+    value: "history",
+    label: "History",
+  },
+  {
+    value: "biology",
+    label: "Biology",
+  },
+  {
+    value: "english",
+    label: "English",
+  },
+];
+
+const CourseForm = ({
+  className,
+  initialData = defaultForm,
+}: {
+  className?: string;
+  initialData?: ICourseForm;
+}) => {
   console.log("Render NewCourseForm");
 
-  const form = useForm({defaultValues: initialData, resolver: yupResolver(courseFormSchema) });
+  const form = useForm({
+    defaultValues: initialData,
+    resolver: yupResolver(courseFormSchema),
+  });
   const [imagePreview, setImagePreview] = useState<string>("");
 
   return (
@@ -97,7 +138,22 @@ const CourseForm = ({ className, initialData = defaultForm }: { className?: stri
             name="courseSubject"
             render={({ field }) => (
               <RequiredInput label="Subject">
-                <SearchSelect {...field} />
+                <SearchSelect
+                  {...field}
+                  list={subjectList}
+                  placeholder="Search"
+                  filterFn={(value, search) => {
+                    return value.toLowerCase().includes(search.toLowerCase()) ? 1 : 0;
+                  }}
+                  renderChild={(item, value) => (
+                    <>
+                      {item.label}
+                      {value === item.value && (
+                        <Check size={16} strokeWidth={2} className="ml-auto" />
+                      )}
+                    </>
+                  )}
+                />
               </RequiredInput>
             )}
           />
@@ -134,7 +190,7 @@ const CourseForm = ({ className, initialData = defaultForm }: { className?: stri
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
-                      console.log(e.target.files)
+                      console.log(e.target.files);
                       const file = e.target.files?.[0];
                       console.log("Image file", file);
                       if (file) {
@@ -171,7 +227,10 @@ const CourseForm = ({ className, initialData = defaultForm }: { className?: stri
           name="courseDescription"
           render={({ field }) => (
             <RequiredInput label="Course Description">
-              <TextEditor initValue={field.value} onTextEditorChange={(tree) => field.onChange(tree)} />
+              <TextEditor
+                initValue={field.value}
+                onTextEditorChange={(tree) => field.onChange(tree)}
+              />
             </RequiredInput>
           )}
         />

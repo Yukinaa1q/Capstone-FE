@@ -15,40 +15,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Check, ChevronDown } from "lucide-react";
-import React, { useId, useState } from "react";
+import { ChevronDown } from "lucide-react";
+import { JSX, useId, useState } from "react";
 import { ControllerRenderProps } from "react-hook-form";
 
-const subjects = [
-  {
-    value: "math",
-    label: "Math",
-  },
-  {
-    value: "physic",
-    label: "Physic",
-  },
-  {
-    value: "chemistry",
-    label: "Chemistry",
-  },
-  {
-    value: "Geography",
-    label: "geography",
-  },
-  {
-    value: "history",
-    label: "History",
-  },
-  {
-    value: "biology",
-    label: "Biology",
-  },
-  {
-    value: "english",
-    label: "English",
-  },
-];
 
 export interface ListItem {
   value: string;
@@ -60,8 +30,10 @@ export default function SearchSelect(
   props: ControllerRenderProps & {
     list: ListItem[];
     placeholder: string;
-    renderChild: (item: ListItem, value: string) => React.ReactNode;
-    searchString: string;
+    renderChild: (item: ListItem, value: string) => JSX.Element;
+    filterFn: (value: string, search: string, keywords?: string[]) => number;
+    onValueChange?: (value: ListItem) => void;
+    className?: string;
   }
 ) {
   const id = useId();
@@ -75,7 +47,7 @@ export default function SearchSelect(
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between bg-background px-3 font-normal outline-offset-0 hover:bg-background focus-visible:border-ring focus-visible:outline-[3px] focus-visible:outline-ring/20"
+          className={cn("w-full justify-between bg-background px-3 font-normal outline-offset-0 hover:bg-background focus-visible:border-ring focus-visible:outline-[3px] focus-visible:outline-ring/20", props.className)}
         >
           <span className={cn("truncate", !value && "text-muted-foreground")}>
             {value
@@ -94,10 +66,10 @@ export default function SearchSelect(
         className="w-full min-w-[var(--radix-popper-anchor-width)] border-input p-0"
         align="start"
       >
-        <Command>
-          <CommandInput placeholder="Search subject..." />
+        <Command filter={props.filterFn}>
+          <CommandInput placeholder="Search keyword ..." />
           <CommandList>
-            <CommandEmpty>No subject found.</CommandEmpty>
+            <CommandEmpty>No result found.</CommandEmpty>
             <CommandGroup>
               {props.list.map((item) => (
                 <CommandItem
@@ -106,6 +78,7 @@ export default function SearchSelect(
                   onSelect={(currentValue) => {
                     setValue(currentValue === value ? "" : currentValue);
                     props?.onChange(currentValue === value ? "" : currentValue);
+                    props?.onValueChange && props.onValueChange(item);
                     setOpen(false);
                   }}
                 >
