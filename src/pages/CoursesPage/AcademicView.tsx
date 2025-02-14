@@ -26,6 +26,7 @@ import {
 import { Link } from "react-router";
 import ClearableSearch from "@/components/ClearableSearch";
 import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
 // 1 Define type and data
 
@@ -119,7 +120,11 @@ const columns: ColumnDef<CourseOverview>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem><Link to={"/courses/"+row.getValue("courseId")}>View Detail</Link></DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to={"/courses/" + row.getValue("courseId")}>
+                View Detail
+              </Link>
+            </DropdownMenuItem>
             <DropdownMenuItem>Class List</DropdownMenuItem>
             <DropdownMenuItem>Student List</DropdownMenuItem>
             <DropdownMenuItem>Tutor List</DropdownMenuItem>
@@ -152,6 +157,25 @@ const AcademicView = () => {
 };
 
 const AddNewCourse = () => {
+  const [courselist, setCourseList] = useState<CourseOverview>([]);
+  useEffect(() => {
+    const getCourse = async () => {
+      try {
+        const res = await fetch("http://localhost:8000/course/all-course", {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
+          },
+        });
+        if (res.status) {
+          console.log(await res.json());
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCourse();
+  }, []);
   return (
     <TooltipProvider delayDuration={100}>
       <Tooltip>

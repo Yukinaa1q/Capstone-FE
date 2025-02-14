@@ -1,5 +1,5 @@
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import { Link, useParams } from "react-router";
 
 import {
@@ -29,6 +29,24 @@ const CourseDetail = () => {
   const params = useParams();
   console.log(params);
   const [showFull, setShowFull] = useState(false);
+  useEffect(() => {
+    const getCourse = async () => {
+      try {
+        const res = await fetch(`http://localhost:8000/course/${params.id}`, {
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
+          },
+        });
+        if (res.status) {
+          console.log(await res.json());
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCourse();
+  }, []);
   return (
     <section
       className="text-white bg-fixed"
