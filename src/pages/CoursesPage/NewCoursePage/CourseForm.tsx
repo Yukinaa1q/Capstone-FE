@@ -23,6 +23,7 @@ import CourseDetailPlaceholder from "./CourseDetailPlaceholder";
 import PriceInput from "@/components/PriceInput";
 import { Descendant } from "slate";
 import { Check } from "lucide-react";
+import TucourApi, { ENV } from "@/utils/http";
 
 interface ICourseForm {
   courseTitle: string;
@@ -94,6 +95,8 @@ const subjectList: ListItem[] = [
   },
 ];
 
+const tucourApi = new TucourApi(ENV.DEV);
+
 const CourseForm = ({
   className,
   initialData = defaultForm,
@@ -109,12 +112,39 @@ const CourseForm = ({
   });
   const [imagePreview, setImagePreview] = useState<string>("");
 
+  const onSubmit = async (data: ICourseForm) => {
+    try {
+      console.log("Token: ", window.localStorage.getItem("token"));
+      // console.log("Data: ", JSON.stringify(data));
+      const formdata = new FormData();
+      formdata.append('courseCode', data.courseCode);
+      formdata.append('courseTitle', data.courseTitle);
+      formdata.append('courseSubject', data.courseSubject);
+      formdata.append('courseLevel', data.courseLevel);
+      formdata.append('coursePrice', data.coursePrice.toString());
+      formdata.append('courseDescription', JSON.stringify(data.courseDescription));
+      formdata.append('courseOutline', JSON.stringify(data.courseOutline));
+      formdata.append('courseImage', data.courseImage as Blob);
+      console.log(formdata.get('courseImage'));
+      const res = await tucourApi.call({
+        method: "POST",
+        url: "/course/create-course",
+        body: formdata,
+        headers: {
+          'Authorization': 'Bearer ' + window.localStorage.getItem("token"),
+        }
+      })
+      console.log(res);
+    }
+    catch (err) {
+      console.error(err);
+    }
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit((data) => {
-          console.log(data);
-        })}
+        onSubmit={form.handleSubmit(onSubmit)}
         className={cn(className, "space-y-4")}
       >
         <FormField

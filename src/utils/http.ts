@@ -58,21 +58,17 @@ export default class TucourApi {
             const res = await fetch(formatUrl, {method: arg.method, headers: arg.headers, body: arg.body});
             // Directly return the data if the status code is < 400
             if (res.ok) {
-                try {
-                    return await res.json();
-                } catch (err) {
-                    console.log("error occurs here")
-                    return await res.text()
-                }
-                
+                return await res.json();
+    
             }
             const error = new StatusError(res.status, res.statusText, await res.json());
             throw error;
 
         }
         catch (err) {
-            alert("Something went wrong while connecting to the server");
-            console.log(err);
+            console.log(err)
+            // const error = new StatusError(err.status, res.statusText, await res.json());
+            // throw error;
         }
     }
 

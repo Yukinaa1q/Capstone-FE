@@ -4,11 +4,13 @@ import { createSlice } from '@reduxjs/toolkit'
 // Define a type for the slice state
 interface AuthState {
   role: "admin" | "student" | "parent" | "tutor" | "academic" | "support";
+  userId: string;
+  name: string;
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
-  role: "student",
+  role: "academic",
 }
 
 export const authSlice = createSlice({
