@@ -1,7 +1,23 @@
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { useEffect, useId, useState } from "react";
 
 export default function SearchInput({ className }: { className?: string }) {
+  const [search, setSearch] = useState("");
+  // Make control + K work for searchInput
+  const inputId = useId();
+  useEffect(() => {
+    document.addEventListener("keydown", (e) => {
+      if (e.ctrlKey && e.key === "k") {
+        e.preventDefault();
+        const input = document.getElementById(inputId);
+        input?.focus();
+      }
+    });
+    return () => {
+      document.removeEventListener("keydown", () => {});
+    };
+  }, []);
   return (
     <div
       className={cn(
@@ -10,10 +26,12 @@ export default function SearchInput({ className }: { className?: string }) {
       )}
     >
       <Input
-        id="input-25"
+        id={inputId}
+        value={search}
         className="pe-11 rounded-full"
         placeholder="Search..."
         type="search"
+        onChange={(e) => setSearch(e.target.value)}
       />
       <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-2 text-muted-foreground">
         <kbd className="inline-flex h-5 max-h-full items-center rounded border border-border px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">

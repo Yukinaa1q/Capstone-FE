@@ -13,20 +13,24 @@ import { ICourse, ICourseP1, ICourseP2 } from "@/interfaces/ICourse";
 import CourseCardP1 from "./CardPhase1";
 import CourseCardP2 from "./CardPhase2";
 import { useAppSelector } from "@/hooks/reduxHook";
+import { useState } from "react";
+import { X } from "lucide-react";
 
 interface CourseCardProps {
   courseContent: ICourse;
 }
 
 const CourseCard = ({ courseContent }: CourseCardProps) => {
+  console.log("Card rendering");
   const phase = useAppSelector((state) => state.phases.phase);
+  const [isRegistered, setIsRegistered] = useState(false);
 
   return (
     <Card className="w-full">
       <CardHeader className="space-y-2 w-full">
         <img
-          src=""
-          alt=""
+          src="#"
+          alt="subject illustation"
           className="aspect-video bg-slate-400 rounded-md object-cover"
         />
         <CardTitle className="flex justify-between items-center gap-4">
@@ -43,7 +47,6 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
         </CardTitle>
         <CardDescription className="flex justify-between text-xs">
           <p>{courseContent.courseId}</p>
-          
         </CardDescription>
       </CardHeader>
       <CardContent className="text-sm w-full">
@@ -62,13 +65,25 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
           <img src={MoreDetailIcon} alt="detail-icon" className="size-5" />
           <p className="text-sm font-medium">Detail</p>
         </button>
-        <button
-          type="button"
-          className="animate-register-btn flex items-center gap-1 px-2 py-2 bg-green-400 rounded-full overflow-hidden"
-        >
-          <img src={RegisterIcon} alt="register-icon" className="size-5" />
-          <p className="text-sm font-medium">Register</p>
-        </button>
+        {isRegistered ? (
+          <button
+            type="button"
+            onClick={() => setIsRegistered((oldState) => !oldState)}
+            className="group flex items-center gap-0 px-2 py-2 bg-red-300 rounded-full overflow-hidden"
+          >
+            <X size={20} strokeWidth={2}/>
+            <p className="text-sm font-medium invisible w-0 group-hover:visible group-hover:w-12 group-hover:transition-all transition-all">Cancel</p>
+          </button>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsRegistered((oldState) => !oldState)}
+            className="animate-register-btn flex items-center gap-1 px-2 py-2 bg-green-400 rounded-full overflow-hidden"
+          >
+            <img src={RegisterIcon} alt="register-icon" className="size-5" />
+            <p className="text-sm font-medium">Register</p>
+          </button>
+        )}
       </CardFooter>
     </Card>
   );

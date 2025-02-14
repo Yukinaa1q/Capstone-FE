@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Input } from "@/components/ui/input";
 import TucourApi, { ENV } from "@/utils/http";
+import { jwtDecoder } from "@/utils/utils";
 
 const tucourApi = new TucourApi(ENV.DEV);
 
@@ -40,6 +41,7 @@ const LoginForm = () => {
           "Content-Type": "application/json",
         },
       });
+      console.log(jwtDecoder(res.token));
       window.localStorage.setItem("token", res.token);
     } catch (err) {
       console.log(err);

@@ -113,7 +113,7 @@ const ClassForm = ({
   defaultValues = initValue,
 }: {
   className?: string;
-  defaultValues: InferType<typeof classFormSchema>;
+  defaultValues?: InferType<typeof classFormSchema>;
 }) => {
   const form = useForm({
     defaultValues,
@@ -223,8 +223,8 @@ const ClassForm = ({
             name="studyWeek"
             render={({ field }) => (
               <RequiredInput label="Study Weekdays">
-                <Select onValueChange={field.onChange}>
-                  <SelectTrigger value={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger>
                     <SelectValue placeholder="Study Weekdays" />
                   </SelectTrigger>
                   <SelectContent>
@@ -241,8 +241,8 @@ const ClassForm = ({
             name="studyShift"
             render={({ field }) => (
               <RequiredInput label="Study Shift">
-                <Select onValueChange={field.onChange}>
-                  <SelectTrigger value={field.value}>
+                <Select onValueChange={field.onChange} value={field.value}>
+                  <SelectTrigger >
                     <SelectValue placeholder="Study Time" />
                   </SelectTrigger>
                   <SelectContent>

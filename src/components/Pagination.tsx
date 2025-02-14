@@ -1,20 +1,15 @@
 import React, {
   createContext,
   useState,
-  Dispatch,
   useContext,
   useEffect,
 } from "react";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
-  PaginationNext,
-  PaginationPrevious,
 } from "@/components/ui/pagination";
-import { Input } from "./ui/input";
 import {
   ChevronFirst,
   ChevronLast,
@@ -28,7 +23,7 @@ interface PaginationProps {
   children?: React.ReactNode;
   size: number;
   total: number;
-  onPageChange?: ({currentPage: number, perPage: number, totalItem: number}) => void;
+  onPageChange?: (pageInfo: {currentPage: number, perPage: number, totalItem: number}) => void;
 }
 
 interface PaginationCtxProps {
@@ -95,17 +90,17 @@ export const PaginationNav = ({ className }: { className?: string }) => {
         </PaginationItem>
         {Array.from(
           { length: endPage - startPage + 1 },
-          (_, i) => i + startPage
-        ).map((i) => (
-          <PaginationItem key={i}>
+          (_, i) => i + startPage // A list of page numbers appear in the pagination
+        ).map((page, idx) => (
+          <PaginationItem key={idx}>
             <PaginationLink
-              onClick={() => ctx.setCurrentPage(i)}
+              onClick={() => ctx.setCurrentPage(page)}
               className={cn(
-                ctx.currentPage === i && "bg-slate-100",
+                ctx.currentPage === page && "bg-slate-100",
                 "hover:cursor-default"
               )}
             >
-              {i}
+              {page}
             </PaginationLink>
           </PaginationItem>
         ))}
@@ -152,7 +147,7 @@ export const PaginationGoto = () => {
         }}
         className="text-center focus:outline-none  border-b-2 w-6 mx-1 leading-[0]"
       />
-      / {ctx.MAX_PAGE}
+      <p className="w-8">/ {ctx.MAX_PAGE}</p>
     </div>
   );
 };
