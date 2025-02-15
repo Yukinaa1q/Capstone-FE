@@ -11,6 +11,8 @@ interface AuthState {
 // Define the initial state using that type
 const initialState: AuthState = {
   role: "academic",
+  userId: "",
+  name: ""
 }
 
 export const authSlice = createSlice({
