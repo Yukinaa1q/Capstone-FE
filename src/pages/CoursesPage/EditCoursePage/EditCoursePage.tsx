@@ -1,5 +1,5 @@
 import ICourseBE from "@/interfaces/ICourseBE";
-import CourseForm, { ICourseForm } from "../NewCoursePage/CourseForm";
+import CourseForm, { ICourseForm } from "../CourseForm";
 import { useEffect, useState } from "react";
 import TucourApi, { ENV } from "@/utils/http";
 import { useNavigate, useParams } from "react-router";
@@ -8,18 +8,6 @@ import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
 
 const tucourApi = new TucourApi(ENV.DEV);
-
-// const testInitValue: ICourseForm = {
-//   courseTitle: "default title",
-//   courseCode: "default code",
-//   courseSubject: "chemistry",
-//   courseLevel: "2",
-//   coursePrice: 1200000,
-//   courseDescription: [
-//     { type: "p", children: [{ text: "this is a text file" }] },
-//   ],
-//   courseOutline: [],
-// };
 
 const EditCoursePage = () => {
   const params = useParams();
@@ -70,7 +58,6 @@ const EditCoursePage = () => {
   }, []);
 
   const onSubmit = async (data: ICourseForm) => {
-    
     console.log("Submit edit course");
     try {
       const formdata = new FormData();
@@ -86,7 +73,7 @@ const EditCoursePage = () => {
       formdata.append("courseOutline", JSON.stringify(data.courseOutline));
       const imageFormData = new FormData();
       imageFormData.append("file", data.courseImage as Blob);
-      
+
       const sendData = JSON.stringify({
         courseTitle: data.courseTitle,
         courseCode: data.courseCode,
@@ -138,10 +125,8 @@ const EditCoursePage = () => {
         </div>
       ) : (
         <CourseForm
-          className="mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2"
           initialData={editCourse}
           onSubmit={onSubmit}
-          isEdit={true}
         >
           <Button
             type="submit"

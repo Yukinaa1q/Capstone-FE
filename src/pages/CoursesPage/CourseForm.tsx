@@ -18,7 +18,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import CourseDetailPlaceholder from "./CourseDetailPlaceholder";
+import CourseDetailPlaceholder from "./NewCoursePage/CourseDetailPlaceholder";
 import PriceInput from "@/components/PriceInput";
 import { Descendant } from "slate";
 import { Check } from "lucide-react";
@@ -52,7 +52,7 @@ const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
       .array<Descendant>()
       .default([{ type: "p", children: [{ text: "" }] }]),
     courseOutline: yup.array().default([]),
-    imgUrl: yup.string().required(),
+    imgUrl: yup.string().optional(),
   })
   .required();
 
@@ -98,17 +98,15 @@ const subjectList: ListItem[] = [
   },
 ];
 
-const CreateCourseForm = ({
+const CourseForm = ({
   className,
   onSubmit,
   initialData = defaultForm,
-  // children,
-  isEdit,
+  children,
 }: {
   className?: string;
   initialData?: ICourseForm;
   onSubmit: (data: ICourseForm) => void;
-  isEdit: boolean;
   children?: React.ReactNode;
 }) => {
   const form = useForm({
@@ -116,16 +114,13 @@ const CreateCourseForm = ({
     resolver: yupResolver(courseFormSchema),
   });
   console.log("Course Form Render", form.getValues());
-  const navigate = useNavigate();
   const [imagePreview, setImagePreview] = useState<string>(initialData.imgUrl);
-  const formOnSubmit = (data: ICourseForm) => {
-    console.log(data);
-  };
   return (
     <Form {...form}>
       <form
-        onSubmit={(e) => {e.preventDefault(); onSubmit(form.getValues())}}
-        className={cn(className, "space-y-4")}
+        id="course-form"
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn(className, "space-y-4 mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2")}
       >
         <FormField
           name="courseTitle"
@@ -260,25 +255,12 @@ const CreateCourseForm = ({
           )}
         />
         {/* {children} */}
-        <Button
-          type="submit"
-          className="bg-t_primary-400 hover:bg-t_primary-500"
-          // disabled={isLoading}
-          // onClick={() => {console.log("Butotn click")}}
-        >
-          {isEdit ? "Edit Course" : "Create Course"}
-        </Button>
-        <Button
-          variant="destructive"
-          className="ml-4"
-          onClick={() => navigate("/courses")}
-          // disabled={isLoading}
-        >
-          Cancel
-        </Button>
+        <div className="flex justify-end gap-4">
+          {children}
+        </div>
       </form>
     </Form>
   );
 };
 
-export default CreateCourseForm;
+export default CourseForm;
