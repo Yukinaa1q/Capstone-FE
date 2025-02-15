@@ -14,10 +14,8 @@ const EditCoursePage = () => {
   const navigate = useNavigate();
   const [editCourse, setEditCourse] = useState<ICourseForm>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isSending, setIsSending] = useState<boolean>(true);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const [courseId, setCourseId] = useState<string>("");
-
-  console.log("Is sending", isSending);
 
   useEffect(() => {
     async function fetchCourse() {
@@ -48,10 +46,10 @@ const EditCoursePage = () => {
         };
         setEditCourse(convertDataType);
         setCourseId(courseDetail.courseId);
+        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
-      setIsLoading(false);
     }
 
     fetchCourse();
@@ -59,6 +57,7 @@ const EditCoursePage = () => {
 
   const onSubmit = async (data: ICourseForm) => {
     console.log("Submit edit course");
+    setIsSubmitting(true);
     try {
       const formdata = new FormData();
       formdata.append("courseCode", data.courseCode);
@@ -104,6 +103,7 @@ const EditCoursePage = () => {
           Authorization: "Bearer " + window.localStorage.getItem("token"),
         },
       });
+      setIsSubmitting(false);
       navigate("/courses");
     } catch (err) {
       console.log(err);
@@ -112,6 +112,11 @@ const EditCoursePage = () => {
 
   return (
     <section className="relative px-8 py-4">
+      {isSubmitting && (
+        <div className="absolute w-full h-full top-0 left-0 bg-gray-100/40">
+          <LoaderCircle size={80} className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"  />
+        </div>
+      )}
       <h1 className="text-center font-bold text-2xl">EDIT COURSE</h1>
       {isLoading ? (
         <div className="h-full mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2 space-y-4">
