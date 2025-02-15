@@ -25,7 +25,7 @@ const initialValue: Descendant[] = [
 ];
 
 const TextEditor = ({
-  initValue,
+  initValue = initialValue,
   onTextEditorChange,
 }: {
   initValue: Descendant[];

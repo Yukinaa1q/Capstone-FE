@@ -14,7 +14,7 @@ import toVND from "@/utils/currencyFormat";
 import { Descendant } from "slate";
 import { CourseOutline } from "@/components/CourseOutlineInput";
 import ICourseBE from "@/interfaces/ICourseBE";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi, { ENV, StatusError } from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 
 interface ICourseDetail {
@@ -28,6 +28,7 @@ interface ICourseDetail {
   coursePrice: number;
   participantNumber: number;
   courseId: string;
+  imgUrl: string;
 }
 
 const CourseDetail = () => {
@@ -35,6 +36,7 @@ const CourseDetail = () => {
   const navigate = useNavigate();
   const [showFull, setShowFull] = useState(false);
   const [course, setCourse] = useState<ICourseDetail>();
+
   useEffect(() => {
     const getCourse = async () => {
       const tucourApi = new TucourApi(ENV.DEV);
@@ -59,6 +61,7 @@ const CourseDetail = () => {
           coursePrice: res.coursePrice,
           participantNumber: res.participantNumber,
           courseId: res.courseId,
+          imgUrl: res.courseImage
         });
       } catch (error) {
         console.log(error);
@@ -66,11 +69,12 @@ const CourseDetail = () => {
     };
     getCourse();
   }, []);
+
   return (
     <section
-      className="text-white bg-fixed"
+      className="text-white"
       style={{
-        background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/5184957/pexels-photo-5184957.jpeg?auto=compress&cs=tinysrgb&w=600')`,
+        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.imgUrl}')`,
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
@@ -91,7 +95,7 @@ const CourseDetail = () => {
         </div>
         <div>
           <Link
-            to={"/courses/MT1003/edit"}
+            to={`/courses/${course?.courseCode}/edit`}
             className={cn(
               buttonVariants({ variant: "default" }),
               "bg-t_primary-600 hover:bg-t_primary-700 w-24"
@@ -106,17 +110,23 @@ const CourseDetail = () => {
             onClick={async () => {
               try {
                 const tucourApi = new TucourApi(ENV.DEV);
+                const jwtToken = window.localStorage.getItem("token");
+                console.log(jwtToken);
                 const res = await tucourApi.call({
                   url: `/course/delete/${course?.courseId}`,
                   method: "DELETE",
                   headers: {
-                    Authentication:
-                      "Bearer " + window.localStorage.getItem("token"),
+                    Authorization: "Bearer " + jwtToken,
                   },
                 });
                 navigate("/courses");
               } catch (err) {
-                console.log(err);
+                const returnState = err as StatusError;
+                console.log(
+                  "Error Occur",
+                  returnState.statusCode,
+                  returnState.errorBody
+                );
               }
             }}
           >
@@ -125,7 +135,7 @@ const CourseDetail = () => {
           </Button>
         </div>
       </section>
-      <section className="p-10 bg-white text-black flex gap-10">
+      <section className="p-10 bg-white text-black flex gap-10 justify-between">
         <div>
           <CourseInfo title="Course Description">
             <div
@@ -151,7 +161,7 @@ const CourseDetail = () => {
           <CourseInfo title="Course Outline">
             <Accordion type="multiple">
               {course?.courseOutline.map((outline, index) => (
-                <AccordionItem value={`item-${index}`}>
+                <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="uppercase">
                     {outline.sectionTitle}
                   </AccordionTrigger>
@@ -166,36 +176,14 @@ const CourseDetail = () => {
                   </AccordionContent>
                 </AccordionItem>
               ))}
-              {/* <AccordionItem value="item-1">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-4">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem> */}
             </Accordion>
           </CourseInfo>
         </div>
         <div className="border rounded-lg h-fit p-4 w-48 shrink-0">
           <h3 className="text-sm">Price</h3>
-          <p className="font-bold text-xl">{toVND(1300000)} </p>
+          <p className="font-bold text-xl text-right">
+            {toVND(course?.coursePrice ? course.coursePrice : 0)}{" "}
+          </p>
         </div>
       </section>
     </section>

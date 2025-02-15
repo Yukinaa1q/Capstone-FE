@@ -10,6 +10,26 @@ export function jwtDecoder(jwt: string) {
   return {
     header: JSON.parse(decodedHeader),
     payload: JSON.parse(decodedPayload),
-    sig: signature
+    sig: signature,
   };
+}
+
+export function isJSON(checkJson: string) {
+  if (
+    /^[\],:{}\s]*$/.test(
+      checkJson
+        .replace(/\\["\\\/bfnrtu]/g, "@")
+        .replace(
+          /"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g,
+          "]"
+        )
+        .replace(/(?:^|:|,)(?:\s*\[)+/g, "")
+    )
+  ) {
+    //the json is ok
+    return true;
+  } else {
+    //the json is not ok
+    return false;
+  }
 }

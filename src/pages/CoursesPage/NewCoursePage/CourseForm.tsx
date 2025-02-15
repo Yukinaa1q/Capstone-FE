@@ -4,7 +4,6 @@ import CourseOutlineInput, {
 import RequiredInput from "@/components/RequiredInput";
 import SearchSelect, { ListItem } from "@/components/SearchSelect";
 import TextEditor from "@/components/TextEditor/TextEditor";
-import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import {
@@ -23,10 +22,8 @@ import CourseDetailPlaceholder from "./CourseDetailPlaceholder";
 import PriceInput from "@/components/PriceInput";
 import { Descendant } from "slate";
 import { Check } from "lucide-react";
-import TucourApi, { ENV } from "@/utils/http";
-import { url } from "inspector";
 
-interface ICourseForm {
+export interface ICourseForm {
   courseTitle: string;
   courseCode: string;
   courseSubject: string;
@@ -35,6 +32,7 @@ interface ICourseForm {
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   courseImage?: File;
+  imgUrl: string;
 }
 
 const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
@@ -52,6 +50,7 @@ const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
       .array<Descendant>()
       .default([{ type: "p", children: [{ text: "" }] }]),
     courseOutline: yup.array().default([]),
+    imgUrl: yup.string().required(),
   })
   .required();
 
@@ -63,6 +62,7 @@ const defaultForm: ICourseForm = {
   coursePrice: 0,
   courseDescription: [{ type: "p", children: [{ text: "" }] }],
   courseOutline: [],
+  imgUrl: "",
 };
 
 const subjectList: ListItem[] = [
@@ -96,53 +96,23 @@ const subjectList: ListItem[] = [
   },
 ];
 
-const tucourApi = new TucourApi(ENV.DEV);
-
 const CourseForm = ({
   className,
+  onSubmit,
   initialData = defaultForm,
+  children,
 }: {
   className?: string;
   initialData?: ICourseForm;
+  onSubmit: (data: ICourseForm) => void;
+  children?: React.ReactNode;
 }) => {
-  console.log("Render NewCourseForm");
-
   const form = useForm({
-    defaultValues: initialData,
+    values: initialData,
     resolver: yupResolver(courseFormSchema),
   });
-  const [imagePreview, setImagePreview] = useState<string>("");
 
-  const onSubmit = async (data: ICourseForm) => {
-    try {
-      console.log("Token: ", window.localStorage.getItem("token"));
-      // console.log("Data: ", JSON.stringify(data));
-      const formdata = new FormData();
-      formdata.append("courseCode", data.courseCode);
-      formdata.append("courseTitle", data.courseTitle);
-      formdata.append("courseSubject", data.courseSubject);
-      formdata.append("courseLevel", data.courseLevel);
-      formdata.append("coursePrice", data.coursePrice.toString());
-      formdata.append(
-        "courseDescription",
-        JSON.stringify(data.courseDescription)
-      );
-      formdata.append("courseOutline", JSON.stringify(data.courseOutline));
-      formdata.append("courseImage", data.courseImage as Blob);
-      console.log(formdata.get("courseImage"));
-      const res = await tucourApi.call({
-        url: "course/create-course",
-        method: "POST",
-        body: formdata,
-        headers: {
-          Authorization: "Bearer " + window.localStorage.getItem("token"),
-        },
-      });
-      console.log(res);
-    } catch (err) {
-      console.log(err);
-    }
-  };
+  const [imagePreview, setImagePreview] = useState<string>(initialData.imgUrl);
 
   return (
     <Form {...form}>
@@ -174,7 +144,7 @@ const CourseForm = ({
                 <SearchSelect
                   {...field}
                   list={subjectList}
-                  placeholder="Search"
+                  placeholder="Choose a subject"
                   filterFn={(value, search) => {
                     return value.toLowerCase().includes(search.toLowerCase())
                       ? 1
@@ -222,6 +192,7 @@ const CourseForm = ({
               render={({ field }) => (
                 <RequiredInput label="Course Image">
                   <Input
+                    
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
@@ -241,6 +212,7 @@ const CourseForm = ({
               render={({ field }) => (
                 <RequiredInput label="Price">
                   <PriceInput
+                    key={field.value}
                     initValue={field.value}
                     handleFormChange={(value) => field.onChange(value)}
                   />
@@ -273,6 +245,7 @@ const CourseForm = ({
           render={({ field }) => (
             <RequiredInput label="Course Outline">
               <CourseOutlineInput
+                key={field.value}
                 initValue={field.value}
                 onCourseOutlineChange={(courseOutline) =>
                   field.onChange(courseOutline)
@@ -281,15 +254,8 @@ const CourseForm = ({
             </RequiredInput>
           )}
         />
-        <Button
-          type="submit"
-          className="bg-t_primary-400 hover:bg-t_primary-500"
-        >
-          Create Course
-        </Button>
-        <Button variant="destructive" type="submit" className="ml-4">
-          Cancel
-        </Button>
+        {children}
+        
       </form>
     </Form>
   );

@@ -38,7 +38,7 @@ export default function SearchSelect(
 ) {
   const id = useId();
   const [open, setOpen] = useState<boolean>(false);
-  const [value, setValue] = useState<string>(props?.value);
+  const [value, setValue] = useState<string>(props.value);
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
