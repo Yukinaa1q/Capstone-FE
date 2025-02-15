@@ -28,12 +28,12 @@ const CourseOutlineInput = ({
   initValue: CourseOutline[];
   onCourseOutlineChange: (courseOutline: CourseOutline[]) => void;
 }) => {
-  console.log("Render courseoutlineinput");
   const [courseOutline, setCourseOutline] = useImmer<CourseOutline[]>(initValue);
   // onCourseOutlineChange(courseOutline);
   useEffect(() => {
     onCourseOutlineChange(courseOutline);
   }, [courseOutline]);
+  
   return (
     <div>
       <Accordion

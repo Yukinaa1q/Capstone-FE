@@ -5,6 +5,7 @@ import TucourApi, { ENV } from "@/utils/http";
 import { useNavigate, useParams } from "react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import { LoaderCircle } from "lucide-react";
 
 const tucourApi = new TucourApi(ENV.DEV);
 
@@ -25,6 +26,10 @@ const EditCoursePage = () => {
   const navigate = useNavigate();
   const [editCourse, setEditCourse] = useState<ICourseForm>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState<boolean>(true);
+  const [courseId, setCourseId] = useState<string>("");
+
+  console.log("Is sending", isSending);
 
   useEffect(() => {
     async function fetchCourse() {
@@ -47,9 +52,14 @@ const EditCoursePage = () => {
           coursePrice: courseDetail.coursePrice,
           courseDescription: JSON.parse(courseDetail.courseDescription),
           courseOutline: courseDetail.courseOutline,
+          courseImage: new File(
+            [await fetch(courseDetail.courseImage).then((res) => res.blob())],
+            "courseImage"
+          ),
           imgUrl: courseDetail.courseImage,
         };
         setEditCourse(convertDataType);
+        setCourseId(courseDetail.courseId);
       } catch (err) {
         console.log(err);
       }
@@ -60,12 +70,61 @@ const EditCoursePage = () => {
   }, []);
 
   const onSubmit = async (data: ICourseForm) => {
-    console.log("UPDATE DATA");
-    console.log(data);
+    
+    console.log("Submit edit course");
+    try {
+      const formdata = new FormData();
+      formdata.append("courseCode", data.courseCode);
+      formdata.append("courseTitle", data.courseTitle);
+      formdata.append("courseSubject", data.courseSubject);
+      formdata.append("courseLevel", data.courseLevel);
+      formdata.append("coursePrice", data.coursePrice.toString());
+      formdata.append(
+        "courseDescription",
+        JSON.stringify(data.courseDescription)
+      );
+      formdata.append("courseOutline", JSON.stringify(data.courseOutline));
+      const imageFormData = new FormData();
+      imageFormData.append("file", data.courseImage as Blob);
+      
+      const sendData = JSON.stringify({
+        courseTitle: data.courseTitle,
+        courseCode: data.courseCode,
+        courseSubject: data.courseSubject,
+        courseLevel: data.courseLevel,
+        coursePrice: data.coursePrice,
+        courseDescription: JSON.stringify(data.courseDescription),
+        courseOutline: data.courseOutline,
+      });
+      console.log(sendData);
+      // Update textual data
+      await tucourApi.call({
+        url: "course/update-course/" + courseId,
+        method: "POST",
+        body: sendData,
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + window.localStorage.getItem("token"),
+        },
+      });
+
+      // Update image file
+      await tucourApi.call({
+        url: "course/update-course-image/" + courseId,
+        method: "POST",
+        body: imageFormData,
+        headers: {
+          Authorization: "Bearer " + window.localStorage.getItem("token"),
+        },
+      });
+      navigate("/courses");
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <section className="px-8 py-4">
+    <section className="relative px-8 py-4">
       <h1 className="text-center font-bold text-2xl">EDIT COURSE</h1>
       {isLoading ? (
         <div className="h-full mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2 space-y-4">
@@ -82,6 +141,7 @@ const EditCoursePage = () => {
           className="mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2"
           initialData={editCourse}
           onSubmit={onSubmit}
+          isEdit={true}
         >
           <Button
             type="submit"

@@ -4,14 +4,17 @@ import RequiredInput from "@/components/RequiredInput";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Input } from "@/components/ui/input";
-import TucourApi, { ENV } from "@/utils/http";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import TucourApi, { ENV, StatusError } from "@/utils/http";
 import { jwtDecoder } from "@/utils/utils";
 import { useAppDispatch } from "@/hooks/reduxHook";
 import { setUser } from "@/store/authenSlice";
+import { AlertCircle } from "lucide-react";
+import { useState } from "react";
 
 interface LoginForm {
   email: string;
@@ -27,6 +30,8 @@ const loginSchema = yup
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const form = useForm<LoginForm>({
     resolver: yupResolver<LoginForm>(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -47,16 +52,19 @@ const LoginForm = () => {
       console.log("payload", payload);
       dispatch(
         setUser({
-          role: payload.role,
+          role: "academic",
           userId: payload.userId,
           name: payload.name,
         })
       );
-
       window.localStorage.setItem("token", res.token);
+      navigate("/");
     } catch (err) {
-      console.log("Catch error login form")
-      console.log(err);
+      if (err instanceof StatusError) {
+        console.log(err.statusCode, err.message, err.errorBody);
+        setErrorMsg("Incorrect Username or Password");
+      }
+      // console.log(typeof err)
     }
   };
 
@@ -69,6 +77,13 @@ const LoginForm = () => {
           <span className="font-bold text-cyan-400 text-xl"> Tucour</span>
         </h2>
       </div>
+      {errorMsg && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{errorMsg}</AlertDescription>
+        </Alert>
+      )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
           <FormField

@@ -98,7 +98,7 @@ const subjectList: ListItem[] = [
   },
 ];
 
-const CourseForm = ({
+const CreateCourseForm = ({
   className,
   onSubmit,
   initialData = defaultForm,
@@ -124,8 +124,7 @@ const CourseForm = ({
   return (
     <Form {...form}>
       <form
-        id="course-form"
-        onSubmit={form.handleSubmit(onSubmit)}
+        onSubmit={(e) => {e.preventDefault(); onSubmit(form.getValues())}}
         className={cn(className, "space-y-4")}
       >
         <FormField
@@ -282,4 +281,4 @@ const CourseForm = ({
   );
 };
 
-export default CourseForm;
+export default CreateCourseForm;

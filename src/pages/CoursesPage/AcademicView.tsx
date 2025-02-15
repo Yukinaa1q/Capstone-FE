@@ -160,7 +160,7 @@ const AddNewCourse = () => {
       <Tooltip>
         <TooltipTrigger asChild>
           <Link
-            to="new"
+            to="/courses/new"
             className={cn(
               buttonVariants({ variant: "outline", size: "icon" }),
               "relative left-full -translate-x-full"
