@@ -47,7 +47,7 @@ const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
       .number()
       .min(0, "Course price must be greater than or equal to 0")
       .required("Course price is required"),
-    courseImage: yup.mixed<File>().optional(),
+    courseImage: yup.mixed<File>().required(),
     courseDescription: yup
       .array<Descendant>()
       .default([{ type: "p", children: [{ text: "" }] }]),
@@ -130,7 +130,8 @@ const CourseForm = ({
       formdata.append("courseOutline", JSON.stringify(data.courseOutline));
       formdata.append("courseImage", data.courseImage as Blob);
       console.log(formdata.get("courseImage"));
-      const res = await fetch("http://localhost:8000/course/create-course", {
+      const res = await tucourApi.call({
+        url: "course/create-course",
         method: "POST",
         body: formdata,
         headers: {
@@ -219,14 +220,13 @@ const CourseForm = ({
             <FormField
               name="courseImage"
               render={({ field }) => (
-                <RequiredInput label="Course Image" isRequired={false}>
+                <RequiredInput label="Course Image">
                   <Input
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
                       console.log(e.target.files);
                       const file = e.target.files?.[0];
-                      console.log("Image file", file);
                       if (file) {
                         setImagePreview(URL.createObjectURL(file));
                       }

@@ -14,7 +14,6 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -27,6 +26,8 @@ import { Link } from "react-router";
 import ClearableSearch from "@/components/ClearableSearch";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import TucourApi, { ENV } from "@/utils/http";
+import ICourseBE from "@/interfaces/ICourseBE";
 
 // 1 Define type and data
 
@@ -38,39 +39,7 @@ type CourseOverview = {
   registrationNumber: number;
 };
 
-export const courseList: CourseOverview[] = [
-  {
-    courseId: "MATH001",
-    courseName: "Toán 12 Cơ Bản",
-    coursePrice: 1250000,
-    classNumber: 3,
-    registrationNumber: 100,
-  },
-  {
-    courseId: "MATH002",
-    courseName: "Toán 12 Nâng Cao",
-    coursePrice: 1350000,
-    classNumber: 10,
-    registrationNumber: 120,
-  },
-  {
-    courseId: "MATH003",
-    courseName: "Toán 12 Chuyên",
-    coursePrice: 1450000,
-    classNumber: 5,
-    registrationNumber: 150,
-  },
-  {
-    courseId: "CHEM005",
-    courseName: "Hoá Hữu Cơ Đại Cương",
-    coursePrice: 1250000,
-    classNumber: 2,
-    registrationNumber: 100,
-  },
-];
-
 // 2. Column Definition
-
 const columns: ColumnDef<CourseOverview>[] = [
   {
     accessorKey: "courseId",
@@ -136,14 +105,43 @@ const columns: ColumnDef<CourseOverview>[] = [
 ];
 
 const AcademicView = () => {
+  const [courselist, setCourseList] = useState<CourseOverview[]>([]);
+  useEffect(() => {
+    const getCourse = async () => {
+      const tucourApi = new TucourApi(ENV.DEV);
+      try {
+        const res: ICourseBE[] = await tucourApi.call({
+          url: "/course/all-course",
+          method: "GET",
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
+          },
+        });
+        setCourseList(
+          res.map((course) => ({
+            courseId: course.courseCode,
+            courseName: course.courseTitle,
+            coursePrice: course.coursePrice,
+            classNumber: 0,
+            registrationNumber: course.participantNumber,
+          }))
+        );
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getCourse();
+  }, []);
+
   const table = useReactTable({
-    data: courseList,
+    data: courselist,
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     globalFilterFn: "includesString",
   });
+
   return (
     <section className="px-8 pt-4">
       <AddNewCourse />
@@ -157,25 +155,6 @@ const AcademicView = () => {
 };
 
 const AddNewCourse = () => {
-  const [courselist, setCourseList] = useState<CourseOverview>([]);
-  useEffect(() => {
-    const getCourse = async () => {
-      try {
-        const res = await fetch("http://localhost:8000/course/all-course", {
-          method: "GET",
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("token"),
-          },
-        });
-        if (res.status) {
-          console.log(await res.json());
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    getCourse();
-  }, []);
   return (
     <TooltipProvider delayDuration={100}>
       <Tooltip>

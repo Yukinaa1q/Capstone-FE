@@ -1,5 +1,3 @@
-import axios from "axios";
-
 export enum ENV {
     PROD,
     DEV,
@@ -60,16 +58,12 @@ export default class TucourApi {
             if (res.ok) {
                 return await res.json();  
             }
-            const error = new StatusError(res.status, res.statusText, await res.json());
-            console.error("Error on fail to get res.ok in http.ts")
-            throw error;
+            // const error = new StatusError(res.status, res.statusText, await res.json());
 
+            throw res;
         }
         catch (err) {
-            console.error("Error on catch http.ts")
             throw err;
-            // const error = new StatusError(err.status, res.statusText, await res.json());
-            // throw error;
         }
     }
 

@@ -26,13 +26,13 @@ const HTMLConverter = ({ nodeList }: { nodeList: Descendant[] }) => {
         switch (node.type) {
           case "h1":
             return (
-              <h1 className="text-2xl" key={index}>
+              <h1 className="text-xl font-medium mt-4" key={index}>
                 {childEle}
               </h1>
             );
           case "h2":
             return (
-              <h2 className="text-xl" key={index}>
+              <h2 className="text-lg" key={index}>
                 {childEle}
               </h2>
             );
@@ -43,16 +43,16 @@ const HTMLConverter = ({ nodeList }: { nodeList: Descendant[] }) => {
               </h3>
             );
           case "p":
-            return <p key={index}>{childEle}</p>;
+            return <p key={index} className="text-sm">{childEle}</p>;
           case "list-unordered":
             return (
-              <ul className="list-disc" key={index}>
+              <ul className="list-disc text-sm" key={index}>
                 {childEle}
               </ul>
             );
           case "list-ordered":
             return (
-              <ol className="list-decimal" key={index}>
+              <ol className="list-decimal text-sm" key={index}>
                 {childEle}
               </ol>
             );

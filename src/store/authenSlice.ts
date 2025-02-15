@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 // import type { PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
@@ -19,11 +19,13 @@ export const authSlice = createSlice({
   name: 'authen',
   initialState,
   reducers: {
-    // incrementByAmount: (state, action: PayloadAction<number>) => {
-    //   state.value += action.payload
-    // },
+    setUser(state, action: PayloadAction<AuthState>) {
+      state.role = action.payload.role;
+      state.userId = action.payload.userId;
+      state.name = action.payload.name;
+    }
   },
 })
 
-// export const { increment, decrement, incrementByAmount } = counterSlice.actions
+export const { setUser } = authSlice.actions
 export default authSlice.reducer

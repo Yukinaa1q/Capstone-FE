@@ -10,8 +10,8 @@ import * as yup from "yup";
 import { Input } from "@/components/ui/input";
 import TucourApi, { ENV } from "@/utils/http";
 import { jwtDecoder } from "@/utils/utils";
-
-const tucourApi = new TucourApi(ENV.DEV);
+import { useAppDispatch } from "@/hooks/reduxHook";
+import { setUser } from "@/store/authenSlice";
 
 interface LoginForm {
   email: string;
@@ -26,12 +26,14 @@ const loginSchema = yup
   .required();
 
 const LoginForm = () => {
+  const dispatch = useAppDispatch();
   const form = useForm<LoginForm>({
     resolver: yupResolver<LoginForm>(loginSchema),
     defaultValues: { email: "", password: "" },
   });
 
   const onSubmit = async (data: LoginForm) => {
+    const tucourApi = new TucourApi(ENV.DEV);
     try {
       const res = await tucourApi.call({
         url: "/authentication/login",
@@ -41,9 +43,19 @@ const LoginForm = () => {
           "Content-Type": "application/json",
         },
       });
-      console.log(jwtDecoder(res.token));
+      const { payload } = jwtDecoder(res.token);
+      console.log("payload", payload);
+      dispatch(
+        setUser({
+          role: payload.role,
+          userId: payload.userId,
+          name: payload.name,
+        })
+      );
+
       window.localStorage.setItem("token", res.token);
     } catch (err) {
+      console.log("Catch error login form")
       console.log(err);
     }
   };

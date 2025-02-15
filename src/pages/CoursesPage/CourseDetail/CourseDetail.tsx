@@ -1,6 +1,6 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { ReactNode, useEffect, useState } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useNavigate, useParams } from "react-router";
 
 import {
   Accordion,
@@ -13,6 +13,9 @@ import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
 import { Descendant } from "slate";
 import { CourseOutline } from "@/components/CourseOutlineInput";
+import ICourseBE from "@/interfaces/ICourseBE";
+import TucourApi, { ENV } from "@/utils/http";
+import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 
 interface ICourseDetail {
   courseTitle: string;
@@ -23,24 +26,40 @@ interface ICourseDetail {
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   coursePrice: number;
+  participantNumber: number;
+  courseId: string;
 }
 
 const CourseDetail = () => {
   const params = useParams();
-  console.log(params);
+  const navigate = useNavigate();
   const [showFull, setShowFull] = useState(false);
+  const [course, setCourse] = useState<ICourseDetail>();
   useEffect(() => {
     const getCourse = async () => {
+      const tucourApi = new TucourApi(ENV.DEV);
       try {
-        const res = await fetch(`http://localhost:8000/course/${params.id}`, {
+        const res: ICourseBE = await tucourApi.call({
+          url: `/course/${params.id}`,
           method: "GET",
           headers: {
             Authorization: "Bearer " + window.localStorage.getItem("token"),
           },
         });
-        if (res.status) {
-          console.log(await res.json());
-        }
+        console.log("Return result", res);
+        const courseDesc = JSON.parse(res.courseDescription) as Descendant[];
+        setCourse({
+          courseTitle: res.courseTitle,
+          courseCode: res.courseCode,
+          learningDuration: "23/8/2024 - 23/12/2024",
+          preregistrationDuration: "23/8/2024 - 23/12/2024",
+          preregistrationNumber: res.participantNumber,
+          courseDescription: courseDesc,
+          courseOutline: res.courseOutline,
+          coursePrice: res.coursePrice,
+          participantNumber: res.participantNumber,
+          courseId: res.courseId,
+        });
       } catch (error) {
         console.log(error);
       }
@@ -59,15 +78,15 @@ const CourseDetail = () => {
     >
       <section className="p-10 flex justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Calculus 1</h1>
-          <h2>MT1002 | 2024 - 2025</h2>
+          <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
+          <h2>{course?.courseCode} | 2024 - 2025</h2>
           <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
             <div>Learning Duration</div>
             <div className="font-semibold">23/8/2024 - 23/12/2024</div>
             <div>Pre-registraiton Duration</div>
             <div className="font-semibold">23/8/2024 - 23/12/2024</div>
             <div>Pre-registraiton Number</div>
-            <div className="font-semibold">200</div>
+            <div className="font-semibold">{course?.participantNumber}</div>
           </div>
         </div>
         <div>
@@ -81,7 +100,26 @@ const CourseDetail = () => {
             <Edit />
             Edit
           </Link>
-          <Button variant="destructive" className="w-24 ml-4">
+          <Button
+            variant="destructive"
+            className="w-24 ml-4"
+            onClick={async () => {
+              try {
+                const tucourApi = new TucourApi(ENV.DEV);
+                const res = await tucourApi.call({
+                  url: `/course/delete/${course?.courseId}`,
+                  method: "DELETE",
+                  headers: {
+                    Authentication:
+                      "Bearer " + window.localStorage.getItem("token"),
+                  },
+                });
+                navigate("/courses");
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
             <Trash2 />
             Delete
           </Button>
@@ -96,44 +134,11 @@ const CourseDetail = () => {
                 "line-clamp-6 before:absolute before:w-full before:bottom-0 before:h-full before:bg-linear-to-b before:to-white"
               }`}
             >
-              <p className="text-sm">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Aperiam labore unde quia officiis maiores sit natus vitae eos.
-                Atque aliquid quo neque laudantium quod cupiditate labore, quam
-                hic commodi quos. Placeat dicta error quos assumenda voluptates,
-                aut autem ea dolores ut? Ab doloremque quas ea voluptatem totam
-                impedit quibusdam magni accusamus qui quo debitis illo, minima
-                id blanditiis. Similique, minus? Sunt, maiores provident.
-                Obcaecati dolor quis ipsum explicabo ipsam! Dignissimos deleniti
-                aliquid maiores repellat quod, quaerat, atque veritatis rem
-                similique dicta totam provident necessitatibus laborum ut
-                molestiae nisi blanditiis natus? Ad nesciunt harum ut quod.
-                Quaerat inventore veniam facere illum aliquam animi sit ut,
-                odit, aperiam saepe, minima quasi! Ab libero ut commodi dolorem
-                vero adipisci officiis error hic fuga! Perferendis repellendus
-                asperiores aspernatur officia! Consectetur illum est
-                necessitatibus, odio ullam error nobis, provident mollitia
-                recusandae, eligendi pariatur magni. Omnis nisi ullam voluptatum
-                ipsam nesciunt vero corrupti reiciendis quidem quo. Iste facere
-                repudiandae laborum dolore, corporis quod voluptatem aspernatur
-                nesciunt nihil tempora quae nostrum dolorem, ipsam deleniti nam
-                harum, eaque earum. Sit laboriosam sunt eaque praesentium
-                corrupti consequuntur asperiores nemo? Ea vitae eos natus,
-                deserunt nesciunt minima voluptate error maiores porro culpa
-                aperiam est sunt veniam commodi. Sequi suscipit pariatur
-                obcaecati. Nihil, quaerat harum. Exercitationem, temporibus
-                amet. Placeat, quis sunt. Voluptate asperiores hic sapiente eum
-                nobis vel, rem laboriosam, quae, numquam praesentium excepturi.
-                Doloribus iste officiis architecto accusantium ipsum eius
-                recusandae autem illum vero ex! Error reiciendis nemo dolorum
-                at. Repellat vero ex excepturi sint qui animi quo, beatae
-                provident labore adipisci fugit inventore sapiente hic possimus
-                nobis totam veritatis nulla blanditiis cum, alias nihil nesciunt
-                autem. Ducimus, quia earum. Nesciunt temporibus nisi nostrum
-                harum nihil suscipit autem vel alias aut aliquam. Cumque
-                accusantium reprehenderit iusto hic officia odio vitae nihil
-                amet ex, expedita, accusamus, et atque at sit fugit.
-              </p>
+              <HTMLConverter
+                nodeList={
+                  course?.courseDescription ? course.courseDescription : []
+                }
+              />
             </div>
             <Button
               variant="link"
@@ -145,7 +150,23 @@ const CourseDetail = () => {
           </CourseInfo>
           <CourseInfo title="Course Outline">
             <Accordion type="multiple">
-              <AccordionItem value="item-1">
+              {course?.courseOutline.map((outline, index) => (
+                <AccordionItem value={`item-${index}`}>
+                  <AccordionTrigger className="uppercase">
+                    {outline.sectionTitle}
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-4">
+                    {course?.courseOutline[index].subsections.map(
+                      (subsection, index) => (
+                        <div key={index} className="border rounded-md p-4">
+                          <h4>{subsection.subsectionTitle}</h4>
+                        </div>
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+              {/* <AccordionItem value="item-1">
                 <AccordionTrigger>Is it accessible?</AccordionTrigger>
                 <AccordionContent>
                   Yes. It adheres to the WAI-ARIA design pattern.
@@ -168,7 +189,7 @@ const CourseDetail = () => {
                 <AccordionContent>
                   Yes. It adheres to the WAI-ARIA design pattern.
                 </AccordionContent>
-              </AccordionItem>
+              </AccordionItem> */}
             </Accordion>
           </CourseInfo>
         </div>
