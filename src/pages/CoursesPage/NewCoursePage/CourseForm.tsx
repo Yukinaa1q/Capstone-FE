@@ -137,7 +137,7 @@ const CourseForm = ({
       console.log(res);
     }
     catch (err) {
-      console.error(err);
+      console.log(err);
     }
   };
 

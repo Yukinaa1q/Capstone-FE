@@ -33,7 +33,7 @@ export default class TucourApi {
         if (env === ENV.PROD) {
             this.baseUrl = "https://tucour.herokuapp.com";
         } else {
-            this.baseUrl = "http://localhost:8000";
+            this.baseUrl = "http://127.0.0.1:8000";
         }
     }
 
@@ -58,15 +58,16 @@ export default class TucourApi {
             const res = await fetch(formatUrl, {method: arg.method, headers: arg.headers, body: arg.body});
             // Directly return the data if the status code is < 400
             if (res.ok) {
-                return await res.json();
-    
+                return await res.json();  
             }
             const error = new StatusError(res.status, res.statusText, await res.json());
+            console.error("Error on fail to get res.ok in http.ts")
             throw error;
 
         }
         catch (err) {
-            console.log(err)
+            console.error("Error on catch http.ts")
+            throw err;
             // const error = new StatusError(err.status, res.statusText, await res.json());
             // throw error;
         }
