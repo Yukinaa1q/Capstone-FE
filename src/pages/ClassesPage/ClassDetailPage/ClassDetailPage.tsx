@@ -44,6 +44,7 @@ interface StudentBrief {
 const ClassDetail = () => {
   const params = useParams();
   const [showFull, setShowFull] = useState(false);
+  const [course, setCourse] = useState<IClassDetail>();
   return (
     <section
       className="text-white bg-fixed"
@@ -141,31 +142,23 @@ const ClassDetail = () => {
             </Button>
           </CourseInfo>
           <CourseInfo title="Course Outline">
-            <Accordion type="multiple">
-              <AccordionItem value="item-1">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-2">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-3">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="item-4">
-                <AccordionTrigger>Is it accessible?</AccordionTrigger>
-                <AccordionContent>
-                  Yes. It adheres to the WAI-ARIA design pattern.
-                </AccordionContent>
-              </AccordionItem>
+          <Accordion type="multiple">
+              {course?.courseOutline.map((outline, index) => (
+                <AccordionItem key={index} value={`item-${index}`}>
+                  <AccordionTrigger className="uppercase">
+                    {outline.sectionTitle}
+                  </AccordionTrigger>
+                  <AccordionContent className="space-y-4">
+                    {course?.courseOutline[index].subsections.map(
+                      (subsection, index) => (
+                        <div key={index} className="border rounded-md p-4">
+                          <h4>{subsection.subsectionTitle}</h4>
+                        </div>
+                      )
+                    )}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
             </Accordion>
           </CourseInfo>
         </div>

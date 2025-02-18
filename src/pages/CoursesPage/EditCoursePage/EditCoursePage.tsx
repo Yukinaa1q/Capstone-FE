@@ -29,7 +29,6 @@ const EditCoursePage = () => {
           },
         });
 
-        console.log("courseDetail", courseDetail);
         const convertDataType: ICourseForm = {
           courseTitle: courseDetail.courseTitle,
           courseCode: courseDetail.courseCode,
@@ -38,10 +37,7 @@ const EditCoursePage = () => {
           coursePrice: courseDetail.coursePrice,
           courseDescription: JSON.parse(courseDetail.courseDescription),
           courseOutline: courseDetail.courseOutline,
-          courseImage: new File(
-            [await fetch(courseDetail.courseImage).then((res) => res.blob())],
-            "courseImage"
-          ),
+          courseImage: new File([], "courseImage"),
           imgUrl: courseDetail.courseImage,
         };
         setEditCourse(convertDataType);
@@ -56,7 +52,6 @@ const EditCoursePage = () => {
   }, []);
 
   const onSubmit = async (data: ICourseForm) => {
-    console.log("Submit edit course");
     setIsSubmitting(true);
     try {
       const formdata = new FormData();
@@ -82,7 +77,6 @@ const EditCoursePage = () => {
         courseDescription: JSON.stringify(data.courseDescription),
         courseOutline: data.courseOutline,
       });
-      console.log(sendData);
       // Update textual data
       await tucourApi.call({
         url: "course/update-course/" + courseId,
@@ -94,15 +88,17 @@ const EditCoursePage = () => {
         },
       });
 
-      // Update image file
-      await tucourApi.call({
-        url: "course/update-course-image/" + courseId,
-        method: "POST",
-        body: imageFormData,
-        headers: {
-          Authorization: "Bearer " + window.localStorage.getItem("token"),
-        },
-      });
+      if (data.courseImage && data.courseImage.size > 0) {
+        // Update image file only if the size is greater than 0
+        await tucourApi.call({
+          url: "course/update-course-image/" + courseId,
+          method: "POST",
+          body: imageFormData,
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
+          },
+        });
+      }
       setIsSubmitting(false);
       navigate("/courses");
     } catch (err) {
@@ -114,7 +110,10 @@ const EditCoursePage = () => {
     <section className="relative px-8 py-4">
       {isSubmitting && (
         <div className="absolute w-full h-full top-0 left-0 bg-gray-100/40">
-          <LoaderCircle size={80} className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"  />
+          <LoaderCircle
+            size={80}
+            className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          />
         </div>
       )}
       <h1 className="text-center font-bold text-2xl">EDIT COURSE</h1>
@@ -129,10 +128,7 @@ const EditCoursePage = () => {
           <Skeleton className="w-full h-32" />
         </div>
       ) : (
-        <CourseForm
-          initialData={editCourse}
-          onSubmit={onSubmit}
-        >
+        <CourseForm initialData={editCourse} onSubmit={onSubmit}>
           <Button
             type="submit"
             className="bg-t_primary-400 hover:bg-t_primary-500"

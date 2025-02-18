@@ -22,8 +22,6 @@ import CourseDetailPlaceholder from "./NewCoursePage/CourseDetailPlaceholder";
 import PriceInput from "@/components/PriceInput";
 import { Descendant } from "slate";
 import { Check } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router";
 
 export interface ICourseForm {
   courseTitle: string;
@@ -34,7 +32,7 @@ export interface ICourseForm {
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   courseImage?: File;
-  imgUrl: string;
+  imgUrl?: string;
 }
 
 const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
@@ -113,8 +111,7 @@ const CourseForm = ({
     defaultValues: initialData,
     resolver: yupResolver(courseFormSchema),
   });
-  console.log("Course Form Render", form.getValues());
-  const [imagePreview, setImagePreview] = useState<string>(initialData.imgUrl);
+  const [imagePreview, setImagePreview] = useState<string>(initialData.imgUrl || "");
   return (
     <Form {...form}>
       <form
@@ -130,12 +127,12 @@ const CourseForm = ({
             </RequiredInput>
           )}
         />
-        <div className="flex justify-between gap-4 flex-wrap">
+        <div className="grid lg:grid-cols-3 gap-4 flex-wrap">
           <FormField
             name="courseCode"
             render={({ field }) => (
               <RequiredInput label="Course Code">
-                <Input {...field} className="w-32" />
+                <Input {...field} className="" />
               </RequiredInput>
             )}
           />

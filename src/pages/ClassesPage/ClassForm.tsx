@@ -41,6 +41,8 @@ const classFormSchema = object({
   studentIdList: array().of(string().defined()).required().defined(),
 }).required();
 
+export type IClassForm = InferType<typeof classFormSchema>;
+
 const initValue = {
   courseTitle: "",
   courseCode: "",
@@ -111,18 +113,19 @@ const tutorList: ListItem[] = [
 const ClassForm = ({
   className,
   defaultValues = initValue,
+  onSubmit,
+  children,
 }: {
   className?: string;
   defaultValues?: InferType<typeof classFormSchema>;
+  onSubmit: (data: IClassForm) => void;
+  children?: React.ReactNode;
 }) => {
   const form = useForm({
     defaultValues,
     resolver: yupResolver(classFormSchema),
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
-  };
   return (
     <Form {...form}>
       <form
@@ -138,7 +141,7 @@ const ClassForm = ({
             </RequiredInput>
           )}
         />
-        <div className="flex justify-between gap-4">
+        <div className="grid lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="courseCode"
@@ -217,7 +220,7 @@ const ClassForm = ({
             )}
           />
         </div>
-        <div className="flex justify-between gap-4">
+        <div className="grid lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="studyWeek"
@@ -242,7 +245,7 @@ const ClassForm = ({
             render={({ field }) => (
               <RequiredInput label="Study Shift">
                 <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger >
+                  <SelectTrigger>
                     <SelectValue placeholder="Study Time" />
                   </SelectTrigger>
                   <SelectContent>
@@ -287,7 +290,7 @@ const ClassForm = ({
             />
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="grid lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="tutorId"
@@ -330,13 +333,20 @@ const ClassForm = ({
             )}
           />
 
-          <FormField control={form.control} name="studentIdList" render={({field}) => (
-            <RequiredInput label="Students" isRequired={false}>
-              <StudentInput value={field.value} onValueChange={(newVal) => field.onChange(newVal)}/>
-            </RequiredInput>
-          )}/>
+          <FormField
+            control={form.control}
+            name="studentIdList"
+            render={({ field }) => (
+              <RequiredInput label="Students" isRequired={false}>
+                <StudentInput
+                  value={field.value}
+                  onValueChange={(newVal) => field.onChange(newVal)}
+                />
+              </RequiredInput>
+            )}
+          />
         </div>
-        <Button type="submit">Submit</Button>
+        <div className="flex justify-end gap-4">{children}</div>
       </form>
     </Form>
   );

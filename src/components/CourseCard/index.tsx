@@ -13,10 +13,9 @@ import { ICourse, ICourseP1, ICourseP2 } from "@/interfaces/ICourse";
 import CourseCardP1 from "./CardPhase1";
 import CourseCardP2 from "./CardPhase2";
 import { useAppSelector } from "@/hooks/reduxHook";
-import { JSX, useState } from "react";
+import { JSX, useId, useState } from "react";
 import { X } from "lucide-react";
 import TutorRegistrationButton from "./TutorRegistration";
-
 
 interface CourseCardProps {
   courseContent: ICourse;
@@ -42,7 +41,12 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
       </button>
     );
   } else if (role === "tutor") {
-    registrationButton = <TutorRegistrationButton courseContent={courseContent as ICourseP1}/>;
+    registrationButton = (
+      <TutorRegistrationButton
+        courseContent={courseContent as ICourseP1}
+        key={useId()}
+      />
+    );
   } else throw new Error("Role not found");
 
   return (

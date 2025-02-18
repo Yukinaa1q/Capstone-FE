@@ -1,11 +1,12 @@
 import { useAppSelector } from "@/hooks/reduxHook";
 import AvailableCourses from "@/pages/AvailableCoursePage/AvailableCourses";
-import CoursesPage from "@/pages/CoursesPage/CoursesPage";
+import { Navigate } from "react-router";
 
 const MainSection = () => {
   const role = useAppSelector((state) => state.auths.role);
   if (role === "academic") {
-    return <CoursesPage />;
+    // return <CoursesPage />;
+    return <Navigate to="/courses" replace={true} />;
   } else {
     return <AvailableCourses />;
   }

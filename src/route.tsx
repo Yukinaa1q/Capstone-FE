@@ -19,6 +19,7 @@ import EditCoursePage from "./pages/CoursesPage/EditCoursePage/EditCoursePage";
 import ClassDetail from "./pages/ClassesPage/ClassDetailPage/ClassDetailPage";
 import NewClassPage from "./pages/ClassesPage/NewClassPage/NewClassPage";
 import EditClassPage from "./pages/ClassesPage/EditClassPage/EditClassPage";
+import RouteGuard from "./layouts/RouteGuard";
 
 const router = createBrowserRouter([
   {
@@ -27,59 +28,111 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element:  <MainSection />,
+        element: <MainSection />,
       },
       {
         path: "/registered-courses",
-        element: <RegisteredCoursesPage />,
+        element: (
+          <RouteGuard>
+            <RegisteredCoursesPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "my-courses",
-        element: <MyCoursesPage />,
+        element: (
+          <RouteGuard>
+            <MyCoursesPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "schedule",
-        element: <SchedulePage />,
+        element: (
+          <RouteGuard>
+            <SchedulePage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "payment",
-        element: <PaymentPage />,
+        element: (
+          <RouteGuard>
+            <PaymentPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "chat",
-        element: <ChatPage />,
+        element: (
+          <RouteGuard>
+            <ChatPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "courses",
-        element: <CoursesPage />,
+        element: (
+          <RouteGuard>
+            <CoursesPage />
+          </RouteGuard>
+        ),
       },
       {
         path: "courses/:id",
-        element: <CourseDetail />,
+        element: (
+          <RouteGuard>
+            <CourseDetail />
+          </RouteGuard>
+        ),
       },
       {
         path: "courses/:id/edit",
-        element: <EditCoursePage />,
+        element: (
+          <RouteGuard>
+            <EditCoursePage />
+          </RouteGuard>
+        ),
       },
       {
         path: "courses/new",
-        element: <NewCoursePage />,
+        element: (
+          <RouteGuard>
+            <NewCoursePage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "classes",
-        element: <ClassesPage />,
+        element: (
+          <RouteGuard>
+            <ClassesPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "classes/new",
-        element: <NewClassPage />,
+        element: (
+          <RouteGuard>
+            <NewClassPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "classes/:id",
-        element: <ClassDetail />,
+        element: (
+          <RouteGuard>
+            <ClassDetail />,
+          </RouteGuard>
+        ),
       },
       {
         path: "classes/:id/edit",
-        element: <EditClassPage />,
+        element: (
+          <RouteGuard>
+            <EditClassPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "tutors",

@@ -5,14 +5,16 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 interface AuthState {
   role: "admin" | "student" | "parent" | "tutor" | "academic" | "support";
   userId: string;
+  userCode: string;
   name: string;
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
-  role: "academic",
+  role: "tutor",
   userId: "",
-  name: ""
+  userCode: "",
+  name: "",
 }
 
 export const authSlice = createSlice({
