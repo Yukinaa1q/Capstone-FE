@@ -64,8 +64,10 @@ const registrationSchema = object({
 
 const TutorRegistrationButton = ({
   courseContent,
+  setIsRegistered
 }: {
   courseContent: ICourseP1;
+  setIsRegistered: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [activity, setActivity] = useState<"registration" | "confirmation">(
     "registration"
@@ -84,7 +86,6 @@ const TutorRegistrationButton = ({
   });
 
   const onSubmit = (data: InferType<typeof registrationSchema>) => {
-    console.log(data);
     if (!data.isOddDays && !data.isEvenDays) {
       setErrMsg("You must choose at least one teaching schedule");
       return;
@@ -196,7 +197,18 @@ const TutorRegistrationButton = ({
                 <ArrowLeft />
                 Back
               </Button>
-              <Button className="bg-green-400 hover:bg-green-500 text-black">Submit</Button>
+              <Button className="bg-green-400 hover:bg-green-500 text-black" onClick={() => {
+                /*
+                  Interface for submitting tutor registration
+                  interface TutorRegistration {
+                    courseCode: string;
+                    evenTimeShift: Array<string>;
+                    oddTimeShift: Array<string>;
+                  }
+                 */
+                setIsClose(true);
+                setIsRegistered(true);
+              }}>Submit</Button>
             </>
           )}
         </DialogFooter>

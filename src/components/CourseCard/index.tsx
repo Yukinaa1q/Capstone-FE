@@ -44,6 +44,7 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
     registrationButton = (
       <TutorRegistrationButton
         courseContent={courseContent as ICourseP1}
+        setIsRegistered={setIsRegistered}
         key={useId()}
       />
     );
@@ -55,7 +56,7 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
         <img
           src="#"
           alt="subject illustation"
-          className="aspect-video bg-slate-400 rounded-md object-cover"
+          className="aspect-video bg-slate-200 rounded-md object-cover"
         />
         <CardTitle className="flex justify-between items-center gap-4">
           <p className="truncate">{courseContent.courseName.toUpperCase()}</p>
