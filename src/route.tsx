@@ -34,7 +34,7 @@ const router = createBrowserRouter([
         path: "/registered-courses",
         element: (
           <RouteGuard>
-            <RegisteredCoursesPage />,
+            <RegisteredCoursesPage />
           </RouteGuard>
         ),
       },
@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         path: "my-courses",
         element: (
           <RouteGuard>
-            <MyCoursesPage />,
+            <MyCoursesPage />
           </RouteGuard>
         ),
       },
@@ -50,7 +50,7 @@ const router = createBrowserRouter([
         path: "schedule",
         element: (
           <RouteGuard>
-            <SchedulePage />,
+            <SchedulePage />
           </RouteGuard>
         ),
       },
@@ -58,7 +58,7 @@ const router = createBrowserRouter([
         path: "payment",
         element: (
           <RouteGuard>
-            <PaymentPage />,
+            <PaymentPage />
           </RouteGuard>
         ),
       },
@@ -66,7 +66,7 @@ const router = createBrowserRouter([
         path: "chat",
         element: (
           <RouteGuard>
-            <ChatPage />,
+            <ChatPage />
           </RouteGuard>
         ),
       },
@@ -98,7 +98,7 @@ const router = createBrowserRouter([
         path: "courses/new",
         element: (
           <RouteGuard>
-            <NewCoursePage />,
+            <NewCoursePage />
           </RouteGuard>
         ),
       },
@@ -106,7 +106,7 @@ const router = createBrowserRouter([
         path: "classes",
         element: (
           <RouteGuard>
-            <ClassesPage />,
+            <ClassesPage />
           </RouteGuard>
         ),
       },
@@ -114,7 +114,7 @@ const router = createBrowserRouter([
         path: "classes/new",
         element: (
           <RouteGuard>
-            <NewClassPage />,
+            <NewClassPage />
           </RouteGuard>
         ),
       },
@@ -122,7 +122,7 @@ const router = createBrowserRouter([
         path: "classes/:id",
         element: (
           <RouteGuard>
-            <ClassDetail />,
+            <ClassDetail />
           </RouteGuard>
         ),
       },
@@ -130,7 +130,7 @@ const router = createBrowserRouter([
         path: "classes/:id/edit",
         element: (
           <RouteGuard>
-            <EditClassPage />,
+            <EditClassPage />
           </RouteGuard>
         ),
       },
