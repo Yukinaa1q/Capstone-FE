@@ -26,4 +26,9 @@ yarn.lock
 .yarn
 .yarnrc.yml
 .pnp.cjs
-.pnp.loader.mjs
+.pnp.loader.mjs 
+
+
+# Docker files
+Dockerfile
+.dockerignore
