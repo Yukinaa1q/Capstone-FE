@@ -15,9 +15,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import TucourApi, { ENV } from "@/utils/http";
 import { shortName } from "@/utils/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Check } from "lucide-react";
+import { useEffect, useId, useState } from "react";
 import { useForm } from "react-hook-form";
 import { array, boolean, InferType, number, object, string } from "yup";
 
@@ -37,7 +39,7 @@ const classFormSchema = object({
     otherwise: (schema) =>
       schema.required("Class room is required when class is not online"),
   }),
-  tutorId: string().required("Tutor is required"),
+  tutorCode: string().required("Tutor is required"),
   studentIdList: array().of(string().defined()).required().defined(),
 }).required();
 
@@ -52,7 +54,7 @@ const initValue = {
   studyShift: "",
   isOnline: false,
   classRoom: "",
-  tutorId: "",
+  tutorCode: "",
   studentIdList: [],
 };
 
@@ -83,32 +85,6 @@ const courseList: ListItem[] = [
   },
 ];
 
-const tutorList: ListItem[] = [
-  {
-    value: "tutoridA",
-    label: "Kieu Tien Thanh",
-    display: {
-      tutorName: "Kieu Tien Thanh",
-      tutorImage: "#",
-    },
-  },
-  {
-    value: "tutoridB",
-    label: "Ly Tran Phuoc Tri",
-    display: {
-      tutorName: "Ly Tran Phuoc Tri",
-      tutorImage: "#",
-    },
-  },
-  {
-    value: "tutoridC",
-    label: "Nguyen Ngoc Quang Phuc",
-    display: {
-      tutorName: "Nguyen Ngoc Quang Phuc",
-      tutorImage: "#",
-    },
-  },
-];
 
 const ClassForm = ({
   className,
@@ -121,10 +97,66 @@ const ClassForm = ({
   onSubmit: (data: IClassForm) => void;
   children?: React.ReactNode;
 }) => {
+  const tucourApi = new TucourApi(ENV.DEV);
+  const [codeList, setCodeList] = useState<ListItem[]>([]);
+  const [tutorList, setTutorList] = useState<ListItem[]>([]);
   const form = useForm({
-    defaultValues,
+    values: defaultValues,
     resolver: yupResolver(classFormSchema),
   });
+
+  // console.log("Default Values", defaultValues);
+
+  useEffect(() => {
+    const fetchCourseCode = async () => {
+      try {
+        const res: { courseCode: string; courseTitle: string }[] =
+          await tucourApi.call({
+            url: "/course/course-code-title",
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          });
+        const tutorListApi = await tucourApi.call({
+          url: "/tutor/all-tutor",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        setTutorList(
+          tutorListApi.map((item) => {
+            return {
+              value: item.tutorCode,
+              label: item.name,
+              display: {
+                tutorName: item.name,
+                tutorImage: item.avatarUrl,
+              },
+            };
+          })
+        );
+        setCodeList(
+          res.map((item) => {
+            return {
+              value: item.courseCode,
+              label: item.courseCode,
+              display: {
+                courseTitle: item.courseTitle,
+                courseCode: item.courseCode,
+              },
+            };
+          })
+        );
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchCourseCode();
+  }, []);
 
   return (
     <Form {...form}>
@@ -151,13 +183,13 @@ const ClassForm = ({
                   <SearchSelect
                     className=""
                     {...field}
-                    list={courseList}
+                    list={codeList}
                     placeholder="Search"
                     onValueChange={(value) =>
                       form.setValue("courseTitle", value.display.courseTitle)
                     }
                     filterFn={(value, search) => {
-                      const result = courseList.find(
+                      const result = codeList.find(
                         (item) => item.value === value
                       );
                       if (!result) return 0;
@@ -178,8 +210,12 @@ const ClassForm = ({
                     renderChild={(item, value) => (
                       <div className="flex items-center gap-4">
                         <div className="text-sm">
-                          <p>{item.display.courseTitle}</p>
-                          <p className="">{item.display.courseCode}</p>
+                          <p className="text-sm font-medium">
+                            {item.display.courseTitle}
+                          </p>
+                          <p className="text-xs text-gray-700">
+                            {item.display.courseCode}
+                          </p>
                         </div>
                         {value === item.value && (
                           <Check
@@ -293,7 +329,7 @@ const ClassForm = ({
         <div className="grid lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
-            name="tutorId"
+            name="tutorCode"
             render={({ field }) => (
               <RequiredInput label="Tutor">
                 <SearchSelect

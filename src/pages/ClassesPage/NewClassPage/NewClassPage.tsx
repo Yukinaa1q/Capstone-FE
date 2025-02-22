@@ -1,10 +1,29 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import ClassForm, { IClassForm } from "../ClassForm";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import TucourApi, { ENV } from "@/utils/http";
 
 const NewClassPage = () => {
-  const onSubmit = (data: IClassForm) => {
-    console.log(data);
+  const tucourApi = new TucourApi(ENV.DEV)
+  const navigate = useNavigate();
+  const onSubmit = async (data: IClassForm) => {
+    // console.log(data)
+    try {
+      const res = await tucourApi.call({
+        url: "/class/create-class",
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(data)
+      })
+      console.log(res)
+      navigate("/classes")
+    }
+    catch (e) {
+      console.error(e)
+    }
   };
   return (
     <section className="px-8 py-4">

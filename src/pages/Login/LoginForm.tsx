@@ -15,6 +15,7 @@ import { useAppDispatch } from "@/hooks/reduxHook";
 import { setUser } from "@/store/authenSlice";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
+import RoleInput from "@/components/RoleInput";
 
 interface LoginForm {
   email: string;
@@ -32,6 +33,7 @@ const LoginForm = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [role, setRole] = useState<string>("");
   const form = useForm<LoginForm>({
     resolver: yupResolver<LoginForm>(loginSchema),
     defaultValues: { email: "", password: "" },
@@ -39,15 +41,27 @@ const LoginForm = () => {
 
   const onSubmit = async (data: LoginForm) => {
     const tucourApi = new TucourApi(ENV.DEV);
+    let res;
     try {
-      const res = await tucourApi.call({
-        url: "/authentication/login",
-        method: "POST",
-        body: JSON.stringify(data),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      if (role === "student") {
+        res = await tucourApi.call({
+          url: "/authentication/login",
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      } else {
+        res = await tucourApi.call({
+          url: "/authentication/login/tutor",
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+      }
       const { payload } = jwtDecoder(res.token);
       console.log("payload", payload);
       dispatch(
@@ -86,6 +100,9 @@ const LoginForm = () => {
       )}
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-2">
+          <RequiredInput label="You are" orientation="horizontal">
+            <RoleInput onChange={(val) => setRole(val)} value={role} />
+          </RequiredInput>
           <FormField
             name="email"
             control={form.control}

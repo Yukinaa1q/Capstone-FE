@@ -4,6 +4,8 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { shortName } from "@/utils/utils";
 import { X } from "lucide-react";
+import { useFetchers } from "react-router";
+import TucourApi, { ENV } from "@/utils/http";
 
 interface StudentInputProps {
   value: string[];
@@ -16,120 +18,123 @@ interface StudentItem {
   studentAvatar: string;
 }
 
-const studentList: StudentItem[] = [
-  {
-    studentName: "Student 1",
-    studentId: "111122",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 2",
-    studentId: "222222",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 3",
-    studentId: "333333",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 4",
-    studentId: "444444",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 5",
-    studentId: "555555",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 6",
-    studentId: "666666",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 7",
-    studentId: "777777",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 8",
-    studentId: "888888",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 9",
-    studentId: "999999",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 10",
-    studentId: "101010",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 11",
-    studentId: "111111",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 12",
-    studentId: "121212",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 13",
-    studentId: "131313",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 14",
-    studentId: "141414",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 15",
-    studentId: "151515",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 16",
-    studentId: "161616",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 17",
-    studentId: "171717",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 18",
-    studentId: "181818",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 19",
-    studentId: "191919",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 20",
-    studentId: "202020",
-    studentAvatar: "#",
-  },
-  {
-    studentName: "Student 21",
-    studentId: "212121",
-    studentAvatar: "#",
-  },
-];
+// const studentList: StudentItem[] = [
+//   {
+//     studentName: "Student 1",
+//     studentId: "111122",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 2",
+//     studentId: "222222",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 3",
+//     studentId: "333333",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 4",
+//     studentId: "444444",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 5",
+//     studentId: "555555",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 6",
+//     studentId: "666666",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 7",
+//     studentId: "777777",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 8",
+//     studentId: "888888",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 9",
+//     studentId: "999999",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 10",
+//     studentId: "101010",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 11",
+//     studentId: "111111",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 12",
+//     studentId: "121212",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 13",
+//     studentId: "131313",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 14",
+//     studentId: "141414",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 15",
+//     studentId: "151515",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 16",
+//     studentId: "161616",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 17",
+//     studentId: "171717",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 18",
+//     studentId: "181818",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 19",
+//     studentId: "191919",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 20",
+//     studentId: "202020",
+//     studentAvatar: "#",
+//   },
+//   {
+//     studentName: "Student 21",
+//     studentId: "212121",
+//     studentAvatar: "#",
+//   },
+// ];
 
 const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
+  const tucourApi = new TucourApi(ENV.DEV);
   const [isDisplay, setDisplay] = React.useState(false);
   const [searchKey, setSearchKey] = React.useState("");
   const [idList, setIdList] = React.useState<string[]>(value);
+  const [studentList, setStudentList] = React.useState<StudentItem[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
@@ -146,6 +151,28 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isDisplay]);
+
+  useEffect(() => {
+    const fetchStudents = async () => {
+      const students = await tucourApi.call({
+        url: "/student/all-student",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        }
+      });
+
+      setStudentList(students.map(item => ({
+        studentName: item.name,
+        studentId: item.studentCode,
+        studentAvatar: item.avatarUrl
+      })))
+    }
+
+    fetchStudents();
+  }, [])
+
   return (
     <div className="relative">
       <Input

@@ -136,7 +136,7 @@ const CourseDetail = () => {
         </div>
       </section>
       <section className="p-10 bg-white text-black flex gap-10 justify-between">
-        <div>
+        <div className="grow">
           <CourseInfo title="Course Description">
             <div
               className={`relative ${

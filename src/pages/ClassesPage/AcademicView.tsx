@@ -15,6 +15,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
+import TucourApi, { ENV } from "@/utils/http";
 import {
   ColumnDef,
   createColumnHelper,
@@ -24,12 +25,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal, SquarePlus } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
 
 interface IClassTable {
   classId: string;
-  classRoom: string;
+  classCode: string;
   classStudents: number;
   tutorId: string;
   tutor: string;
@@ -38,16 +39,16 @@ interface IClassTable {
 const columnHelper = createColumnHelper<IClassTable>();
 
 const defaultColumns = [
-  columnHelper.accessor("classId", {
-    header: () => <div className="text-center">CLASS ID</div>,
+  // columnHelper.accessor("classId", {
+  //   header: () => <div className="text-center">CLASS ID</div>,
+  //   cell: (props) => {
+  //     return <div className="text-center">{props.row.original.classId}</div>;
+  //   },
+  // }),
+  columnHelper.accessor("classCode", {
+    header: () => <div className="text-center">CLASSCODE</div>,
     cell: (props) => {
-      return <div className="text-center">{props.row.original.classId}</div>;
-    },
-  }),
-  columnHelper.accessor("classRoom", {
-    header: () => <div className="text-center">CLASSROOM</div>,
-    cell: (props) => {
-      return <div className="text-center">{props.row.original.classRoom}</div>;
+      return <div className="text-center">{props.row.original.classCode}</div>;
     },
   }),
   columnHelper.accessor("classStudents", {
@@ -83,7 +84,7 @@ const defaultColumns = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/classes/" + props.row.getValue("classId")}>
+              <Link to={"/classes/" + props.row.getValue("classCode")}>
                 View Detail
               </Link>
             </DropdownMenuItem>
@@ -98,107 +99,25 @@ const defaultColumns = [
 ] as Array<ColumnDef<IClassTable, unknown>>;
 
 const AcademicView = () => {
-  const [data, setData] = React.useState<IClassTable[]>([
-    {
-      classId: "CC01",
-      classRoom: "A1",
-      classStudents: 30,
-      tutorId: "1",
-      tutor: "John Doe",
-    },
-    {
-      classId: "CC02",
-      classRoom: "A2",
-      classStudents: 30,
-      tutorId: "2",
-      tutor: "Jane Doe",
-    },
-    {
-      classId: "CC03",
-      classRoom: "A3",
-      classStudents: 30,
-      tutorId: "3",
-      tutor: "John Smith",
-    },
-    {
-      classId: "CC04",
-      classRoom: "A4",
-      classStudents: 30,
-      tutorId: "4",
-      tutor: "Jane Smith",
-    },
-    {
-      classId: "CC05",
-      classRoom: "A5",
-      classStudents: 30,
-      tutorId: "5",
-      tutor: "John Doe",
-    },
-    {
-      classId: "CC06",
-      classRoom: "A6",
-      classStudents: 30,
-      tutorId: "6",
-      tutor: "Jane Doe",
-    },
-    {
-      classId: "CC07",
-      classRoom: "A7",
-      classStudents: 30,
-      tutorId: "7",
-      tutor: "John Smith",
-    },
-    {
-      classId: "CC08",
-      classRoom: "A8",
-      classStudents: 30,
-      tutorId: "8",
-      tutor: "Jane Smith",
-    },
-    {
-      classId: "CC09",
-      classRoom: "A9",
-      classStudents: 30,
-      tutorId: "9",
-      tutor: "John Doe",
-    },
-    {
-      classId: "CC10",
-      classRoom: "A10",
-      classStudents: 30,
-      tutorId: "10",
-      tutor: "Jane Doe",
-    },
-    {
-      classId: "CC11",
-      classRoom: "A11",
-      classStudents: 30,
-      tutorId: "11",
-      tutor: "John Smith",
-    },
-    {
-      classId: "CC12",
-      classRoom: "A12",
-      classStudents: 30,
-      tutorId: "12",
-      tutor: "Jane Smith",
-    },
-    {
-      classId: "CC13",
-      classRoom: "A13",
-      classStudents: 30,
-      tutorId: "13",
-      tutor: "John Doe",
-    },
-    {
-      classId: "CC14",
-      classRoom: "A14",
-      classStudents: 50,
-      tutorId: "14",
-      tutor: "Jane Doe",
-    },
-  ]);
+  const [data, setData] = React.useState<IClassTable[]>([]);
 
+  console.log(data)
+
+  useEffect(() => {
+    const tucourApi = new TucourApi(ENV.DEV);
+    const getClassesList = async () => {
+      const res = await tucourApi.call({
+        url: "/class/view-class",
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setData(res);
+    };
+    getClassesList();
+  }, []);
   const table = useReactTable({
     columns: defaultColumns,
     data,
@@ -210,7 +129,12 @@ const AcademicView = () => {
   return (
     <section className="px-8 py-4">
       <AddNewClass />
-      <ClearableSearch handleChange={(e) => {table.setGlobalFilter(e.target.value)}} className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-2"/>
+      <ClearableSearch
+        handleChange={(e) => {
+          table.setGlobalFilter(e.target.value);
+        }}
+        className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-2"
+      />
       <DataTable columns={defaultColumns} table={table} />
     </section>
   );

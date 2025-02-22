@@ -2,7 +2,7 @@ import PwdInput from "@/components/PwdInput";
 import RequiredInput from "@/components/RequiredInput";
 import RoleInput from "@/components/RoleInput";
 import { Button } from "@/components/ui/button";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import PhoneInp from "@/components/PhoneInput";
 import axios from "axios";
 import { yupResolver } from "@hookform/resolvers/yup"
 import * as yup from "yup"
+import TucourApi, { ENV } from "@/utils/http";
 
 interface SignUpData {
   role: string;
@@ -29,6 +30,8 @@ const signupSchema = yup.object({
   repwd: yup.string().required("Re-enter password is required").oneOf([yup.ref("password")], "Passwords must match")
 }).required();
 
+const tucourApi = new TucourApi(ENV.DEV);
+
 const SignupForm = () => {
   const form = useForm<SignUpData>({
     defaultValues: {
@@ -41,19 +44,38 @@ const SignupForm = () => {
     },
     resolver: yupResolver<SignUpData>(signupSchema),
   });
+  const navigate = useNavigate();
   const handleSubmit = async (formData: SignUpData) => {
     console.log(formData);
+    const stringify = JSON.stringify(formData);
     try {
-      const res = await axios.post("http://localhost:8000/authentication/signup", formData)
-      if (res.status === 201) {
-        console.log(res.data);
+      if (formData.role === "student") {
+        await tucourApi.call({
+          url: "/authentication/signup",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: stringify,
+        });
+      }
+      else if (formData.role === "tutor") {
+        await tucourApi.call({
+          url: "/authentication/signup/tutor",
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: stringify,
+        });
       }
       else {
-        console.log("some thing went wrong");
+        throw new Error("Invalid role");
       }
+      navigate("/login");
     }
-    catch (err) {
-      console.log(err);
+    catch (error) {
+      console.error(error);
     }
   };
 

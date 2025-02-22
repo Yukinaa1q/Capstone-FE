@@ -1,6 +1,6 @@
 import { Button, buttonVariants } from "@/components/ui/button";
-import { ReactNode, useState } from "react";
-import { Link, useParams } from "react-router";
+import { ReactNode, useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router";
 
 import {
   Accordion,
@@ -15,6 +15,8 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Descendant } from "slate";
 import { CourseOutline } from "@/components/CourseOutlineInput";
+import TucourApi, { ENV } from "@/utils/http";
+import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 
 interface IClassDetail {
   courseTitle: string;
@@ -28,8 +30,9 @@ interface IClassDetail {
   coursePrice: number;
   classSession: string;
   classShift: string;
-  learningType: string;
+  learningType: boolean;
   classCode: string;
+  classId: string;
   classStudents: number;
   classMaxStudents: number;
   studentList: StudentBrief[];
@@ -43,8 +46,32 @@ interface StudentBrief {
 
 const ClassDetail = () => {
   const params = useParams();
+  const navigate = useNavigate();
   const [showFull, setShowFull] = useState(false);
   const [course, setCourse] = useState<IClassDetail>();
+  useEffect(() => {
+    const getClassDetail = async () => {
+      try {
+        const res = await new TucourApi(ENV.DEV).call({
+          url: `/class/view-class-detail/${params.id}`,
+          method: "GET",
+          headers: {
+            "Contet-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+        console.log(res);
+        setCourse({
+          ...res,
+          courseDescription: JSON.parse(res.courseDescription),
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+
+    getClassDetail();
+  }, []);
   return (
     <section
       className="text-white bg-fixed"
@@ -57,20 +84,25 @@ const ClassDetail = () => {
     >
       <section className="p-10 flex justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">Calculus 1</h1>
-          <h2>MT1002 | 2024 - 2025</h2>
+          <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
+          <h2>{course?.courseCode} | 2024 - 2025</h2>
           <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
             <div>Learning Duration</div>
             <div className="font-semibold">23/8/2024 - 23/12/2024</div>
             <div>Registration Duration</div>
             <div className="font-semibold">23/8/2024 - 23/12/2024</div>
             <div>Tutor</div>
-            <Link to="" className="font-semibold hover:underline">Tran Van Ba</Link>
+            <Link
+              to={`/tutors/${course?.tutorId}`}
+              className="font-semibold hover:underline"
+            >
+              {course?.tutor}
+            </Link>
           </div>
         </div>
         <div>
           <Link
-            to={"/classes/MT1003/edit"}
+            to={`/classes/${course?.classCode}/edit`}
             className={cn(
               buttonVariants({ variant: "default" }),
               "bg-t_primary-600 hover:bg-t_primary-700 w-24"
@@ -79,14 +111,32 @@ const ClassDetail = () => {
             <Edit />
             Edit
           </Link>
-          <Button variant="destructive" className="w-24 ml-4">
+          <Button
+            variant="destructive"
+            className="w-24 ml-4"
+            onClick={async () => {
+              try {
+                await new TucourApi(ENV.DEV).call({
+                  url: `/class/delete-class/${course?.classId}`,
+                  method: "DELETE",
+                  headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                  },
+                });
+                navigate("/classes");
+              } catch (err) {
+                console.log(err);
+              }
+            }}
+          >
             <Trash2 />
             Delete
           </Button>
         </div>
       </section>
-      <section className="p-10 bg-white text-black flex gap-4">
-        <div>
+      <section className="p-10 bg-white text-black flex gap-4 justify-between">
+        <div className="grow">
           <CourseInfo title="Course Description">
             <div
               className={`relative ${
@@ -94,7 +144,7 @@ const ClassDetail = () => {
                 "line-clamp-6 before:absolute before:w-full before:bottom-0 before:h-full before:bg-linear-to-b before:to-white"
               }`}
             >
-              <p className="text-sm">
+              {/* <p className="text-sm">
                 Lorem ipsum dolor sit, amet consectetur adipisicing elit.
                 Aperiam labore unde quia officiis maiores sit natus vitae eos.
                 Atque aliquid quo neque laudantium quod cupiditate labore, quam
@@ -131,7 +181,10 @@ const ClassDetail = () => {
                 harum nihil suscipit autem vel alias aut aliquam. Cumque
                 accusantium reprehenderit iusto hic officia odio vitae nihil
                 amet ex, expedita, accusamus, et atque at sit fugit.
-              </p>
+              </p> */}
+              <HTMLConverter
+                nodeList={course ? course?.courseDescription : []}
+              />
             </div>
             <Button
               variant="link"
@@ -142,7 +195,7 @@ const ClassDetail = () => {
             </Button>
           </CourseInfo>
           <CourseInfo title="Course Outline">
-          <Accordion type="multiple">
+            <Accordion type="multiple">
               {course?.courseOutline.map((outline, index) => (
                 <AccordionItem key={index} value={`item-${index}`}>
                   <AccordionTrigger className="uppercase">
@@ -165,20 +218,26 @@ const ClassDetail = () => {
         <div className="shrink-0 space-y-4">
           <div className="border rounded-lg h-fit p-4">
             <h3 className="text-sm">Price</h3>
-            <p className="font-bold text-xl">{toVND(1300000)} </p>
+            <p className="font-bold text-xl">
+              {toVND(course?.coursePrice ?? 0)}{" "}
+            </p>
           </div>
 
           <div className="border rounded-lg h-fit p-4 grid grid-cols-2 gap-y-2 gap-x-4">
             <h3 className="text-sm">Session</h3>
-            <p className="font-semibold text-sm">2-4-6</p>
+            <p className="font-semibold text-sm">{course?.classSession}</p>
             <h3 className="text-sm">Study Shift</h3>
-            <p className="font-semibold text-sm">19h45 - 21h00</p>
+            <p className="font-semibold text-sm">{course?.classShift}</p>
             <h3 className="text-sm">Learning Type</h3>
-            <p className="font-semibold text-sm">Offline</p>
+            <p className="font-semibold text-sm">
+              {course?.learningType ? "Online" : "Offline"}
+            </p>
             <h3 className="text-sm">Class Code</h3>
-            <p className="font-semibold text-sm">CC15</p>
+            <p className="font-semibold text-sm">{course?.classCode}</p>
             <h3 className="text-sm">No. Students</h3>
-            <p className="font-semibold text-sm">30/50</p>
+            <p className="font-semibold text-sm">
+              0/{course?.classMaxStudents}
+            </p>
           </div>
 
           <ScrollArea type="hover" className="p-4 border rounded-md h-[280px]">
@@ -193,7 +252,7 @@ const ClassDetail = () => {
                   <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p>Student Name</p>
+                  <p>Student</p>
                   <p>2153718</p>
                 </div>
               </Link>

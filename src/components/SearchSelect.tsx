@@ -83,10 +83,6 @@ export default function SearchSelect(
                   }}
                 >
                   {props.renderChild(item, value)}
-                  {/* {item.label}
-                  {value === item.value && (
-                    <Check size={16} strokeWidth={2} className="ml-auto" />
-                  )} */}
                 </CommandItem>
               ))}
             </CommandGroup>
