@@ -14,7 +14,7 @@ import toVND from "@/utils/currencyFormat";
 import { Descendant } from "slate";
 import { CourseOutline } from "@/components/CourseOutlineInput";
 import ICourseBE from "@/interfaces/ICourseBE";
-import TucourApi, { ENV, StatusError } from "@/utils/http";
+import TucourApi, { StatusError } from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 
 interface ICourseDetail {
@@ -39,16 +39,13 @@ const CourseDetail = () => {
 
   useEffect(() => {
     const getCourse = async () => {
-      const tucourApi = new TucourApi(ENV.DEV);
       try {
-        const res: ICourseBE = await tucourApi.call({
-          url: `/course/${params.id}`,
+        const res: ICourseBE = await TucourApi.call(`/course/${params.id}`, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + window.localStorage.getItem("token"),
           },
         });
-        console.log("Return result", res);
         const courseDesc = JSON.parse(res.courseDescription) as Descendant[];
         setCourse({
           courseTitle: res.courseTitle,
@@ -61,7 +58,7 @@ const CourseDetail = () => {
           coursePrice: res.coursePrice,
           participantNumber: res.participantNumber,
           courseId: res.courseId,
-          imgUrl: res.courseImage
+          imgUrl: res.courseImage,
         });
       } catch (error) {
         console.log(error);
@@ -109,11 +106,8 @@ const CourseDetail = () => {
             className="w-24 ml-4"
             onClick={async () => {
               try {
-                const tucourApi = new TucourApi(ENV.DEV);
                 const jwtToken = window.localStorage.getItem("token");
-                console.log(jwtToken);
-                const res = await tucourApi.call({
-                  url: `/course/delete/${course?.courseId}`,
+                await TucourApi.call(`/course/delete/${course?.courseId}`, {
                   method: "DELETE",
                   headers: {
                     Authorization: "Bearer " + jwtToken,

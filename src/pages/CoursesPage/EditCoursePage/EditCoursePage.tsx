@@ -1,13 +1,11 @@
 import ICourseBE from "@/interfaces/ICourseBE";
 import CourseForm, { ICourseForm } from "../CourseForm";
 import { useEffect, useState } from "react";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 import { useNavigate, useParams } from "react-router";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { LoaderCircle } from "lucide-react";
-
-const tucourApi = new TucourApi(ENV.DEV);
 
 const EditCoursePage = () => {
   const params = useParams();
@@ -21,13 +19,15 @@ const EditCoursePage = () => {
     async function fetchCourse() {
       setIsLoading(true);
       try {
-        const courseDetail: ICourseBE = await tucourApi.call({
-          url: "/course/" + params.id,
-          method: "GET",
-          headers: {
-            Authorization: "Bearer " + window.localStorage.getItem("token"),
-          },
-        });
+        const courseDetail: ICourseBE = await TucourApi.call(
+          "/course/" + params.id,
+          {
+            method: "GET",
+            headers: {
+              Authorization: "Bearer " + window.localStorage.getItem("token"),
+            },
+          }
+        );
 
         const convertDataType: ICourseForm = {
           courseTitle: courseDetail.courseTitle,
@@ -78,8 +78,7 @@ const EditCoursePage = () => {
         courseOutline: data.courseOutline,
       });
       // Update textual data
-      await tucourApi.call({
-        url: "course/update-course/" + courseId,
+      await TucourApi.call("course/update-course/" + courseId, {
         method: "POST",
         body: sendData,
         headers: {
@@ -90,8 +89,7 @@ const EditCoursePage = () => {
 
       if (data.courseImage && data.courseImage.size > 0) {
         // Update image file only if the size is greater than 0
-        await tucourApi.call({
-          url: "course/update-course-image/" + courseId,
+        await TucourApi.call("course/update-course-image/" + courseId, {
           method: "POST",
           body: imageFormData,
           headers: {

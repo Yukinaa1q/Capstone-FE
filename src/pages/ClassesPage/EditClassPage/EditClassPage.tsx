@@ -2,7 +2,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import ClassForm, { IClassForm } from "../ClassForm";
 import { Link, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const EditClassPage = () => {
@@ -17,14 +17,16 @@ const EditClassPage = () => {
     setIsLoading(true);
     const getClassDetail = async () => {
       try {
-        const res = await new TucourApi(ENV.DEV).call({
-          url: `/class/view-class-detail/${params.id}`,
-          method: "GET",
-          headers: {
-            "Contet-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await TucourApi.call(
+          `/class/view-class-detail/${params.id}`,
+          {
+            method: "GET",
+            headers: {
+              "Contet-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         setClassId(res.classId);
         setClassDetail({
           courseTitle: res.courseTitle,
@@ -49,8 +51,7 @@ const EditClassPage = () => {
   const onSubmit = async (data: IClassForm) => {
     console.log(data);
     try {
-      await new TucourApi(ENV.DEV).call({
-        url: `/class/update-class/${classId}`,
+      await TucourApi.call(`/class/update-class/${classId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,8 +60,7 @@ const EditClassPage = () => {
         body: JSON.stringify(data),
       });
       navigate("/classes");
-    }
-    catch (err) {
+    } catch (err) {
       console.log(err);
     }
   };

@@ -7,10 +7,9 @@ import { useForm } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import PhoneInp from "@/components/PhoneInput";
-import axios from "axios";
-import { yupResolver } from "@hookform/resolvers/yup"
-import * as yup from "yup"
-import TucourApi, { ENV } from "@/utils/http";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import TucourApi from "@/utils/http";
 
 interface SignUpData {
   role: string;
@@ -21,16 +20,19 @@ interface SignUpData {
   repwd: string;
 }
 
-const signupSchema = yup.object({
-  role: yup.string().required("Role is required"),
-  name: yup.string().required("Full name is required"),
-  email: yup.string().email("Invalid email").required("Email is required"),
-  phone: yup.string().required("Phone number is required"),
-  password: yup.string().required("Password is required"),
-  repwd: yup.string().required("Re-enter password is required").oneOf([yup.ref("password")], "Passwords must match")
-}).required();
-
-const tucourApi = new TucourApi(ENV.DEV);
+const signupSchema = yup
+  .object({
+    role: yup.string().required("Role is required"),
+    name: yup.string().required("Full name is required"),
+    email: yup.string().email("Invalid email").required("Email is required"),
+    phone: yup.string().required("Phone number is required"),
+    password: yup.string().required("Password is required"),
+    repwd: yup
+      .string()
+      .required("Re-enter password is required")
+      .oneOf([yup.ref("password")], "Passwords must match"),
+  })
+  .required();
 
 const SignupForm = () => {
   const form = useForm<SignUpData>({
@@ -50,31 +52,26 @@ const SignupForm = () => {
     const stringify = JSON.stringify(formData);
     try {
       if (formData.role === "student") {
-        await tucourApi.call({
-          url: "/authentication/signup",
+        await TucourApi.call("/authentication/signup", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: stringify,
         });
-      }
-      else if (formData.role === "tutor") {
-        await tucourApi.call({
-          url: "/authentication/signup/tutor",
+      } else if (formData.role === "tutor") {
+        await TucourApi.call("/authentication/signup/tutor", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: stringify,
         });
-      }
-      else {
+      } else {
         throw new Error("Invalid role");
       }
       navigate("/login");
-    }
-    catch (error) {
+    } catch (error) {
       console.error(error);
     }
   };
@@ -127,7 +124,7 @@ const SignupForm = () => {
             control={form.control}
             render={({ field }) => (
               <RequiredInput label="Phone Number">
-                <PhoneInp onChange={field.onChange} value={field.value}/>
+                <PhoneInp onChange={field.onChange} value={field.value} />
               </RequiredInput>
             )}
           />

@@ -15,7 +15,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Descendant } from "slate";
 import { CourseOutline } from "@/components/CourseOutlineInput";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 
 interface IClassDetail {
@@ -52,14 +52,16 @@ const ClassDetail = () => {
   useEffect(() => {
     const getClassDetail = async () => {
       try {
-        const res = await new TucourApi(ENV.DEV).call({
-          url: `/class/view-class-detail/${params.id}`,
-          method: "GET",
-          headers: {
-            "Contet-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const res = await TucourApi.call(
+          `/class/view-class-detail/${params.id}`,
+          {
+            method: "GET",
+            headers: {
+              "Contet-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
         console.log(res);
         setCourse({
           ...res,
@@ -116,8 +118,7 @@ const ClassDetail = () => {
             className="w-24 ml-4"
             onClick={async () => {
               try {
-                await new TucourApi(ENV.DEV).call({
-                  url: `/class/delete-class/${course?.classId}`,
+                await TucourApi.call(`/class/delete-class/${course?.classId}`, {
                   method: "DELETE",
                   headers: {
                     "Content-Type": "application/json",
@@ -144,44 +145,6 @@ const ClassDetail = () => {
                 "line-clamp-6 before:absolute before:w-full before:bottom-0 before:h-full before:bg-linear-to-b before:to-white"
               }`}
             >
-              {/* <p className="text-sm">
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Aperiam labore unde quia officiis maiores sit natus vitae eos.
-                Atque aliquid quo neque laudantium quod cupiditate labore, quam
-                hic commodi quos. Placeat dicta error quos assumenda voluptates,
-                aut autem ea dolores ut? Ab doloremque quas ea voluptatem totam
-                impedit quibusdam magni accusamus qui quo debitis illo, minima
-                id blanditiis. Similique, minus? Sunt, maiores provident.
-                Obcaecati dolor quis ipsum explicabo ipsam! Dignissimos deleniti
-                aliquid maiores repellat quod, quaerat, atque veritatis rem
-                similique dicta totam provident necessitatibus laborum ut
-                molestiae nisi blanditiis natus? Ad nesciunt harum ut quod.
-                Quaerat inventore veniam facere illum aliquam animi sit ut,
-                odit, aperiam saepe, minima quasi! Ab libero ut commodi dolorem
-                vero adipisci officiis error hic fuga! Perferendis repellendus
-                asperiores aspernatur officia! Consectetur illum est
-                necessitatibus, odio ullam error nobis, provident mollitia
-                recusandae, eligendi pariatur magni. Omnis nisi ullam voluptatum
-                ipsam nesciunt vero corrupti reiciendis quidem quo. Iste facere
-                repudiandae laborum dolore, corporis quod voluptatem aspernatur
-                nesciunt nihil tempora quae nostrum dolorem, ipsam deleniti nam
-                harum, eaque earum. Sit laboriosam sunt eaque praesentium
-                corrupti consequuntur asperiores nemo? Ea vitae eos natus,
-                deserunt nesciunt minima voluptate error maiores porro culpa
-                aperiam est sunt veniam commodi. Sequi suscipit pariatur
-                obcaecati. Nihil, quaerat harum. Exercitationem, temporibus
-                amet. Placeat, quis sunt. Voluptate asperiores hic sapiente eum
-                nobis vel, rem laboriosam, quae, numquam praesentium excepturi.
-                Doloribus iste officiis architecto accusantium ipsum eius
-                recusandae autem illum vero ex! Error reiciendis nemo dolorum
-                at. Repellat vero ex excepturi sint qui animi quo, beatae
-                provident labore adipisci fugit inventore sapiente hic possimus
-                nobis totam veritatis nulla blanditiis cum, alias nihil nesciunt
-                autem. Ducimus, quia earum. Nesciunt temporibus nisi nostrum
-                harum nihil suscipit autem vel alias aut aliquam. Cumque
-                accusantium reprehenderit iusto hic officia odio vitae nihil
-                amet ex, expedita, accusamus, et atque at sit fugit.
-              </p> */}
               <HTMLConverter
                 nodeList={course ? course?.courseDescription : []}
               />

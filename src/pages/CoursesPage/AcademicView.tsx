@@ -26,7 +26,7 @@ import { Link } from "react-router";
 import ClearableSearch from "@/components/ClearableSearch";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 import ICourseBE from "@/interfaces/ICourseBE";
 
 // 1 Define type and data
@@ -108,10 +108,8 @@ const AcademicView = () => {
   const [courselist, setCourseList] = useState<CourseOverview[]>([]);
   useEffect(() => {
     const getCourse = async () => {
-      const tucourApi = new TucourApi(ENV.DEV);
       try {
-        const res: ICourseBE[] = await tucourApi.call({
-          url: "/course/all-course",
+        const res: ICourseBE[] = await TucourApi.call("/course/all-course", {
           method: "GET",
           headers: {
             Authorization: "Bearer " + window.localStorage.getItem("token"),

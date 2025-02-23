@@ -15,7 +15,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 import {
   ColumnDef,
   createColumnHelper,
@@ -101,13 +101,11 @@ const defaultColumns = [
 const AcademicView = () => {
   const [data, setData] = React.useState<IClassTable[]>([]);
 
-  console.log(data)
+  console.log(data);
 
   useEffect(() => {
-    const tucourApi = new TucourApi(ENV.DEV);
     const getClassesList = async () => {
-      const res = await tucourApi.call({
-        url: "/class/view-class",
+      const res = await TucourApi.call("/class/view-class", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

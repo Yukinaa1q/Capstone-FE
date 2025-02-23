@@ -2,7 +2,6 @@ import RequiredInput from "@/components/RequiredInput";
 import SearchSelect, { ListItem } from "@/components/SearchSelect";
 import StudentInput from "@/components/StudentInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -15,11 +14,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 import { shortName } from "@/utils/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Check } from "lucide-react";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { array, boolean, InferType, number, object, string } from "yup";
 
@@ -58,34 +57,6 @@ const initValue = {
   studentIdList: [],
 };
 
-const courseList: ListItem[] = [
-  {
-    value: "MT1002",
-    label: "MT1002",
-    display: {
-      courseTitle: "Toan 12 nang cao",
-      courseCode: "MT1002",
-    },
-  },
-  {
-    value: "CH2003",
-    label: "CH2003",
-    display: {
-      courseTitle: "Hoa 12 nang cao",
-      courseCode: "CH2003",
-    },
-  },
-  {
-    value: "PHYS1001",
-    label: "PHYS1001",
-    display: {
-      courseTitle: "Ly 10 co ban",
-      courseCode: "PHYS1001",
-    },
-  },
-];
-
-
 const ClassForm = ({
   className,
   defaultValues = initValue,
@@ -97,7 +68,6 @@ const ClassForm = ({
   onSubmit: (data: IClassForm) => void;
   children?: React.ReactNode;
 }) => {
-  const tucourApi = new TucourApi(ENV.DEV);
   const [codeList, setCodeList] = useState<ListItem[]>([]);
   const [tutorList, setTutorList] = useState<ListItem[]>([]);
   const form = useForm({
@@ -111,16 +81,14 @@ const ClassForm = ({
     const fetchCourseCode = async () => {
       try {
         const res: { courseCode: string; courseTitle: string }[] =
-          await tucourApi.call({
-            url: "/course/course-code-title",
+          await TucourApi.call("/course/course-code-title", {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           });
-        const tutorListApi = await tucourApi.call({
-          url: "/tutor/all-tutor",
+        const tutorListApi = await TucourApi.call("/tutor/all-tutor", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",

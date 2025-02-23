@@ -1,11 +1,9 @@
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 import CourseForm, { ICourseForm } from "../CourseForm";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
-
-const tucourApi = new TucourApi(ENV.DEV);
 
 const NewCoursePage = () => {
   const navigate = useNavigate();
@@ -28,8 +26,7 @@ const NewCoursePage = () => {
       formdata.append("courseImage", data.courseImage as Blob);
       console.log(formdata.get("courseImage"));
 
-      await tucourApi.call({
-        url: "course/create-course",
+      await TucourApi.call("course/create-course", {
         method: "POST",
         body: formdata,
         headers: {
@@ -48,18 +45,24 @@ const NewCoursePage = () => {
     <section className="relative px-8 py-4">
       {isLoading && (
         <div className="absolute w-full h-full top-0 left-0 bg-gray-100/40">
-          <LoaderCircle size={80} className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"  />
+          <LoaderCircle
+            size={80}
+            className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          />
         </div>
       )}
       <h1 className="text-center font-bold text-2xl">ADD NEW COURSE</h1>
       <CourseForm onSubmit={onSubmit}>
-        <Button className="bg-t_primary-400 hover:bg-t_primary-500" type="submit" disabled={isLoading}>
+        <Button
+          className="bg-t_primary-400 hover:bg-t_primary-500"
+          type="submit"
+          disabled={isLoading}
+        >
           Create Course
         </Button>
         <Link
           to={"/courses"}
           className={buttonVariants({ variant: "destructive" })}
-          
         >
           Cancel
         </Link>

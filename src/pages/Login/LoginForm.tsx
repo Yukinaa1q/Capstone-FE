@@ -9,7 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { Input } from "@/components/ui/input";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import TucourApi, { ENV, StatusError } from "@/utils/http";
+import TucourApi, { StatusError } from "@/utils/http";
 import { jwtDecoder } from "@/utils/utils";
 import { useAppDispatch } from "@/hooks/reduxHook";
 import { setUser } from "@/store/authenSlice";
@@ -40,12 +40,10 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (data: LoginForm) => {
-    const tucourApi = new TucourApi(ENV.DEV);
     let res;
     try {
       if (role === "student") {
-        res = await tucourApi.call({
-          url: "/authentication/login",
+        res = await TucourApi.call("/authentication/login", {
           method: "POST",
           body: JSON.stringify(data),
           headers: {
@@ -53,8 +51,7 @@ const LoginForm = () => {
           },
         });
       } else {
-        res = await tucourApi.call({
-          url: "/authentication/login/tutor",
+        res = await TucourApi.call("/authentication/login/tutor", {
           method: "POST",
           body: JSON.stringify(data),
           headers: {

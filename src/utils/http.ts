@@ -6,7 +6,6 @@ export enum ENV {
 }
 
 interface ApiArguments {
-  url: string;
   method: "GET" | "POST" | "PUT" | "DELETE";
   queryString?: Record<string, string>;
   headers?: HeadersInit;
@@ -27,17 +26,18 @@ export class StatusError extends Error {
 TucourApi: create an abstraction for fetching data from the tucour api
 */
 export default class TucourApi {
-  private baseUrl: string;
+  private static baseUrl: string;
+  private productEnv: ENV = ENV.DEV;
 
   constructor(env: ENV) {
-    if (env === ENV.PROD) {
-      this.baseUrl = "https://tucour.herokuapp.com";
+    if (this.productEnv === ENV.PROD) {
+      TucourApi.baseUrl = "https://tucour.herokuapp.com";
     } else {
-      this.baseUrl = "http://127.0.0.1:8000";
+      TucourApi.baseUrl = "http://127.0.0.1:8000";
     }
   }
 
-  urlFormatter(url: string, queryString?: Record<string, string>) {
+  private static urlFormatter(url: string, queryString?: Record<string, string>) {
     let formattedUrl = this.baseUrl;
     if (url[0] === "/") {
       formattedUrl = `${this.baseUrl}${url}`;
@@ -51,8 +51,8 @@ export default class TucourApi {
     return formattedUrl;
   }
 
-  async call(arg: ApiArguments) {
-    const formatUrl = this.urlFormatter(arg.url, arg?.queryString);
+  public static async call(url: string, arg: ApiArguments) {
+    const formatUrl = this.urlFormatter(url, arg?.queryString);
     try {
       const res = await fetch(formatUrl, {
         method: arg.method,

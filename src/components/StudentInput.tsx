@@ -4,8 +4,7 @@ import { cn } from "@/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { shortName } from "@/utils/utils";
 import { X } from "lucide-react";
-import { useFetchers } from "react-router";
-import TucourApi, { ENV } from "@/utils/http";
+import TucourApi from "@/utils/http";
 
 interface StudentInputProps {
   value: string[];
@@ -127,7 +126,6 @@ interface StudentItem {
 // ];
 
 const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
-  const tucourApi = new TucourApi(ENV.DEV);
   const [isDisplay, setDisplay] = React.useState(false);
   const [searchKey, setSearchKey] = React.useState("");
   const [idList, setIdList] = React.useState<string[]>(value);
@@ -154,24 +152,25 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
 
   useEffect(() => {
     const fetchStudents = async () => {
-      const students = await tucourApi.call({
-        url: "/student/all-student",
+      const students = await TucourApi.call("/student/all-student", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-        }
+        },
       });
 
-      setStudentList(students.map(item => ({
-        studentName: item.name,
-        studentId: item.studentCode,
-        studentAvatar: item.avatarUrl
-      })))
-    }
+      setStudentList(
+        students.map((item) => ({
+          studentName: item.name,
+          studentId: item.studentCode,
+          studentAvatar: item.avatarUrl,
+        }))
+      );
+    };
 
     fetchStudents();
-  }, [])
+  }, []);
 
   return (
     <div className="relative">
