@@ -22,8 +22,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { ICourseP1 } from "@/interfaces/ICourse";
-import { ArrowLeft, ArrowRight, TriangleAlert, UserRoundPen } from "lucide-react";
+import { ICourseCardP1 } from "@/interfaces/ICourse";
+import {
+  ArrowLeft,
+  ArrowRight,
+  TriangleAlert,
+  UserRoundPen,
+} from "lucide-react";
 import { useId, useState } from "react";
 import {
   Form,
@@ -38,10 +43,12 @@ import { array, boolean, InferType, object, string } from "yup";
 import { Checkbox } from "../ui/checkbox";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { cn } from "@/lib/utils";
+import { StudyShift } from "@/interfaces/common";
+import ITutorRegistration from "@/interfaces/ITutorRegistration";
 
 const registrationSchema = object({
   isOddDays: boolean().default(false),
-  oddTimeShift: array(string())
+  oddTimeShift: array(string<StudyShift>())
     .when("isOddDays", {
       is: true,
       then: (schema) =>
@@ -51,7 +58,7 @@ const registrationSchema = object({
     })
     .default([]),
   isEvenDays: boolean().default(false),
-  evenTimeShift: array(string())
+  evenTimeShift: array(string<StudyShift>())
     .when("isEvenDays", {
       is: true,
       then: (schema) =>
@@ -64,16 +71,13 @@ const registrationSchema = object({
 
 const TutorRegistrationButton = ({
   courseContent,
-  setIsRegistered
 }: {
-  courseContent: ICourseP1;
-  setIsRegistered: React.Dispatch<React.SetStateAction<boolean>>;
+  courseContent: ICourseCardP1;
 }) => {
   const [activity, setActivity] = useState<"registration" | "confirmation">(
     "registration"
   );
   const [errMsg, setErrMsg] = useState<string | null>(null);
-  const [isClose, setIsClose] = useState<boolean>(true);
 
   const form = useForm({
     values: {
@@ -96,11 +100,7 @@ const TutorRegistrationButton = ({
   };
 
   return (
-    <Dialog
-      open={!isClose}
-      onOpenChange={(val) => setIsClose(!val)}
-      key={useId()}
-    >
+    <Dialog>
       <DialogTrigger asChild>
         <button
           type="button"
@@ -136,10 +136,10 @@ const TutorRegistrationButton = ({
         <div>
           <div>
             <h1 className="font-semibold text-2xl uppercase">
-              {courseContent.courseName}
+              {courseContent.courseTitle}
             </h1>
             <p className="text-sm font-semibold text-gray-600">
-              {courseContent.courseId}
+              {courseContent.courseCode}
             </p>
           </div>
           <Alert
@@ -162,23 +162,16 @@ const TutorRegistrationButton = ({
         <DialogFooter>
           {activity === "registration" && (
             <>
-              <Button type="submit" form="tutorRegistration" variant="outline" className="border-t_primary-500 hover:bg-t_primary-100">
+              <Button
+                type="submit"
+                form="tutorRegistration"
+                variant="outline"
+                className="border-t_primary-500 hover:bg-t_primary-100"
+              >
                 <ArrowRight />
                 Continue
               </Button>
-              <Button
-                variant="destructive"
-                type="button"
-                onClick={() => {
-                  setIsClose(true);
-                  form.reset({
-                    isEvenDays: false,
-                    isOddDays: false,
-                    evenTimeShift: [],
-                    oddTimeShift: [],
-                  });
-                }}
-              >
+              <Button variant="destructive" type="button">
                 Cancel
               </Button>
             </>
@@ -197,18 +190,21 @@ const TutorRegistrationButton = ({
                 <ArrowLeft />
                 Back
               </Button>
-              <Button className="bg-green-400 hover:bg-green-500 text-black" onClick={() => {
-                /*
-                  Interface for submitting tutor registration
-                  interface TutorRegistration {
-                    courseCode: string;
-                    evenTimeShift: Array<string>;
-                    oddTimeShift: Array<string>;
-                  }
-                 */
-                setIsClose(true);
-                setIsRegistered(true);
-              }}>Submit</Button>
+              <Button
+                className="bg-green-400 hover:bg-green-500 text-black"
+                onClick={() => {
+                  const submitData: ITutorRegistration = {
+                    evenTimeShift: form
+                      .getValues("evenTimeShift")
+                      .filter((v) => v !== undefined),
+                    oddTimeShift: form
+                      .getValues("oddTimeShift")
+                      .filter((v) => v !== undefined),
+                  };
+                }}
+              >
+                Submit
+              </Button>
             </>
           )}
         </DialogFooter>
@@ -271,10 +267,7 @@ const Registration = ({
                         checked={field.value?.includes("17h45 - 19h15")}
                         onCheckedChange={(val) => {
                           if (val) {
-                            field.onChange([
-                              ...(field.value as Array<string>),
-                              "17h45 - 19h15",
-                            ]);
+                            field.onChange([...field.value, "17h45 - 19h15"]);
                           } else {
                             field.onChange(
                               field.value?.filter((v) => v !== "17h45 - 19h15")
@@ -288,10 +281,7 @@ const Registration = ({
                         checked={field.value?.includes("19h30 - 21h00")}
                         onCheckedChange={(val) => {
                           if (val) {
-                            field.onChange([
-                              ...(field.value as Array<string>),
-                              "19h30 - 21h00",
-                            ]);
+                            field.onChange([...field.value, "19h30 - 21h00"]);
                           } else {
                             field.onChange(
                               field.value?.filter((v) => v !== "19h30 - 21h00")
@@ -342,7 +332,6 @@ const Registration = ({
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-50">
-                      {/* <DropdownMenuLabel>Appearance</DropdownMenuLabel> */}
                       <DropdownMenuSeparator />
                       <DropdownMenuCheckboxItem
                         checked={field.value?.includes("17h45 - 19h15")}

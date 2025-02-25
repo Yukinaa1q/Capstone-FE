@@ -1,14 +1,9 @@
-import {
-  PriceIcon,
-  RegistrationDateIcon,
-  RegistrationTotalIcon,
-} from "@/assets/icons";
+import { RegistrationDateIcon, RegistrationTotalIcon } from "@/assets/icons";
 
-import { ICourseP1 } from "@/interfaces/ICourse";
-import toVND from "@/utils/currencyFormat";
+import { ICourseCardP1 } from "@/interfaces/ICourse";
 
 interface CourseCardProps {
-  courseContent: ICourseP1;
+  courseContent: ICourseCardP1;
 }
 
 const CourseCardP1 = ({ courseContent }: CourseCardProps) => {
@@ -29,10 +24,6 @@ const CourseCardP1 = ({ courseContent }: CourseCardProps) => {
           className="size-4"
         />
         <p>{courseContent.totalRegistration}</p>
-      </div>
-      <div className="flex items-center gap-2 mt-4 font-semibold text-lg">
-        <img src={PriceIcon} alt="price" className="size-5" />
-        <p className="text-base">{toVND(courseContent.coursePrice)}</p>
       </div>
     </>
   );

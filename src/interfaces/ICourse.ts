@@ -6,7 +6,6 @@ interface ICourseCard {
   courseCode: string;
   coursePrice: number;
   courseImage: string;
-  isRegistered: boolean;
 }
 
 interface ICourseCardP1 extends ICourseCard{
@@ -22,6 +21,7 @@ interface ICourseCardP2 extends ICourseCard {
   studyShift: StudyShift;
   isOnline: boolean;
 }
+
 
 
 export type { ICourseCardP1, ICourseCardP2, ICourseCard };

@@ -20,6 +20,7 @@ import ClassDetail from "./pages/ClassesPage/ClassDetailPage/ClassDetailPage";
 import NewClassPage from "./pages/ClassesPage/NewClassPage/NewClassPage";
 import EditClassPage from "./pages/ClassesPage/EditClassPage/EditClassPage";
 import RouteGuard from "./layouts/RouteGuard";
+import StaffLogin from "./pages/Login/StaffLogin";
 
 const router = createBrowserRouter([
   {
@@ -156,6 +157,10 @@ const router = createBrowserRouter([
     path: "/test",
     element: <TestPage />,
   },
+  {
+    path: "/staff/login",
+    element: <StaffLogin />
+  }
 ]);
 
 export default router;

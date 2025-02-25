@@ -1,4 +1,4 @@
-import CourseCard from "@/components/CourseCard";
+import CourseCard from "@/components/CourseCard/UnregisterCard";
 import PriceInput from "@/components/PriceInput";
 import {
   Carousel,
@@ -11,7 +11,7 @@ import { GraduationCapIcon } from "lucide-react";
 const TestPage = () => {
   return (
     <div className="m-10">
-      <PriceInput name="price" onChange={e => console.log("Change value")}/>
+      <PriceInput name="price" onChange={(e) => console.log("Change value")} />
     </div>
   );
 };

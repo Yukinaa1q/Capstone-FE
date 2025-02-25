@@ -1,16 +1,9 @@
-import {
-  ClassMemberIcon,
-  PriceIcon,
-  StudyTimeIcon,
-  TutorIcon,
-} from "@/assets/icons";
+import { ClassMemberIcon, StudyTimeIcon, TutorIcon } from "@/assets/icons";
 
-
-import { ICourseP2 } from "@/interfaces/ICourse";
-import toVND from "@/utils/currencyFormat";
+import { ICourseCardP2 } from "@/interfaces/ICourse";
 
 interface CourseCardProps {
-  courseContent: ICourseP2;
+  courseContent: ICourseCardP2;
 }
 
 const CourseCardP2 = ({ courseContent }: CourseCardProps) => {
@@ -22,16 +15,15 @@ const CourseCardP2 = ({ courseContent }: CourseCardProps) => {
       </div>
       <div className="flex gap-2 items-center">
         <img src={ClassMemberIcon} alt="class-member-icon" className="size-5" />
-        <p>{courseContent.classNumber}</p>
+        <p>
+          {courseContent.currentStudents}/{courseContent.maxStudents}
+        </p>
       </div>
       <div className="flex gap-2 items-center">
         <img src={StudyTimeIcon} alt="study-time-icon" className="size-5" />
-        <p>{courseContent.studyTime}</p>
-      </div>
-
-      <div className="flex items-center gap-2 mt-2 font-semibold">
-        <img src={PriceIcon} alt="price" className="size-5" />
-        <p className="text-base">{toVND(courseContent.coursePrice)}</p>
+        <p>
+          {courseContent.studyWeek} | {courseContent.studyShift}
+        </p>
       </div>
     </>
   );

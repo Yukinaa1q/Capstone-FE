@@ -7,9 +7,10 @@ const MainSection = () => {
   if (role === "academic") {
     // return <CoursesPage />;
     return <Navigate to="/courses" replace={true} />;
-  } else {
+  } else if (role === "student" || role === "tutor"){
     return <AvailableCourses />;
-  }
+  } else if (role === "admin")
+    return <></>
 };
 
 export default MainSection;
