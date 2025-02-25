@@ -108,7 +108,7 @@
 }
 
 @utility active-nav {
-  @apply bg-t_primary-700 hover:bg-t_primary-700 text-white font-semibold data-[active=true]:hover:bg-t_primary-700 data-[active=true]:hover:text-white;
+  @apply bg-t_primary-700;
 
   & img {
     filter: invert(1);

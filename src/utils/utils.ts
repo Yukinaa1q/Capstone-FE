@@ -33,3 +33,10 @@ export function isJSON(checkJson: string) {
     return false;
   }
 }
+
+export function matchUrl(prefixUrl: string, currentUrl: string) {
+  if (prefixUrl === "/") {
+    return currentUrl === prefixUrl;
+  }
+  return currentUrl.startsWith(prefixUrl);
+}

@@ -101,8 +101,6 @@ const defaultColumns = [
 const AcademicView = () => {
   const [data, setData] = React.useState<IClassTable[]>([]);
 
-  console.log(data);
-
   useEffect(() => {
     const getClassesList = async () => {
       const res = await TucourApi.call("/class/view-class", {

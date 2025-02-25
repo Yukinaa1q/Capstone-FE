@@ -9,6 +9,7 @@ import BrandLogo from "../BrandLogo";
 
 import {
   Sidebar,
+  SidebarContent,
   SidebarHeader,
   SidebarInset,
   SidebarProvider,
@@ -16,57 +17,31 @@ import {
 } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import Topbar from "../Topbar/Topbar";
+import { Role } from "@/interfaces/common";
 
 interface SidebarFactoryProps {
   children: React.ReactNode;
 }
 
+const sidebarContent: Record<Role, React.ReactNode> = {
+  admin: <AdminSidebar />,
+  student: <StudentSidebar />,
+  parent: <ParentSidebar />,
+  tutor: <TutorSidebar />,
+  academic: <AcademicAffairSidebar />,
+  support: <SupportSidebar />,
+};
+
 // Factor Method design pattern, maybe?
 const SidebarFactory = ({ children }: SidebarFactoryProps) => {
   const userRole = useAppSelector((state) => state.auths.role);
-  let sidebarContent: React.ReactNode;
-  switch (userRole) {
-    case "admin":
-      sidebarContent = <AdminSidebar />;
-      break;
-    case "student":
-      sidebarContent = <StudentSidebar />;
-      break;
-    case "parent":
-      sidebarContent = <ParentSidebar />;
-      break;
-    case "tutor":
-      sidebarContent = <TutorSidebar />;
-      break;
-    case "academic":
-      sidebarContent = <AcademicAffairSidebar />;
-      break;
-    case "support":
-      sidebarContent = <SupportSidebar />;
-      break;
-    default:
-      sidebarContent = <StudentSidebar />;
-      break;
-  }
   return (
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader className="mx-auto">
           <BrandLogo size="md" />
         </SidebarHeader>
-        {/*
-        <SidebarContent>
-          <SidebarGroup>
-            <SidebarGroupLabel>
-            <SidebarGroupContent>
-              <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuItemButton/>
-                  <SidebarMenuAction>
-            <SidebarGroupAction>
-        */}
-        {sidebarContent}{" "}
-        {/*All sidebar content must be wrapped in <SidebarContent></SidebarContent> */}
+        <SidebarContent>{sidebarContent[userRole]}</SidebarContent>
       </Sidebar>
       {/* I don't know why but setting w-1 make the carousel not expand out of the container size  */}
       <SidebarInset className="w-0 md:max-lg:w-screen">

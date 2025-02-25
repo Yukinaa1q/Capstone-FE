@@ -30,11 +30,8 @@ export default class TucourApi {
   private static baseUrl: string = TucourApi.productEnv === ENV.PROD ? "https://tucour.herokuapp.com" : "http://localhost:8000";
 
   private static urlFormatter(url: string, queryString?: Record<string, string>) {
-    console.log("In urlFormatter", url);
     let formattedUrl = TucourApi.baseUrl;
     if (url[0] === "/") {
-      console.log("first / detected")
-      console.log(TucourApi.baseUrl);
       formattedUrl = `${TucourApi.baseUrl}${url}`;
     } else {
       formattedUrl = `${TucourApi.baseUrl}/${url}`;
