@@ -6,9 +6,8 @@ import TucourApi from "@/utils/http";
 const NewClassPage = () => {
   const navigate = useNavigate();
   const onSubmit = async (data: IClassForm) => {
-    // console.log(data)
     try {
-      const res = await TucourApi.call("/class/create-class", {
+      await TucourApi.call("/class/create-class", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -16,7 +15,6 @@ const NewClassPage = () => {
         },
         body: JSON.stringify(data),
       });
-      console.log(res);
       navigate("/classes");
     } catch (e) {
       console.error(e);

@@ -1,25 +1,27 @@
-type ICourse = ICourseP1 | ICourseP2;
+import { StudyShift, StudyWeek } from "./common";
 
-// type ICourse = ICourseP1 | ICourseP2;
 
-interface ICourseP1{
-  courseName: string;
-  courseId: string;
-  price: number;
+interface ICourseCard {
+  courseTitle: string;
+  courseCode: string;
+  coursePrice: number;
+  courseImage: string;
+  isRegistered: boolean;
+}
+
+interface ICourseCardP1 extends ICourseCard{
   registrationDate: string;
   totalRegistration: number;
-  isRegistered: boolean;
 }
 
-interface ICourseP2{
-  courseName: string;
-  courseId: string;
-  price: number;
+interface ICourseCardP2 extends ICourseCard {
   tutor: string;
-  classNumber: string;
-  studyTime: string;
-  isRegistered: boolean;
+  currentStudents: number;
+  maxStudents: number;
+  studyWeek: StudyWeek;
+  studyShift: StudyShift;
+  isOnline: boolean;
 }
 
 
-export type { ICourseP1, ICourseP2, ICourse };
+export type { ICourseCardP1, ICourseCardP2, ICourseCard };

@@ -9,16 +9,17 @@ import {
 } from "../ui/card";
 import { Badge } from "@/components/ui/badge";
 
-import { ICourse, ICourseP1, ICourseP2 } from "@/interfaces/ICourse";
+import { ICourseCard, ICourseCardP1, ICourseCardP2 } from "@/interfaces/ICourse";
 import CourseCardP1 from "./CardPhase1";
 import CourseCardP2 from "./CardPhase2";
 import { useAppSelector } from "@/hooks/reduxHook";
 import { JSX, useId, useState } from "react";
 import { X } from "lucide-react";
 import TutorRegistrationButton from "./TutorRegistration";
+import StudenRegistration from "./StudenRegistration";
 
 interface CourseCardProps {
-  courseContent: ICourse;
+  courseContent: ICourseCard;
 }
 
 const CourseCard = ({ courseContent }: CourseCardProps) => {
@@ -29,21 +30,23 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
   let registrationButton: JSX.Element;
   if (role === "student") {
     registrationButton = (
-      <button
-        type="button"
-        onClick={() => setIsRegistered((oldState) => !oldState)}
-        className="group flex items-center gap-0 px-2 py-2 bg-green-300 rounded-full overflow-hidden"
-      >
-        <img src={RegisterIcon} alt="register-icon" className="size-5" />
-        <p className="text-sm font-medium invisible w-0 group-hover:visible group-hover:w-16 group-hover:transition-all transition-all">
-          Register
-        </p>
-      </button>
+      <StudenRegistration key={useId()}>
+        <button
+          type="button"
+          // onClick={() => setIsRegistered((oldState) => !oldState)}
+          className="group flex items-center gap-0 px-2 py-2 bg-green-300 rounded-full overflow-hidden"
+        >
+          <img src={RegisterIcon} alt="register-icon" className="size-5" />
+          <p className="text-sm font-medium invisible w-0 group-hover:visible group-hover:w-16 group-hover:transition-all transition-all">
+            Register
+          </p>
+        </button>
+      </StudenRegistration>
     );
   } else if (role === "tutor") {
     registrationButton = (
       <TutorRegistrationButton
-        courseContent={courseContent as ICourseP1}
+        courseContent={courseContent as ICourseCardP1}
         setIsRegistered={setIsRegistered}
         key={useId()}
       />
@@ -59,7 +62,7 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
           className="aspect-video bg-slate-200 rounded-md object-cover"
         />
         <CardTitle className="flex justify-between items-center gap-4">
-          <p className="truncate">{courseContent.courseName.toUpperCase()}</p>
+          <p className="truncate">{courseContent.courseTitle.toUpperCase()}</p>
           {phase === 1 ? (
             <Badge className="bg-t_secondary-500 hover:bg-t_secondary-500 text-white text-xs shrink-0 w-fit">
               Phase 1
@@ -71,14 +74,14 @@ const CourseCard = ({ courseContent }: CourseCardProps) => {
           )}
         </CardTitle>
         <CardDescription className="flex justify-between text-xs">
-          <p>{courseContent.courseId}</p>
+          <p>{courseContent.courseCode}</p>
         </CardDescription>
       </CardHeader>
       <CardContent className="text-sm w-full">
         {phase === 1 ? (
-          <CourseCardP1 courseContent={courseContent as ICourseP1} />
+          <CourseCardP1 courseContent={courseContent as ICourseCardP1} />
         ) : (
-          <CourseCardP2 courseContent={courseContent as ICourseP2} />
+          <CourseCardP2 courseContent={courseContent as ICourseCardP2} />
         )}
       </CardContent>
 

@@ -161,7 +161,7 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
       });
 
       setStudentList(
-        students.map((item) => ({
+        students.map((item: any) => ({
           studentName: item.name,
           studentId: item.studentCode,
           studentAvatar: item.avatarUrl,

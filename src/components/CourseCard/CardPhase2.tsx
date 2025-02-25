@@ -31,7 +31,7 @@ const CourseCardP2 = ({ courseContent }: CourseCardProps) => {
 
       <div className="flex items-center gap-2 mt-2 font-semibold">
         <img src={PriceIcon} alt="price" className="size-5" />
-        <p className="text-base">{toVND(courseContent.price)}</p>
+        <p className="text-base">{toVND(courseContent.coursePrice)}</p>
       </div>
     </>
   );

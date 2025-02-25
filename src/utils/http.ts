@@ -26,23 +26,18 @@ export class StatusError extends Error {
 TucourApi: create an abstraction for fetching data from the tucour api
 */
 export default class TucourApi {
-  private static baseUrl: string;
-  private productEnv: ENV = ENV.DEV;
-
-  constructor(env: ENV) {
-    if (this.productEnv === ENV.PROD) {
-      TucourApi.baseUrl = "https://tucour.herokuapp.com";
-    } else {
-      TucourApi.baseUrl = "http://127.0.0.1:8000";
-    }
-  }
+  private static productEnv: ENV = ENV.DEV;
+  private static baseUrl: string = TucourApi.productEnv === ENV.PROD ? "https://tucour.herokuapp.com" : "http://localhost:8000";
 
   private static urlFormatter(url: string, queryString?: Record<string, string>) {
-    let formattedUrl = this.baseUrl;
+    console.log("In urlFormatter", url);
+    let formattedUrl = TucourApi.baseUrl;
     if (url[0] === "/") {
-      formattedUrl = `${this.baseUrl}${url}`;
+      console.log("first / detected")
+      console.log(TucourApi.baseUrl);
+      formattedUrl = `${TucourApi.baseUrl}${url}`;
     } else {
-      formattedUrl = `${this.baseUrl}/${url}`;
+      formattedUrl = `${TucourApi.baseUrl}/${url}`;
     }
     if (queryString) {
       const params = new URLSearchParams(queryString);

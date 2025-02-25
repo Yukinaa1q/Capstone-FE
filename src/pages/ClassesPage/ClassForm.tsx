@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { StudyShift, StudyWeek } from "@/interfaces/common";
 import { cn } from "@/lib/utils";
 import TucourApi from "@/utils/http";
 import { shortName } from "@/utils/utils";
@@ -20,7 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { array, boolean, InferType, number, object, string } from "yup";
+import { array, boolean, InferType, mixed, number, object, string } from "yup";
 
 const classFormSchema = object({
   courseTitle: string(),
@@ -29,8 +30,8 @@ const classFormSchema = object({
     .min(1, "Class size cannot be smaller than 1")
     .required("Class size is required"),
   classCode: string().required("Class code is required"),
-  studyWeek: string().required("Study week is required"),
-  studyShift: string().required("Study shift is required"),
+  studyWeek: string<StudyWeek | "">().required("Study week is required"),
+  studyShift: string<StudyShift | "">().required("Study shift is required"),
   isOnline: boolean().default(false),
   classRoom: string().when("isOnline", {
     is: true,
@@ -44,7 +45,7 @@ const classFormSchema = object({
 
 export type IClassForm = InferType<typeof classFormSchema>;
 
-const initValue = {
+const initValue: IClassForm = {
   courseTitle: "",
   courseCode: "",
   maxStudents: 0,
@@ -75,7 +76,6 @@ const ClassForm = ({
     resolver: yupResolver(classFormSchema),
   });
 
-  // console.log("Default Values", defaultValues);
 
   useEffect(() => {
     const fetchCourseCode = async () => {
@@ -96,7 +96,7 @@ const ClassForm = ({
           },
         });
         setTutorList(
-          tutorListApi.map((item) => {
+          tutorListApi.map((item: any) => {
             return {
               value: item.tutorCode,
               label: item.name,

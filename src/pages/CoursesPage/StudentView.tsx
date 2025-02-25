@@ -4,11 +4,14 @@ import MyPagination, {
   PaginationNav,
 } from "@/components/Pagination";
 import SearchInput from "@/components/SearchInput";
-import { useAppSelector } from "@/hooks/reduxHook";
+import { ICourseCard } from "@/interfaces/ICourse";
+import { coursesPhase1 } from "@/utils/fakeData";
 import { useState } from "react";
 
+const PRODUCTS_PER_PAGE = 5
+
 const StudentView = () => {
-  const courseList = useAppSelector((state) => state.courses.coursesP1);
+  const [courseList, setCourseList] = useState<ICourseCard[]>(coursesPhase1)
   const urlParams = new URLSearchParams(window.location.search);
   const myParam = urlParams.get("q");
   const [searchKey, setSearchKey] = useState(myParam || "");
@@ -24,11 +27,11 @@ const StudentView = () => {
         <SearchInput className="" />
       </form>
 
-      <MyPagination size={5} total={100}>
+      <MyPagination size={PRODUCTS_PER_PAGE} total={100} onPageChange={(pageInfo) => console.log(pageInfo)}>
         <div className="px-10 mt-10 flex justify-between items-center">
           <p className="text-lg font-semibold">XXX results for "{searchKey}"</p>
           <div className="flex gap-4">
-            <PaginationNav className="w-fit mx-0" />
+            <PaginationNav className="w-fit mx-0"/>
             <PaginationGoto />
           </div>
         </div>

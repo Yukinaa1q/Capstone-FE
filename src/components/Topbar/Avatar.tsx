@@ -6,10 +6,11 @@ import { ChevronDown } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 // import Image from "next/image";
 
 export default function AvatarPopover() {
+  const navigate = useNavigate();
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -48,7 +49,10 @@ export default function AvatarPopover() {
           </div>
         </div>
         <Separator />
-        <Button variant="ghost" className="w-full mt-2 hover:bg-red-100">
+        <Button variant="ghost" className="w-full mt-2 hover:bg-red-100" onClick={() => {
+          localStorage.removeItem("token");
+          navigate("/login");
+        }}>
           Log out
         </Button>
       </PopoverContent>
