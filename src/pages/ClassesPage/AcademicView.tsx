@@ -127,7 +127,7 @@ const AcademicView = () => {
       <AddNewClass />
       <ClearableSearch
         handleChange={(e) => {
-          table.setGlobalFilter(e.target.value);
+          table.setGlobalFilter(e);
         }}
         className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-2"
       />

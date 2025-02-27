@@ -1,13 +1,18 @@
+import ClearableSearch from "@/components/ClearableSearch";
 import DataTable from "@/components/DataTable";
+import { buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   ColumnDef,
   getCoreRowModel,
+  getFilteredRowModel,
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { ActionComponent, EditableCell } from "./util";
+import { Link } from "react-router";
 import StaffAccountCtx from "./staffAccCtx";
+import { ActionComponent, EditableCell } from "./util";
 
 export interface IStaffAccount {
   staffCode: string;
@@ -34,9 +39,11 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
     accessorKey: "staffName",
     header: "STAFF NAME",
     cell: (props) => (
-      <EditableCell cell={props} columnKey="staffName" className="w-36">
-        <div>{props.row.getValue("staffName")}</div>
-      </EditableCell>
+      <div className="w-48">
+        <EditableCell cell={props} columnKey="staffName">
+          {props.row.getValue("staffName")}
+        </EditableCell>
+      </div>
     ),
   },
   {
@@ -53,13 +60,28 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
     accessorKey: "staffPassword",
     header: "PASSWORD",
     cell: (props) => (
-      <EditableCell cell={props} columnKey="staffPassword" className="w-32">
-        <div>{props.row.getValue("staffPassword")}</div>
-      </EditableCell>
+      <div className="w-32">
+        <EditableCell cell={props} columnKey="staffPassword">
+          {props.row.getValue("staffPassword")}
+        </EditableCell>
+      </div>
     ),
   },
   {
     id: "editAction",
+    header: () => (
+      <div>
+        <Link
+          to="/courses/new"
+          className={cn(
+            buttonVariants({ variant: "link", size: "icon" }),
+            "relative left-1/2 -translate-x-1/2 size-6 rounded-full"
+          )}
+        >
+          Add Staff
+        </Link>
+      </div>
+    ),
     cell: (props) => <ActionComponent cell={props} />,
   },
 ];
@@ -69,7 +91,7 @@ const StaffAccountPage = () => {
     {
       staffCode: "STF001",
       staffId: "1",
-      staffName: "John Doe",
+      staffName: "John Doe Do di do di",
       staffRole: "Admin",
       staffEmail: "johndoe01@gmail.com",
       staffPassword: "password",
@@ -94,9 +116,15 @@ const StaffAccountPage = () => {
     columns,
     getPaginationRowModel: getPaginationRowModel(),
     getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: "includesString",
   });
   return (
     <section className="px-8 pt-4">
+      <ClearableSearch
+        handleChange={(searchKey) => tanTable.setGlobalFilter(searchKey)}
+        className="my-4 w-full md:w-3/4 lg:w-1/2 mx-auto"
+      />
       <StaffAccountCtx.Provider value={{ data, setData }}>
         <DataTable table={tanTable} columns={columns} />
       </StaffAccountCtx.Provider>

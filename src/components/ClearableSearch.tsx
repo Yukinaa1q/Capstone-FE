@@ -8,7 +8,7 @@ export default function ClearableSearch({
   handleChange,
 }: {
   className?: string;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (e: string) => void;
 }) {
   const id = useId();
   const [inputValue, setInputValue] = useState("");
@@ -19,6 +19,7 @@ export default function ClearableSearch({
     if (inputRef.current) {
       inputRef.current.focus();
     }
+    handleChange("")
   };
 
   return (
@@ -31,12 +32,12 @@ export default function ClearableSearch({
         value={inputValue}
         onChange={(e) => {
           setInputValue(e.target.value);
-          handleChange(e);
+          handleChange(e.target.value);
         }}
       />
       {inputValue && (
         <button
-          className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/80 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+          className="absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-lg text-muted-foreground/80 outline-offset-2 transition-colors hover:text-foreground focus:z-10 focus-visible:outline focus-visible:outline-ring/70 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
           aria-label="Clear input"
           onClick={handleClearInput}
         >

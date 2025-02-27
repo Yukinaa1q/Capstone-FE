@@ -1,11 +1,11 @@
-import { JSX, useContext, useState } from "react";
-import { IsEditing, IStaffAccount } from "./StaffAccountPage";
-import { CellContext } from "@tanstack/react-table";
-import StaffAccountCtx from "./staffAccCtx";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Edit, LucideTrash, Save, Undo } from "lucide-react";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import { CellContext } from "@tanstack/react-table";
+import { Edit, LucideTrash, Save, Undo } from "lucide-react";
+import { JSX, useContext } from "react";
+import StaffAccountCtx from "./staffAccCtx";
+import { IsEditing, IStaffAccount } from "./StaffAccountPage";
 
 export const EditableCell = ({
   cell,
@@ -55,7 +55,7 @@ export function ActionComponent({
   // If user in editing mode, show edit and delete button
   if (!targetStaff.isEditing)
     return (
-      <div>
+      <div className="flex justify-center">
         <Button
           variant="ghost"
           size="icon"
