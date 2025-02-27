@@ -3,3 +3,7 @@ export interface IMenuItem {
     icon: React.ReactNode;
     title: string;
 }
+
+export interface ISidebarGroup {
+    label?: string;
+}

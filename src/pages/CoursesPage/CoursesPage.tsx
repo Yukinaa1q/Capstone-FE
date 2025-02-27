@@ -6,7 +6,7 @@ import StudentView from "./StudentView";
 
 const CoursesPage = () => {
   const role = useAppSelector((state) => state.auths.role);
-  return role === "academic" ? <AcademicView /> : <StudentView />;
+  return role === "academic" || role === "admin" ? <AcademicView /> : <StudentView />;
 };
 
 export default CoursesPage;

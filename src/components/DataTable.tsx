@@ -10,11 +10,7 @@ import {
 import {
   ColumnDef,
   flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  Table as TanTable,
-  useReactTable,
+  Table as TanTable
 } from "@tanstack/react-table";
 import { Button } from "./ui/button";
 

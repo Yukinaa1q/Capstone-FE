@@ -21,6 +21,7 @@ import NewClassPage from "./pages/ClassesPage/NewClassPage/NewClassPage";
 import EditClassPage from "./pages/ClassesPage/EditClassPage/EditClassPage";
 import RouteGuard from "./layouts/RouteGuard";
 import StaffLogin from "./pages/Login/StaffLogin";
+import StaffAccountPage from "./pages/StaffAccountPage/StaffAccountPage";
 
 const router = createBrowserRouter([
   {
@@ -143,6 +144,10 @@ const router = createBrowserRouter([
         path: "students",
         element: <StudentsPage />,
       },
+      {
+        path: "staff/accounts",
+        element: <StaffAccountPage />,
+      }
     ],
   },
   {
@@ -159,8 +164,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/staff/login",
-    element: <StaffLogin />
-  }
+    element: <StaffLogin />,
+  },
 ]);
 
 export default router;

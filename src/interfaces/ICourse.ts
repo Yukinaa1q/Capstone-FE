@@ -4,6 +4,7 @@ import { StudyShift, StudyWeek } from "./common";
 interface ICourseCard {
   courseTitle: string;
   courseCode: string;
+  courseId: string;
   coursePrice: number;
   courseImage: string;
 }
