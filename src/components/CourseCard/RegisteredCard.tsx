@@ -27,8 +27,7 @@ import IRegisteredCard from "@/interfaces/IRegisteredCard";
 
 
 
-const RegisteredCard = ({ courseContent }: { courseContent: IRegisteredCard }) => {
-  const course = courseContent.courseContent;
+const RegisteredCard = ({ cardInfo }: { cardInfo: IRegisteredCard }) => {
   const phase = useAppSelector((state) => state.phases.phase);
   return (
     <Card className="w-full">
@@ -39,7 +38,7 @@ const RegisteredCard = ({ courseContent }: { courseContent: IRegisteredCard }) =
           className="aspect-video bg-slate-200 rounded-md object-cover"
         />
         <CardTitle className="flex justify-between items-center gap-4">
-          <p className="truncate">{course.courseTitle.toUpperCase()}</p>
+          <p className="truncate">{cardInfo.courseTitle.toUpperCase()}</p>
           {phase === 1 ? (
             <Badge className="bg-t_secondary-500 hover:bg-t_secondary-500 text-white text-xs shrink-0 w-fit">
               Phase 1
@@ -51,19 +50,19 @@ const RegisteredCard = ({ courseContent }: { courseContent: IRegisteredCard }) =
           )}
         </CardTitle>
         <CardDescription className="flex justify-between text-xs">
-          <p>{course.courseCode}</p>
+          <p>{cardInfo.courseCode}</p>
         </CardDescription>
       </CardHeader>
       <CardContent className="text-sm w-full">
         {phase === 1 ? (
-          <CourseCardP1 courseContent={course as ICourseCardP1} />
+          <CourseCardP1 courseContent={cardInfo as ICourseCardP1} />
         ) : (
-          <CourseCardP2 courseContent={course as ICourseCardP2} />
+          <CourseCardP2 courseContent={cardInfo as ICourseCardP2} />
         )}
         <div className="flex justify-between items-center mt-2">
           <div className="flex items-center gap-2 font-semibold">
             <img src={PriceIcon} alt="price" className="size-5" />
-            <p className="text-base">{toVND(course.coursePrice)}</p>
+            <p className="text-base">{toVND(cardInfo.coursePrice)}</p>
           </div>
           <TooltipProvider delayDuration={0}>
             <Tooltip>
@@ -74,11 +73,11 @@ const RegisteredCard = ({ courseContent }: { courseContent: IRegisteredCard }) =
                 <h4 className="text-base font-semibold">Your Registration Information</h4>
                 <div className="grid grid-cols-2 gap-2 gap-x-4 mt-4">
                   <p className="text-sm">Course Name</p>
-                  <p className="text-sm font-medium">{course.courseTitle}</p>
+                  <p className="text-sm font-medium">{cardInfo.courseTitle}</p>
                   <p className="text-sm ">Course Code</p>
-                  <p className="text-sm font-medium">{course.courseCode}</p>
+                  <p className="text-sm font-medium">{cardInfo.courseCode}</p>
                   <p className="text-sm">Desire learning type</p>
-                  <p className="text-sm font-medium">{courseContent.isOnline ? "Online" : "Offline"}</p>
+                  <p className="text-sm font-medium">{cardInfo.isOnline ? "Online" : "Offline"}</p>
                 </div>
               </TooltipContent>
             </Tooltip>

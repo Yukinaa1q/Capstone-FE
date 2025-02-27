@@ -3,7 +3,7 @@ import {
   ColumnDef,
   getCoreRowModel,
   getPaginationRowModel,
-  useReactTable
+  useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
 import { ActionComponent, EditableCell } from "./util";
@@ -20,6 +20,8 @@ export interface IStaffAccount {
 
 export interface IsEditing {
   isEditing: boolean;
+  prevName: string;
+  prevPassword: string;
 }
 
 const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
@@ -32,7 +34,7 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
     accessorKey: "staffName",
     header: "STAFF NAME",
     cell: (props) => (
-      <EditableCell cell={props} columnKey="staffName">
+      <EditableCell cell={props} columnKey="staffName" className="w-36">
         <div>{props.row.getValue("staffName")}</div>
       </EditableCell>
     ),
@@ -50,11 +52,15 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
   {
     accessorKey: "staffPassword",
     header: "PASSWORD",
-    cell: (props) => <div>{props.row.getValue("staffPassword")}</div>,
+    cell: (props) => (
+      <EditableCell cell={props} columnKey="staffPassword" className="w-32">
+        <div>{props.row.getValue("staffPassword")}</div>
+      </EditableCell>
+    ),
   },
   {
     id: "editAction",
-    cell: (props) => <ActionComponent cell={props}/>
+    cell: (props) => <ActionComponent cell={props} />,
   },
 ];
 
@@ -68,6 +74,8 @@ const StaffAccountPage = () => {
       staffEmail: "johndoe01@gmail.com",
       staffPassword: "password",
       isEditing: false,
+      prevName: "John Doe",
+      prevPassword: "password",
     },
     {
       staffCode: "STF002",
@@ -77,6 +85,8 @@ const StaffAccountPage = () => {
       staffEmail: "janethebooba111@gmail.com",
       staffPassword: "password",
       isEditing: false,
+      prevName: "Jane Doe",
+      prevPassword: "password",
     },
   ]);
   const tanTable = useReactTable({
