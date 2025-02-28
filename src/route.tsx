@@ -23,6 +23,7 @@ import RouteGuard from "./layouts/RouteGuard";
 import StaffLogin from "./pages/Login/StaffLogin";
 import StaffAccountPage from "./pages/StaffAccountPage/StaffAccountPage";
 import AccountSettingPage from "./pages/AccountPage/AccountSettingPage";
+import AccountProfilePage from "./pages/AccountPage/AccountProfilePage";
 
 const router = createBrowserRouter([
   {
@@ -158,7 +159,7 @@ const router = createBrowserRouter([
           },
           {
             path: "profile",
-            element: <div>Profile Page</div>,
+            element: <AccountProfilePage/>,
           },
           {
             path: "time-table",

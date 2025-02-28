@@ -158,19 +158,19 @@ const StaffAccountPage = () => {
     <section className="px-8 pt-4">
       <ClearableSearch
         handleChange={(searchKey) => tanTable.setGlobalFilter(searchKey)}
-        className="my-8 w-full md:w-3/4 lg:w-1/2 mx-auto"
+        className="w-full md:w-3/4 lg:w-1/2 mx-auto"
       />
 
       <AnimatePresence>
         {showForm && (
           <motion.div
-            initial={{ marginBottom: "-50%", opacity: 0 }}
-            animate={{ marginBottom: "0", opacity: 1 }}
-            exit={{ marginBottom: "-45%", opacity: 0 }}
-            transition={{ type: "tween" }}
+            initial={{ height: "0", margin: "0", opacity: 0 }}
+            animate={{ height: "auto", margin: "2rem 0", opacity: 1 }}
+            exit={{ height: "0", margin: "0", opacity: 0}}
+            transition={{ type: "tween", duration: 0.5 }}
             className="border rounded-md overflow-hidden bg-white"
           >
-            <div className="my-4">
+            <div className="p-4">
               <h3 className="text-2xl font-semibold text-center mb-4">
                 Create Staff Account
               </h3>

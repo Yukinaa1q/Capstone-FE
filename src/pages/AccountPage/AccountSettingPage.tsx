@@ -1,5 +1,8 @@
+import PwdInput from "@/components/PwdInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Label } from "@/components/ui/label";
 import ContentLayout from "@/layouts/ContentLayout";
+import SectionLayout from "@/layouts/SectionLayout";
 import { shortName } from "@/utils/utils";
 import { Edit, IdCard, Mail, Phone } from "lucide-react";
 import { Link } from "react-router";
@@ -36,6 +39,15 @@ const AccountSettingPage = () => {
           </Link>
         </div>
       </div>
+      <SectionLayout sectionTitle="PASSWORD & AUTHENTICATION">
+        <h4 className="font-medium">Change Password</h4>
+        <div className="w-xs mt-1">
+          <Label>Old Password</Label>
+          <PwdInput value={""} onChange={() => {}} />
+          <Label>New Password</Label>
+          <PwdInput value={""} onChange={() => {}} />
+        </div>
+      </SectionLayout>
     </ContentLayout>
   );
 };
