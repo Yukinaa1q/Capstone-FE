@@ -92,6 +92,22 @@
       height: 0;
     }
   }
+
+  --animate-slide-down: slide-down 5s ease-out forwards;
+  --animate-slide-up: slide-down 5s reverse ease-out forwards;
+
+  @keyframes slide-down {
+    from {
+      /* opacity: 0; */
+      max-height: 0;
+      /* tranform: translateY(-100%); */
+    }
+
+    to {
+      /* opacity: 1; */
+      max-height: 550px;
+    }
+  }
 }
 
 /*
@@ -102,6 +118,14 @@
   If we ever want to remove these styles, we need to add an explicit border
   color utility to any element that depends on these defaults.
 */
+
+@utility show-transition {
+  max-height: 550px;
+  transition-property: max-height;
+  transition-duration: 5s;
+  transition-timing-function: ease-out;
+  /* transition: max-height 2s ease-in; */
+}
 
 @utility active-subnav {
   @apply bg-t_primary-100 hover:bg-t_primary-100 rounded-md;
@@ -227,6 +251,9 @@
   * {
     font-family: "Montserrat", serif;
     border-color: hsl(var(--border));
+    list-style: none;
+    box-sizing: border-box;
+    interpolate-size: allow-keywords;
   }
 
   input[type="file"] {

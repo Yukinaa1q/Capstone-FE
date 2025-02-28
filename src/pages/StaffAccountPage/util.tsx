@@ -5,7 +5,8 @@ import { CellContext } from "@tanstack/react-table";
 import { Edit, LucideTrash, Save, Undo } from "lucide-react";
 import { JSX, useContext } from "react";
 import StaffAccountCtx from "./staffAccCtx";
-import { IsEditing, IStaffAccount } from "./StaffAccountPage";
+import { IsEditing } from "./StaffAccountPage";
+import { IStaffAccount } from "@/interfaces/IStaffCRUD";
 
 export const EditableCell = ({
   cell,
@@ -85,7 +86,7 @@ export function ActionComponent({
   // Else show save and cancel button
   else
     return (
-      <div>
+      <div className="flex justify-center">
         <Button
           variant="ghost"
           size="icon"

@@ -30,7 +30,7 @@ const signupSchema = yup
     repwd: yup
       .string()
       .required("Re-enter password is required")
-      .oneOf([yup.ref("password")], "Passwords must match"),
+      .oneOf([yup.ref("password")], "Password must match"),
   })
   .required();
 

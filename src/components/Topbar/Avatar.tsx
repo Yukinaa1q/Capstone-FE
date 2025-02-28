@@ -37,13 +37,13 @@ export default function AvatarPopover() {
             <p className="font-medium text-gray-700">2153798</p>
           </div>
           <div className="flex flex-col space-y-2 py-2 font-medium">
-            <Link to="#" className="hover:underline">
+            <Link to="/user/account" className="hover:underline">
               Account Setting
             </Link>
-            <Link to="#" className="hover:underline">
+            <Link to="/user/profile" className="hover:underline">
               Profile Setting
             </Link>
-            <Link to="#" className="hover:underline">
+            <Link to="/user/time-table" className="hover:underline">
               Your Timetable
             </Link>
           </div>

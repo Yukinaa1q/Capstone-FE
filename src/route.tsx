@@ -22,6 +22,7 @@ import EditClassPage from "./pages/ClassesPage/EditClassPage/EditClassPage";
 import RouteGuard from "./layouts/RouteGuard";
 import StaffLogin from "./pages/Login/StaffLogin";
 import StaffAccountPage from "./pages/StaffAccountPage/StaffAccountPage";
+import AccountSettingPage from "./pages/AccountPage/AccountSettingPage";
 
 const router = createBrowserRouter([
   {
@@ -147,6 +148,23 @@ const router = createBrowserRouter([
       {
         path: "staff/accounts",
         element: <StaffAccountPage />,
+      },
+      {
+        path: "user",
+        children: [
+          {
+            path: "account",
+            element: <AccountSettingPage/>
+          },
+          {
+            path: "profile",
+            element: <div>Profile Page</div>,
+          },
+          {
+            path: "time-table",
+            element: <div>Time Table Page</div>
+          }
+        ]
       }
     ],
   },

@@ -18,6 +18,8 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Topbar from "../Topbar/Topbar";
 import { Role } from "@/interfaces/common";
+import { useLocation } from "react-router";
+import UserSettingSidebar from "./SidebarGroup/UserSettingSidebar";
 
 interface SidebarFactoryProps {
   children: React.ReactNode;
@@ -34,6 +36,7 @@ const sidebarContent: Record<Role, React.ReactNode> = {
 
 // Factor Method design pattern, maybe?
 const SidebarFactory = ({ children }: SidebarFactoryProps) => {
+  const url = useLocation();
   const userRole = useAppSelector((state) => state.auths.role);
   return (
     <SidebarProvider>
@@ -41,7 +44,13 @@ const SidebarFactory = ({ children }: SidebarFactoryProps) => {
         <SidebarHeader className="mx-auto">
           <BrandLogo size="md" />
         </SidebarHeader>
-        <SidebarContent>{sidebarContent[userRole]}</SidebarContent>
+        <SidebarContent>
+          {url.pathname.startsWith("/user") ? (
+            <UserSettingSidebar />
+          ) : (
+            sidebarContent[userRole]
+          )}
+        </SidebarContent>
       </Sidebar>
       {/* I don't know why but setting w-1 make the carousel not expand out of the container size  */}
       <SidebarInset className="w-0 md:max-lg:w-screen">
