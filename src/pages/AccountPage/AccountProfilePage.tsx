@@ -1,3 +1,4 @@
+import DOBInput from "@/components/DOBInput";
 import RequiredInput from "@/components/RequiredInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -9,11 +10,14 @@ import { shortName } from "@/utils/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
-import { object, ObjectSchema, string } from "yup";
+import { date, object, ObjectSchema, string } from "yup";
+import { motion, AnimatePresence } from "motion/react";
 
 const ProfileCtx = React.createContext<{
   profile: IUserProfile;
   setProfile: React.Dispatch<React.SetStateAction<IUserProfile>>;
+  isSave: boolean;
+  setIsSave: React.Dispatch<React.SetStateAction<boolean>>;
 }>({
   profile: {
     userCode: "",
@@ -22,6 +26,8 @@ const ProfileCtx = React.createContext<{
     email: "",
     phoneNumber: "",
   },
+  isSave: true,
+  setIsSave: () => {},
   setProfile: () => {},
 });
 const AccountProfilePage = () => {
@@ -31,10 +37,11 @@ const AccountProfilePage = () => {
     fullName: "Kieu Tien Thanhhhh",
     email: "thanhkieu207@gmail.com",
     phoneNumber: "0123456789",
-    dob: "20/07/2003",
+    dob: new Date(2003, 6, 20),
   });
+  const [isSave, setIsSave] = React.useState<boolean>(true);
   return (
-    <ProfileCtx.Provider value={{ profile, setProfile }}>
+    <ProfileCtx.Provider value={{ profile, setProfile, isSave, setIsSave }}>
       <ContentLayout>
         <section className="flex p-10 rounded-lg bg-gray-100 justify-between">
           <div className="flex gap-24">
@@ -49,16 +56,50 @@ const AccountProfilePage = () => {
                 <AvatarImage src="#" />
                 <AvatarFallback> {shortName(profile.fullName)} </AvatarFallback>
               </Avatar>
-              <Button className="bg-t_primary-700 hover:bg-t_primary-700/80">Change</Button>
+              <Button className="bg-t_primary-700 hover:bg-t_primary-700/80">
+                Change
+              </Button>
             </div>
           </div>
           <div className="text-sm">
             <h4 className="font-semibold text-lg mb-4">LINK PARENT ACCOUNT</h4>
-            <p>Have parent account? <Button variant="link">Link Now</Button></p>
-            <p>Don't have parent account? <Button variant="link">Create Now</Button></p>
+            <p>
+              Have parent account? <Button variant="link">Link Now</Button>
+            </p>
+            <p>
+              Don't have parent account?{" "}
+              <Button variant="link">Create Now</Button>
+            </p>
           </div>
         </section>
-        <div></div>
+        <AnimatePresence>
+          {!isSave && (
+            <motion.div
+              initial={{ bottom: "-48px" }}
+              animate={{ bottom: "16px" }}
+              exit={{ bottom: "-60px" }}
+              transition={{ duration: 0.5, type: "spring" }}
+              className="flex w-full md:w-3/4 lg:w-1/2 absolute bottom-4 left-1/2 -translate-x-1/2 py-2 px-4 bg-t_primary-700 text-white text-sm rounded-lg items-center justify-between"
+            >
+              <p>
+                <span className="font-semibold">Careful!</span> You have unsaved
+                changes
+              </p>
+              <div>
+                <Button
+                  variant="ghost"
+                  className="hover:bg-t_primary-700/80 hover:text-white"
+                  onClick={() => setIsSave(true)}
+                >
+                  Cancel
+                </Button>
+                <Button className="bg-green-600 hover:bg-green-700">
+                  Save Changes
+                </Button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </ContentLayout>
     </ProfileCtx.Provider>
   );
@@ -69,7 +110,7 @@ export default AccountProfilePage;
 const nameAndDOBSchema: ObjectSchema<Pick<IUserProfile, "fullName" | "dob">> =
   object({
     fullName: string().required("Name cannot be empty."),
-    dob: string(),
+    dob: date(),
   });
 
 const NameAndDOBform = () => {
@@ -78,15 +119,27 @@ const NameAndDOBform = () => {
     resolver: yupResolver(nameAndDOBSchema),
     defaultValues: ctx.profile,
   });
+  const prevValues = ctx.profile;
+  if (ctx.isSave) {
+    form.setValue("fullName", prevValues.fullName as never);
+    form.setValue("dob", prevValues.dob as never);
+  }
   return (
     <Form {...form}>
-      <form className="space-y-2">
+      <form className="space-y-2" id="nameAndDOB">
         <FormField
           name="fullName"
           control={form.control}
           render={({ field }) => (
             <RequiredInput label="Full Name">
-              <Input {...field} />
+              <Input
+                {...field}
+                onChange={(e) => {
+                  field.onChange(e.target.value);
+                  ctx.setIsSave(false);
+                }}
+                className="bg-white"
+              />
             </RequiredInput>
           )}
         />
@@ -96,7 +149,14 @@ const NameAndDOBform = () => {
           control={form.control}
           render={({ field }) => (
             <RequiredInput label="Date of Birth" isRequired={false}>
-              <Input {...field} />
+              <DOBInput
+                key={Math.random()}
+                init={field.value}
+                onChange={(date) => {
+                  field.onChange(date);
+                  ctx.setIsSave(false);
+                }}
+              />
             </RequiredInput>
           )}
         />
@@ -119,7 +179,7 @@ const EmailEditForm = () => {
           control={form.control}
           render={({ field }) => (
             <RequiredInput label="Email">
-              <Input {...field} />
+              <Input {...field} className="bg-white" />
             </RequiredInput>
           )}
         />
@@ -148,7 +208,7 @@ const PhoneEditForm = () => {
           control={form.control}
           render={({ field }) => (
             <RequiredInput label="Phone Number">
-              <Input {...field} />
+              <Input {...field} className="bg-white" />
             </RequiredInput>
           )}
         />

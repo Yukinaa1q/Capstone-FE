@@ -256,6 +256,10 @@
     interpolate-size: allow-keywords;
   }
 
+  input {
+    background-color: white;
+  }
+
   input[type="file"] {
     font-style: italic;
     color: var(--color-gray-500);

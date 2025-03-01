@@ -1,6 +1,10 @@
 "use client";
 
-import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -8,74 +12,110 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useState } from "react";
-import { DropdownNavProps, DropdownProps } from "react-day-picker";
+import { cn } from "@/lib/utils";
+import { CalendarIcon } from "lucide-react";
+import React, { ChangeEvent } from "react";
+import { DayPicker, DropdownProps } from "react-day-picker";
+import { Button } from "./ui/button";
 
+export default function DOBInput({
+  init,
+  onChange,
+}: {
+  init?: Date;
+  onChange?: (date: Date | undefined) => void;
+}) {
+  const [date, setDate] = React.useState<Date | undefined>(init);
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant={"outline"}
+          className={cn(
+            "w-full justify-start text-left font-normal hover:bg-white",
+            !date && "text-muted-foreground"
+          )}
+        >
+          <CalendarIcon />
+          {date ? date.toLocaleDateString() : <span>Pick a date</span>}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-auto p-0" align="start">
+        <DOBCalendar date={date} setDate={setDate} onChange={onChange} />
+      </PopoverContent>
+    </Popover>
+  );
+}
 
+export function DOBCalendar({
+  date,
+  setDate,
+  onChange,
+}: {
+  date?: Date;
+  setDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  onChange?: (date: Date | undefined) => void;
+}) {
+  // const [selected, setSelected] = useState<Date>();
+  const today = new Date();
+  return (
+    <DayPicker
+      mode="single"
+      captionLayout="dropdown"
+      showOutsideDays
+      fixedWeeks
+      defaultMonth={new Date(today.getFullYear(), today.getMonth())}
+      startMonth={new Date(today.getFullYear() - 100, today.getMonth())}
+      endMonth={new Date(today.getFullYear(), today.getMonth())}
+      selected={date}
+      onSelect={(date) => {
+        setDate(date);
+        if (onChange) onChange(date);
+      }}
+      components={{ Dropdown: CalendarDropdown }}
+      classNames={{
+        day_button: "text-sm text-center w-full",
+        day: " p-1",
+        selected: "bg-t_primary-700 text-white font-semibold rounded-md",
+        disabled: "text-gray-100",
+        dropdowns: "flex gap-2",
+        nav: "flex justify-between mb-2",
+        button_previous:
+          "[&>svg]:size-5 hover:bg-t_secondary-100/50 p-1 rounded-sm disabled:bg-gray-100 disabled:fill-gray-300",
+        button_next:
+          "[&>svg]:size-5 hover:bg-t_secondary-100/50 p-1 rounded-sm disabled:bg-gray-100 disabled:fill-gray-300",
+        month_grid: "w-full mt-2",
+        outside: "text-gray-500",
+        root: "p-2",
+      }}
+    />
+  );
+}
 
-
-function DOBCalendar() {
-  const [date, setDate] = useState<Date | undefined>(new Date());
-
-  const handleCalendarChange = (
-    _value: string | number,
-    _e: React.ChangeEventHandler<HTMLSelectElement>,
-  ) => {
-    const _event = {
-      target: {
-        value: String(_value),
-      },
-    } as React.ChangeEvent<HTMLSelectElement>;
-    _e(_event);
+const CalendarDropdown = (props: DropdownProps) => {
+  const handleChange = (selectValue: string) => {
+    if (props.onChange) {
+      const syntheticEvent = {
+        target: {
+          value: selectValue,
+        },
+      } as ChangeEvent<HTMLSelectElement>;
+      props.onChange(syntheticEvent);
+    }
   };
 
   return (
-    <div>
-      <Calendar
-        mode="single"
-        selected={date}
-        onSelect={setDate}
-        className="rounded-md border p-2"
-        classNames={{
-          month_caption: "mx-0",
-        }}
-        captionLayout="dropdown"
-        defaultMonth={new Date()}
-        startMonth={new Date(1980, 6)}
-        hideNavigation
-        components={{
-          DropdownNav: (props: DropdownNavProps) => {
-            return <div className="flex w-full items-center gap-2">{props.children}</div>;
-          },
-          Dropdown: (props: DropdownProps) => {
-            return (
-              <Select
-                value={String(props.value)}
-                onValueChange={(value) => {
-                  if (props.onChange) {
-                    handleCalendarChange(value, props.onChange);
-                  }
-                }}
-              >
-                <SelectTrigger className="h-8 w-fit font-medium first:grow">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent className="max-h-[min(26rem,var(--radix-select-content-available-height))]">
-                  {props.options?.map((option) => (
-                    <SelectItem
-                      key={option.value}
-                      value={String(option.value)}
-                      disabled={option.disabled}
-                    >
-                      {option.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            );
-          },
-        }}
-      />
-    </div>
+    <Select value={props.value?.toString()} onValueChange={handleChange}>
+      <SelectTrigger className="w-32">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent>
+        {props.options?.map((option) => (
+          <SelectItem key={option.value} value={option.value.toString()}>
+            {option.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
   );
-}
+};

@@ -3,7 +3,7 @@ export interface IUserProfile {
   userId: string; // Postgres generated id
   fullName: string;
   email: string;
-  dob?: string;
+  dob?: Date;
   phoneNumber: string;
 }
 
