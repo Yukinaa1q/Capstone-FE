@@ -43,7 +43,7 @@ const AccountProfilePage = () => {
   return (
     <ProfileCtx.Provider value={{ profile, setProfile, isSave, setIsSave }}>
       <ContentLayout>
-        <section className="flex p-10 rounded-lg bg-gray-100 justify-between">
+        <section className="flex flex-col lg:flex-row gap-10 p-10 rounded-lg bg-gray-100 justify-between">
           <div className="flex gap-24">
             <div className="space-y-2">
               <p className="font-bold text-2xl mb-8">Student ID: 2153798</p>

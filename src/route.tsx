@@ -24,6 +24,7 @@ import StaffLogin from "./pages/Login/StaffLogin";
 import StaffAccountPage from "./pages/StaffAccountPage/StaffAccountPage";
 import AccountSettingPage from "./pages/AccountPage/AccountSettingPage";
 import AccountProfilePage from "./pages/AccountPage/AccountProfilePage";
+import ClassroomPage from "./pages/ClassroomPage/ClassroomPage";
 
 const router = createBrowserRouter([
   {
@@ -166,6 +167,10 @@ const router = createBrowserRouter([
             element: <div>Time Table Page</div>
           }
         ]
+      },
+      {
+        path: "classroom/:classId",
+        element: <ClassroomPage/>
       }
     ],
   },

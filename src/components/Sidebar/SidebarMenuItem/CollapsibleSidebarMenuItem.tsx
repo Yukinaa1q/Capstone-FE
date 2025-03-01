@@ -1,59 +1,64 @@
 import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
-import { Link, useLocation } from "react-router";
-import { IMenuItem } from "../SidebarGroup/Interface";
-import { matchUrl } from "@/utils/utils";
+import { ChevronDown } from "lucide-react";
+import { motion } from "motion/react";
+import React from "react";
+import { Link } from "react-router";
 
-interface CollapsibleSidebarMenuItemProps {
-  prefixUrl: string;
-  icon: React.ReactNode;
-  title: string;
-  subMenuList: Omit<IMenuItem, "icon">[];
+export interface ISubSection {
+  subsection: string;
+  contentId: string;
+}
+
+export interface ICollapsibleSection {
+  section: string;
+  subsections: ISubSection[];
 }
 
 const CollapsibleSidebarMenuItem = ({
-  prefixUrl,
-  icon,
-  title,
-  subMenuList,
-}: CollapsibleSidebarMenuItemProps) => {
-  const location = useLocation();
-  // let matchNav: boolean = matchUrl(prefixUrl, location.pathname);
-  const activeMenu = subMenuList.some((subMenuItem) =>
-    matchUrl(subMenuItem.prefixUrl, location.pathname)
-  );
+  section,
+  subsections,
+}: ICollapsibleSection) => {
+  const [isOpen, setIsOpen] = React.useState(true);
   return (
-    <SidebarMenuItem>
-      <SidebarMenuButton
-        asChild
-        isActive={activeMenu}
-        className="h-fit data-[active=true]:bg-t_primary-700 data-[active=true]:text-white data-[active=true]:font-semibold"
-      >
-        <Link to={prefixUrl}>
-          {icon}
-          <span>{title}</span>
-        </Link>
-      </SidebarMenuButton>
-      {activeMenu && (
-        <SidebarMenuSub>
-          {subMenuList.map((subMenuItem) => (
-            <SidebarMenuSubItem>
-              <SidebarMenuSubButton
-                asChild
-                isActive={matchUrl(subMenuItem.prefixUrl, location.pathname)}
-              >
-                <Link to={subMenuItem.prefixUrl}>{subMenuItem.title}</Link>
-              </SidebarMenuSubButton>
-            </SidebarMenuSubItem>
-          ))}
-        </SidebarMenuSub>
-      )}
-    </SidebarMenuItem>
+    <Collapsible
+      defaultOpen
+      className="group/collapsible"
+      onOpenChange={(open) => setIsOpen(open)}
+    >
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton className="flex justify-between bg-t_primary-700 text-white hover:bg-t_primary-700 hover:text-white data-[state=open]:hover:bg-t_primary-700 data-[state=open]:hover:text-white data-[state=closed]:focus:bg-t_primary-700 data-[state=closed]:focus:text-white font-semibold">
+            {section}
+            <motion.span animate={{ rotate: isOpen ? 0 : -90 }}>
+              <ChevronDown size={20} />
+            </motion.span>
+          </SidebarMenuButton>
+        </CollapsibleTrigger>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {subsections.map((subsection) => (
+              <SidebarMenuSubItem key={subsection.contentId}>
+                <SidebarMenuSubButton asChild>
+                  <Link to={`#${subsection.contentId}`}>{subsection.subsection}</Link>
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            ))}
+            <SidebarMenuSubItem />
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
+    </Collapsible>
   );
 };
 

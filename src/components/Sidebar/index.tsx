@@ -18,8 +18,9 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Topbar from "../Topbar/Topbar";
 import { Role } from "@/interfaces/common";
-import { useLocation } from "react-router";
-import UserSettingSidebar from "./SidebarGroup/UserSettingSidebar";
+import { Link, useLocation } from "react-router";
+import UserSettingSidebar from "./UserSettingSidebar";
+import ClassroomSidebar from "./ClassroomSidebar";
 
 interface SidebarFactoryProps {
   children: React.ReactNode;
@@ -42,11 +43,15 @@ const SidebarFactory = ({ children }: SidebarFactoryProps) => {
     <SidebarProvider>
       <Sidebar>
         <SidebarHeader className="mx-auto">
-          <BrandLogo size="md" />
+          <Link to="/">
+            <BrandLogo size="md" />
+          </Link>
         </SidebarHeader>
         <SidebarContent>
           {url.pathname.startsWith("/user") ? (
             <UserSettingSidebar />
+          ) : url.pathname.startsWith("/classroom") ? (
+            <ClassroomSidebar />
           ) : (
             sidebarContent[userRole]
           )}

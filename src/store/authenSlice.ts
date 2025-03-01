@@ -12,7 +12,7 @@ interface AuthState {
 
 // Define the initial state using that type
 const initialState: AuthState = {
-  role: "admin",
+  role: "tutor",
   userId: "",
   userCode: "",
   name: "",

@@ -1,5 +1,5 @@
 import { SidebarGroup, SidebarGroupContent } from "@/components/ui/sidebar";
-import CollapsibleSidebarMenuItem from "../SidebarMenuItem/CollapsibleSidebarMenuItem";
+import SubSidebarMenuItem from "../SidebarMenuItem/SubSidebarMenuItem";
 import { Calendar, CreditCard, LibraryBig, MessageCircle } from "lucide-react";
 import TC_SidebarMenuItem from "../SidebarMenuItem/SidebarMenuItem";
 import { useAppSelector } from "@/hooks/reduxHook";
@@ -17,7 +17,7 @@ const ClientSidebarGroup = ({ label }: { label?: string }) => {
     <SidebarGroup>
       {label && <SidebarGroupContent>{label}</SidebarGroupContent>}
       <SidebarGroupContent>
-        <CollapsibleSidebarMenuItem
+        <SubSidebarMenuItem
           prefixUrl="/"
           icon={<LibraryBig />}
           title="Course"

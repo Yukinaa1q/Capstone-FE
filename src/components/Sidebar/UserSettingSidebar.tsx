@@ -1,5 +1,5 @@
 import { SidebarGroup, SidebarGroupContent } from '@/components/ui/sidebar'
-import TC_SidebarMenuItem from '../SidebarMenuItem/SidebarMenuItem'
+import TC_SidebarMenuItem from './SidebarMenuItem/SidebarMenuItem'
 import { IdCard, Table, UserCircle } from 'lucide-react'
 
 const UserSettingSidebar = () => {
