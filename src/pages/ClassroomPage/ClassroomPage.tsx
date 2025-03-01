@@ -8,13 +8,14 @@ import {
   AccordionContent,
 } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
+import EditClass from "./components/EditClass";
 
 const ClassroomPage = () => {
   const params = useParams();
 
   return (
     <>
-      <div className="bg-t_primary-700 text-white p-6 shadow-md">
+      <div className="bg-t_primary-700 text-white p-6 shadow-md relative">
         <h2 className="text-2xl font-bold">Vật Lý 12</h2>
         <p className="mb-4 font-semibold">PHYS001 | CC01</p>
 
@@ -31,9 +32,11 @@ const ClassroomPage = () => {
           </span>
           <p>B402</p>
         </div>
+
+        <EditClass classId="someid"/>
       </div>
       <ContentLayout>
-        <Accordion type="multiple" className="w-full space-y-2">
+        <Accordion type="multiple"  className="w-full space-y-2" defaultValue={["section-1", "section-2"]}>
           <AccordionItem
             value="section-1"
             className="p-4 border rounded-lg shadow-sm bg-white"
