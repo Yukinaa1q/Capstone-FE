@@ -1,8 +1,14 @@
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SectionControl from "./SectionControl";
-import ContentControl from "./ContentControl";
+import SectionControl from "./SectionComponent/SectionControl";
+import ContentControl from "./ContentComponent/ContentControl";
 
 const EditClass = ({ classId }: { classId: string }) => {
   return (
@@ -12,18 +18,18 @@ const EditClass = ({ classId }: { classId: string }) => {
           Edit Class
         </Button>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-w-full h-full md:max-w-4/5 md:h-4/5 lg:max-w-3/5 xl:max-w-2/5">
         <DialogTitle className="hidden"></DialogTitle>
         <DialogDescription className="hidden"></DialogDescription>
-        <Tabs defaultValue="section" className="">
+        <Tabs defaultValue="section" className="min-h-0">
           <TabsList>
             <TabsTrigger value="section">Section</TabsTrigger>
             <TabsTrigger value="content">Content</TabsTrigger>
           </TabsList>
-          <TabsContent value="section">
+          <TabsContent value="section" className="h-full min-h-0">
             <SectionControl classId={classId} />
           </TabsContent>
-          <TabsContent value="content">
+          <TabsContent value="content" className="h-full min-h-0">
             <ContentControl />
           </TabsContent>
         </Tabs>

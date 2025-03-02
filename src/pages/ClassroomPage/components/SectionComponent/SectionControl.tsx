@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import SectionCard from "./SectionCard";
-import { Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { Tooltip } from "@mui/material";
 import React from "react";
 import { ClassSection } from "@/interfaces/IClassroom";
@@ -16,7 +16,7 @@ const SectionControl = ({ classId }: { classId: string }) => {
   ]);
 
   return (
-    <div>
+    <div className="flex flex-col h-full min-h-0">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold">Class Sections</h1>
         <Tooltip title="Add Section" arrow placement="left">
@@ -39,7 +39,7 @@ const SectionControl = ({ classId }: { classId: string }) => {
           </Button>
         </Tooltip>
       </div>
-      <div className="w-full h-80 bg-gray-100 rounded-md overflow-y-auto p-2 space-y-2">
+      <div className="min-h-0 w-full h-full grow bg-gray-100 rounded-md overflow-y-scroll p-2 space-y-2">
         <DragNDrop items={sectionList} setItems={setSectionList}>
           {sectionList.map((section) => (
             <SectionCard
@@ -57,7 +57,7 @@ const SectionControl = ({ classId }: { classId: string }) => {
         >
           Cancel
         </Button>
-        <Button className="bg-green-500 hover:bg-green-600">Save</Button>
+        <Button className="bg-green-600 hover:bg-green-600/80">Save<Save/></Button>
       </div>
     </div>
   );
