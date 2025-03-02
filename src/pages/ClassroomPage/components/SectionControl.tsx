@@ -4,14 +4,15 @@ import { Plus } from "lucide-react";
 import { Tooltip } from "@mui/material";
 import React from "react";
 import { ClassSection } from "@/interfaces/IClassroom";
+import DragNDrop from "./DragNDrop";
 
 const SectionControl = ({ classId }: { classId: string }) => {
   // An api call fetch all existing sections of a class
   const [sectionList, setSectionList] = React.useState<
-    (Omit<ClassSection, "contents"> & {isEdit: boolean})[]
+    (Omit<ClassSection, "contents"> & { isEdit: boolean })[]
   >([
-    { section: "Section 1", sectionId: "1", isEdit: false },
-    { section: "Section 2", sectionId: "2", isEdit: false },
+    { section: "Section 1", sectionId: "s1", isEdit: false },
+    { section: "Section 2", sectionId: "s2", isEdit: false },
   ]);
 
   return (
@@ -39,9 +40,15 @@ const SectionControl = ({ classId }: { classId: string }) => {
         </Tooltip>
       </div>
       <div className="w-full h-80 bg-gray-100 rounded-md overflow-y-auto p-2 space-y-2">
-        {sectionList.map((section) => (
-          <SectionCard key={section.sectionId} section={section} setSectionList={setSectionList}/>
-        ))}
+        <DragNDrop items={sectionList} setItems={setSectionList}>
+          {sectionList.map((section) => (
+            <SectionCard
+              key={section.sectionId}
+              section={section}
+              setSectionList={setSectionList}
+            />
+          ))}
+        </DragNDrop>
       </div>
       <div className="mt-4 flex justify-end gap-4">
         <Button

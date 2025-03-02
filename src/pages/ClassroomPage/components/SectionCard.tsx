@@ -1,6 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { ClassSection } from "@/interfaces/IClassroom";
-
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+import React from "react";
 const SectionCard = ({
   section,
   setSectionList,
@@ -12,10 +14,27 @@ const SectionCard = ({
     >
   >;
 }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id: section.sectionId });
+  const style = {
+    transition,
+    transform: CSS.Transform.toString(transform),
+  };
+
   return (
-    <div
-      // draggable
-      onClick={() => {
+    <button
+      ref={setNodeRef}
+      {...attributes}
+      {...listeners}
+      style={style}
+      onKeyDown={(e) => {
+        if (e.key === "Delete") {
+          setSectionList((prev) =>
+            prev.filter((s) => s.sectionId !== section.sectionId)
+          );
+        }
+      }}
+      onDoubleClick={() => {
         setSectionList((prev) => {
           const index = prev.findIndex(
             (s) => s.sectionId === section.sectionId
@@ -25,7 +44,7 @@ const SectionCard = ({
           return [...prev];
         });
       }}
-      className="flex items-center text-sm w-full px-3 h-10 bg-white rounded-md select-none"
+      className="flex items-center text-sm w-full px-3 h-10 bg-white rounded-md select-none focus:bg-t_primary-100/50 focus:ring-1 focus:ring-t_primary-500"
     >
       {section.isEdit ? (
         <form
@@ -46,11 +65,13 @@ const SectionCard = ({
           <Input
             defaultValue={section.section}
             autoFocus
-            onBlur={() => {
+            onBlur={(e) => {
+              e.preventDefault();
               setSectionList((prev) => {
                 const index = prev.findIndex(
                   (s) => s.sectionId === section.sectionId
                 );
+                prev[index].section = e.target.value;
                 prev[index].isEdit = false;
                 return [...prev];
               });
@@ -62,7 +83,7 @@ const SectionCard = ({
       ) : (
         <span>{section.section}</span>
       )}
-    </div>
+    </button>
   );
 };
 
