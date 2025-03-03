@@ -7,10 +7,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import SectionControl from "./SectionComponent/SectionControl";
 import ContentControl from "./ContentComponent/ContentControl";
+import SectionControl from "./SectionComponent/SectionControl";
 
-const EditClass = ({ classId }: { classId: string }) => {
+const EditClass = () => {
   return (
     <Dialog>
       <DialogTrigger asChild className="absolute top-4 right-4">
@@ -27,10 +27,10 @@ const EditClass = ({ classId }: { classId: string }) => {
             <TabsTrigger value="content">Content</TabsTrigger>
           </TabsList>
           <TabsContent value="section" className="h-full min-h-0">
-            <SectionControl classId={classId} />
+            <SectionControl/>
           </TabsContent>
           <TabsContent value="content" className="h-full min-h-0">
-            <ContentControl />
+            <ContentControl/>
           </TabsContent>
         </Tabs>
       </DialogContent>

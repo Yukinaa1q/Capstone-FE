@@ -12,10 +12,11 @@ import { Edit, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
 import { Descendant } from "slate";
-import { CourseOutline } from "@/components/CourseOutlineInput";
+import { CourseOutline } from "@/components/Input/CourseOutlineInput";
 import ICourseBE from "@/interfaces/ICourseBE";
 import TucourApi, { StatusError } from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
+import { useAppSelector } from "@/hooks/reduxHook";
 
 interface ICourseDetail {
   courseTitle: string;
@@ -33,6 +34,7 @@ interface ICourseDetail {
 
 const CourseDetail = () => {
   const params = useParams();
+  const user = useAppSelector((state) => state.auths);
   const navigate = useNavigate();
   const [showFull, setShowFull] = useState(false);
   const [course, setCourse] = useState<ICourseDetail>();
@@ -40,12 +42,12 @@ const CourseDetail = () => {
   useEffect(() => {
     const getCourse = async () => {
       try {
-        const res: ICourseBE = await TucourApi.call(`/course/${params.id}`, {
+        const res = (await TucourApi.call(`/course/${params.id}`, {
           method: "GET",
           headers: {
             Authorization: "Bearer " + window.localStorage.getItem("token"),
           },
-        });
+        })) as ICourseBE;
         const courseDesc = JSON.parse(res.courseDescription) as Descendant[];
         setCourse({
           courseTitle: res.courseTitle,
@@ -90,44 +92,46 @@ const CourseDetail = () => {
             <div className="font-semibold">{course?.participantNumber}</div>
           </div>
         </div>
-        <div>
-          <Link
-            to={`/courses/${course?.courseCode}/edit`}
-            className={cn(
-              buttonVariants({ variant: "default" }),
-              "bg-t_primary-600 hover:bg-t_primary-700 w-24"
-            )}
-          >
-            <Edit />
-            Edit
-          </Link>
-          <Button
-            variant="destructive"
-            className="w-24 ml-4"
-            onClick={async () => {
-              try {
-                const jwtToken = window.localStorage.getItem("token");
-                await TucourApi.call(`/course/delete/${course?.courseId}`, {
-                  method: "DELETE",
-                  headers: {
-                    Authorization: "Bearer " + jwtToken,
-                  },
-                });
-                navigate("/courses");
-              } catch (err) {
-                const returnState = err as StatusError;
-                console.log(
-                  "Error Occur",
-                  returnState.statusCode,
-                  returnState.errorBody
-                );
-              }
-            }}
-          >
-            <Trash2 />
-            Delete
-          </Button>
-        </div>
+        {user.role === "academic" && (
+          <div>
+            <Link
+              to={`/courses/${course?.courseCode}/edit`}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "bg-t_primary-600 hover:bg-t_primary-700 w-24"
+              )}
+            >
+              <Edit />
+              Edit
+            </Link>
+            <Button
+              variant="destructive"
+              className="w-24 ml-4"
+              onClick={async () => {
+                try {
+                  const jwtToken = window.localStorage.getItem("token");
+                  await TucourApi.call(`/course/delete/${course?.courseId}`, {
+                    method: "DELETE",
+                    headers: {
+                      Authorization: "Bearer " + jwtToken,
+                    },
+                  });
+                  navigate("/courses");
+                } catch (err) {
+                  const returnState = err as StatusError;
+                  console.log(
+                    "Error Occur",
+                    returnState.statusCode,
+                    returnState.errorBody
+                  );
+                }
+              }}
+            >
+              <Trash2 />
+              Delete
+            </Button>
+          </div>
+        )}
       </section>
       <section className="p-10 bg-white text-black flex gap-10 justify-between">
         <div className="grow">

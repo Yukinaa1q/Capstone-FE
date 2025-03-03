@@ -33,7 +33,7 @@ const ClassroomPage = () => {
           <p>B402</p>
         </div>
 
-        <EditClass classId="someid"/>
+        <EditClass/>
       </div>
       <ContentLayout>
         <Accordion type="multiple"  className="w-full space-y-2" defaultValue={["section-1", "section-2"]}>

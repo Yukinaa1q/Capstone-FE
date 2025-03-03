@@ -10,8 +10,12 @@ import React from "react";
 import ContentCard from "./ContentCard";
 import { Content } from "@/interfaces/IClassroom";
 import { Button } from "@/components/ui/button";
+import { SectionBrief } from "../ContentControl";
+import NewContentCtx from "../NewContentCtx";
 
-const ChooseContentType = () => {
+const ChooseContentType = ({ sections }: { sections: SectionBrief[] }) => {
+  const { contentType, setContentType } = React.useContext(NewContentCtx);
+  // 1. An api to get all the contents in a section
   const [fileList, setFileList] = React.useState<
     Omit<Content, "contentDescription" | "content">[] | undefined
   >([
@@ -40,12 +44,15 @@ const ChooseContentType = () => {
       contentName: "File 5",
       contentType: "text",
     },
-    // {
-    //   contentId: "file6",
-    //   contentName: "File 6",
-    //   contentType: "submission",
-    // },
   ]);
+
+  const handleSelectSection = async (value: string) => {
+    // Logic for trigger api 1.
+  };
+
+  const handleRemoveContent = async (id: string) => {
+    // Logic to remove content from the section
+  };
 
   const contentIcon = {
     file: <File className="stroke-t_primary-500" />,
@@ -56,7 +63,7 @@ const ChooseContentType = () => {
   return (
     <div className="grow flex justify-between gap-4 mt-4 min-h-0">
       <div className="w-full flex flex-col gap-4 min-h-0">
-        <Select>
+        <Select onValueChange={handleSelectSection}>
           <SelectTrigger>
             <SelectValue placeholder="Select section" />
           </SelectTrigger>
@@ -81,7 +88,12 @@ const ChooseContentType = () => {
                   {contentIcon[file.contentType]}
                   <span>{file.contentName}</span>
                 </div>
-                <Button variant="ghost"><Trash/></Button>
+                <Button
+                  variant="ghost"
+                  onClick={() => handleRemoveContent(file.contentId)}
+                >
+                  <Trash />
+                </Button>
               </div>
             ))
           )}
@@ -91,14 +103,20 @@ const ChooseContentType = () => {
         <ContentCard
           contentType="File"
           icon={<File className="stroke-t_primary-500" />}
+          isFocused={contentType === "file"}
+          onClick={() => setContentType("file")}
         />
         <ContentCard
           contentType="Text"
           icon={<FileType className="stroke-t_primary-500" />}
+          isFocused={contentType === "text"}
+          onClick={() => setContentType("text")}
         />
         <ContentCard
           contentType="Submission"
           icon={<FileUp className="stroke-t_primary-500" />}
+          isFocused={contentType === "submission"}
+          onClick={() => setContentType("submission")}
         />
       </div>
     </div>

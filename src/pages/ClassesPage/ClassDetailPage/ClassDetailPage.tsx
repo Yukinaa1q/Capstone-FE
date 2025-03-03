@@ -14,9 +14,10 @@ import toVND from "@/utils/currencyFormat";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Descendant } from "slate";
-import { CourseOutline } from "@/components/CourseOutlineInput";
+import { CourseOutline } from "@/components/Input/CourseOutlineInput";
 import TucourApi from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
+import { useAppSelector } from "@/hooks/reduxHook";
 
 interface IClassDetail {
   courseTitle: string;
@@ -46,13 +47,14 @@ interface StudentBrief {
 
 const ClassDetail = () => {
   const params = useParams();
+  const user = useAppSelector((state) => state.auths);
   const navigate = useNavigate();
   const [showFull, setShowFull] = useState(false);
   const [course, setCourse] = useState<IClassDetail>();
   useEffect(() => {
     const getClassDetail = async () => {
       try {
-        const res = await TucourApi.call(
+        const res = (await TucourApi.call(
           `/class/view-class-detail/${params.id}`,
           {
             method: "GET",
@@ -61,7 +63,9 @@ const ClassDetail = () => {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
-        );
+        )) as Omit<IClassDetail, "courseDescription"> & {
+          courseDescription: string;
+        };
         setCourse({
           ...res,
           courseDescription: JSON.parse(res.courseDescription),
@@ -101,39 +105,46 @@ const ClassDetail = () => {
             </Link>
           </div>
         </div>
-        <div>
-          <Link
-            to={`/classes/${course?.classCode}/edit`}
-            className={cn(
-              buttonVariants({ variant: "default" }),
-              "bg-t_primary-600 hover:bg-t_primary-700 w-24"
-            )}
-          >
-            <Edit />
-            Edit
-          </Link>
-          <Button
-            variant="destructive"
-            className="w-24 ml-4"
-            onClick={async () => {
-              try {
-                await TucourApi.call(`/class/delete-class/${course?.classId}`, {
-                  method: "DELETE",
-                  headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                  },
-                });
-                navigate("/classes");
-              } catch (err) {
-                console.log(err);
-              }
-            }}
-          >
-            <Trash2 />
-            Delete
-          </Button>
-        </div>
+        {user.role === "academic" && (
+          <div>
+            <Link
+              to={`/classes/${course?.classCode}/edit`}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "bg-t_primary-600 hover:bg-t_primary-700 w-24"
+              )}
+            >
+              <Edit />
+              Edit
+            </Link>
+            <Button
+              variant="destructive"
+              className="w-24 ml-4"
+              onClick={async () => {
+                try {
+                  await TucourApi.call(
+                    `/class/delete-class/${course?.classId}`,
+                    {
+                      method: "DELETE",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem(
+                          "token"
+                        )}`,
+                      },
+                    }
+                  );
+                  navigate("/classes");
+                } catch (err) {
+                  console.log(err);
+                }
+              }}
+            >
+              <Trash2 />
+              Delete
+            </Button>
+          </div>
+        )}
       </section>
       <section className="p-10 bg-white text-black flex gap-4 justify-between">
         <div className="grow">

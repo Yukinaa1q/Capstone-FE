@@ -17,8 +17,13 @@ export interface Content {
     contentType: ContentType;
     contentId: string;
     contentName: string;
-    contentDescription: string;
-    content: string;
 }
+
+export interface IFileContent extends Content {
+    contentDescription: string;
+    file: File;
+}
+
+
 
 export type ContentType = "file" | "text" | "submission";
