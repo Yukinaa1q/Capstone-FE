@@ -1,8 +1,8 @@
 import CourseOutlineInput, {
   CourseOutline,
-} from "@/components/CourseOutlineInput";
-import RequiredInput from "@/components/RequiredInput";
-import SearchSelect, { ListItem } from "@/components/SearchSelect";
+} from "@/components/Input/CourseOutlineInput";
+import RequiredInput from "@/components/Input/RequiredInput";
+import SearchSelect, { ListItem } from "@/components/Input/SearchSelect";
 import TextEditor from "@/components/TextEditor/TextEditor";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -19,7 +19,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import CourseDetailPlaceholder from "./NewCoursePage/CourseDetailPlaceholder";
-import PriceInput from "@/components/PriceInput";
+import PriceInput from "@/components/Input/PriceInput";
 import { Descendant } from "slate";
 import { Check } from "lucide-react";
 
@@ -111,13 +111,18 @@ const CourseForm = ({
     defaultValues: initialData,
     resolver: yupResolver(courseFormSchema),
   });
-  const [imagePreview, setImagePreview] = useState<string>(initialData.imgUrl || "");
+  const [imagePreview, setImagePreview] = useState<string>(
+    initialData.imgUrl || ""
+  );
   return (
     <Form {...form}>
       <form
         id="course-form"
         onSubmit={form.handleSubmit(onSubmit)}
-        className={cn(className, "space-y-4 mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2")}
+        className={cn(
+          className,
+          "space-y-4 mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2"
+        )}
       >
         <FormField
           name="courseTitle"
@@ -194,7 +199,6 @@ const CourseForm = ({
                     type="file"
                     accept="image/*"
                     onChange={(e) => {
-                      console.log(e.target.files);
                       const file = e.target.files?.[0];
                       if (file) {
                         setImagePreview(URL.createObjectURL(file));
@@ -252,9 +256,7 @@ const CourseForm = ({
           )}
         />
         {/* {children} */}
-        <div className="flex justify-end gap-4">
-          {children}
-        </div>
+        <div className="flex justify-end gap-4">{children}</div>
       </form>
     </Form>
   );

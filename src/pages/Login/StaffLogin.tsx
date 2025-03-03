@@ -1,21 +1,16 @@
-import { GoogleIcon, XIcon } from "@/assets/icons";
-import PwdInput from "@/components/PwdInput";
-import RequiredInput from "@/components/RequiredInput";
+import BrandLogo from "@/components/BrandLogo";
+import PwdInput from "@/components/Input/PwdInput";
+import RequiredInput from "@/components/Input/RequiredInput";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { InferType, object, string } from "yup";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import TucourApi, { StatusError } from "@/utils/http";
-import { jwtDecoder } from "@/utils/utils";
-import { useAppDispatch } from "@/hooks/reduxHook";
-import { setUser } from "@/store/authenSlice";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
-import BrandLogo from "@/components/BrandLogo";
+import { useForm } from "react-hook-form";
+import { Link } from "react-router";
+import { InferType, object, string } from "yup";
 
 const staffLoginSchema = object({
   email: string().required("Email is required"),
@@ -33,7 +28,7 @@ const StaffLogin = () => {
 
   return (
     <main className="w-full h-screen p-8">
-      <BrandLogo size="lg"/>
+      <BrandLogo size="lg" />
       <div className="space-y-4 w-full lg:w-2/5 xl:w-1/3 absolute border p-4 lg:p-10 rounded-lg left-1/2 -translate-x-1/2 top-1/2 -translate-y-1/2 bg-t_primary-600/10 backdrop-blur-lg">
         <div>
           <h1 className="font-bold text-3xl ">Welcome,</h1>

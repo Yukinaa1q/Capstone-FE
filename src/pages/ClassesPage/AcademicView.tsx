@@ -1,4 +1,4 @@
-import ClearableSearch from "@/components/ClearableSearch";
+import ClearableSearch from "@/components/Input/ClearableSearch";
 import DataTable from "@/components/DataTable";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {

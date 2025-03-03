@@ -1,5 +1,5 @@
-import DOBInput from "@/components/DOBInput";
-import RequiredInput from "@/components/RequiredInput";
+import DOBInput from "@/components/Input/DOBInput";
+import RequiredInput from "@/components/Input/RequiredInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";

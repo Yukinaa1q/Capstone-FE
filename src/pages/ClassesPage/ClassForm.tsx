@@ -1,6 +1,6 @@
-import RequiredInput from "@/components/RequiredInput";
-import SearchSelect, { ListItem } from "@/components/SearchSelect";
-import StudentInput from "@/components/StudentInput";
+import RequiredInput from "@/components/Input/RequiredInput";
+import SearchSelect, { ListItem } from "@/components/Input/SearchSelect";
+import StudentInput from "@/components/Input/StudentInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormField } from "@/components/ui/form";
@@ -21,7 +21,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Check } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { array, boolean, InferType, mixed, number, object, string } from "yup";
+import { array, boolean, InferType, number, object, string } from "yup";
 
 const classFormSchema = object({
   courseTitle: string(),
@@ -75,7 +75,6 @@ const ClassForm = ({
     values: defaultValues,
     resolver: yupResolver(classFormSchema),
   });
-
 
   useEffect(() => {
     const fetchCourseCode = async () => {

@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import SectionCard from "./SectionCard";
 import { Plus, Save } from "lucide-react";
-import { Tooltip } from "@mui/material";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import React from "react";
 import { ClassSection } from "@/interfaces/IClassroom";
 import DragNDrop from "./DragNDrop";
@@ -19,25 +24,32 @@ const SectionControl = ({ classId }: { classId: string }) => {
     <div className="flex flex-col h-full min-h-0">
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-xl font-semibold">Class Sections</h1>
-        <Tooltip title="Add Section" arrow placement="left">
-          <Button
-            variant="outline"
-            size="icon"
-            className="size-8 rounded-full"
-            onClick={() => {
-              setSectionList((prev) => {
-                prev.push({
-                  section: `Section ${prev.length + 1}`,
-                  sectionId: `${prev.length + 1}`,
-                  isEdit: true,
-                });
-                return [...prev];
-              });
-            }}
-          >
-            <Plus className="stroke-gray-400" />
-          </Button>
-        </Tooltip>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="size-8 rounded-full"
+                onClick={() => {
+                  setSectionList((prev) => {
+                    prev.push({
+                      section: `Section ${prev.length + 1}`,
+                      sectionId: `${prev.length + 1}`,
+                      isEdit: true,
+                    });
+                    return [...prev];
+                  });
+                }}
+              >
+                <Plus className="stroke-gray-400" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Add Section</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
       <div className="min-h-0 w-full h-full grow bg-gray-100 rounded-md overflow-y-scroll p-2 space-y-2">
         <DragNDrop items={sectionList} setItems={setSectionList}>
@@ -57,7 +69,10 @@ const SectionControl = ({ classId }: { classId: string }) => {
         >
           Cancel
         </Button>
-        <Button className="bg-green-600 hover:bg-green-600/80">Save<Save/></Button>
+        <Button className="bg-green-600 hover:bg-green-600/80">
+          Save
+          <Save />
+        </Button>
       </div>
     </div>
   );

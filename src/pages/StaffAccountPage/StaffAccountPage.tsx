@@ -1,7 +1,7 @@
-import ClearableSearch from "@/components/ClearableSearch";
+import ClearableSearch from "@/components/Input/ClearableSearch";
 import DataTable from "@/components/DataTable";
-import PwdInput from "@/components/PwdInput";
-import RequiredInput from "@/components/RequiredInput";
+import PwdInput from "@/components/Input/PwdInput";
+import RequiredInput from "@/components/Input/RequiredInput";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -166,7 +166,7 @@ const StaffAccountPage = () => {
           <motion.div
             initial={{ height: "0", margin: "0", opacity: 0 }}
             animate={{ height: "auto", margin: "2rem 0", opacity: 1 }}
-            exit={{ height: "0", margin: "0", opacity: 0}}
+            exit={{ height: "0", margin: "0", opacity: 0 }}
             transition={{ type: "tween", duration: 0.5 }}
             className="border rounded-md overflow-hidden bg-white"
           >

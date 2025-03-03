@@ -14,7 +14,6 @@ const TC_SidebarMenuItem = ({
   title: string;
 }) => {
   const location = useLocation();
-  console.log(prefixUrl, location.pathname);
   const matchNav: boolean = matchUrl(prefixUrl, location.pathname);
   return (
     <SidebarMenuItem>

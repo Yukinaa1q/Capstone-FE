@@ -25,7 +25,7 @@ const CollapsibleSidebarMenuItem = ({
   const location = useLocation();
   // let matchNav: boolean = matchUrl(prefixUrl, location.pathname);
   const activeMenu = subMenuList.some((subMenuItem) =>
-    matchUrl(subMenuItem.prefixUrl, location.pathname)
+    matchUrl(subMenuItem.prefixUrl, location.pathname) || matchUrl("/courses", location.pathname)
   );
   return (
     <SidebarMenuItem>
@@ -42,7 +42,7 @@ const CollapsibleSidebarMenuItem = ({
       {activeMenu && (
         <SidebarMenuSub>
           {subMenuList.map((subMenuItem) => (
-            <SidebarMenuSubItem>
+            <SidebarMenuSubItem key={subMenuItem.prefixUrl}>
               <SidebarMenuSubButton
                 asChild
                 isActive={matchUrl(subMenuItem.prefixUrl, location.pathname)}

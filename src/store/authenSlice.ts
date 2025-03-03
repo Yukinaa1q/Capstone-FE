@@ -1,10 +1,10 @@
 import { Role } from '@/interfaces/common';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 // import type { PayloadAction } from '@reduxjs/toolkit'
 
 // Define a type for the slice state
-interface AuthState {
-  role: Role;
+export interface AuthState {
+  role: Role | null;
   userId: string;
   userCode: string;
   name: string;
@@ -12,7 +12,7 @@ interface AuthState {
 
 // Define the initial state using that type
 const initialState: AuthState = {
-  role: "academic",
+  role: null,
   userId: "",
   userCode: "",
   name: "",
@@ -25,6 +25,7 @@ export const authSlice = createSlice({
     setUser(state, action: PayloadAction<AuthState>) {
       state.role = action.payload.role;
       state.userId = action.payload.userId;
+      state.userCode = action.payload.userCode;
       state.name = action.payload.name;
     }
   },

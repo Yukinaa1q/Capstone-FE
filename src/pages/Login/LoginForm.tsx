@@ -1,6 +1,6 @@
 import { GoogleIcon, XIcon } from "@/assets/icons";
-import PwdInput from "@/components/PwdInput";
-import RequiredInput from "@/components/RequiredInput";
+import PwdInput from "@/components/Input/PwdInput";
+import RequiredInput from "@/components/Input/RequiredInput";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
@@ -12,22 +12,21 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import TucourApi, { StatusError } from "@/utils/http";
 import { jwtDecoder } from "@/utils/utils";
 import { useAppDispatch } from "@/hooks/reduxHook";
-import { setUser } from "@/store/authenSlice";
+import { AuthState, setUser } from "@/store/authenSlice";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
-import RoleInput from "@/components/RoleInput";
-
+import RoleInput from "@/components/Input/RoleInput";
 
 const loginSchema = yup
-.object({
-  accountRole: yup
-  .string()
-  .oneOf(["student", "tutor"])
-  .required("You must choose the role to continue"),
-  email: yup.string().required("Email is required"),
-  password: yup.string().required("Password is required"),
-})
-.required();
+  .object({
+    accountRole: yup
+      .string()
+      .oneOf(["student", "tutor"])
+      .required("You must choose the role to continue"),
+    email: yup.string().required("Email is required"),
+    password: yup.string().required("Password is required"),
+  })
+  .required();
 
 type LoginForm = yup.InferType<typeof loginSchema>;
 
@@ -61,22 +60,21 @@ const LoginForm = () => {
         });
       }
       const { payload } = jwtDecoder(res.token);
-      console.log("payload", payload);
-      // dispatch(
-      //   setUser({
-      //     role: "academic",
-      //     userId: payload.userId,
-      //     name: payload.name,
-      //   })
-      // );
+      const userInfo: AuthState = payload.payload;
+      dispatch(
+        setUser({
+          role: userInfo.role,
+          userId: userInfo.userId,
+          name: userInfo.name,
+          userCode: userInfo.userCode,
+        })
+      );
       window.localStorage.setItem("token", res.token);
       navigate("/");
     } catch (err) {
       if (err instanceof StatusError) {
-        console.log(err.statusCode, err.message, err.errorBody);
         setErrorMsg("Incorrect Username or Password");
       }
-      // console.log(typeof err)
     }
   };
 
@@ -101,9 +99,12 @@ const LoginForm = () => {
           <FormField
             name="accountRole"
             control={form.control}
-            render={({field}) => (
+            render={({ field }) => (
               <RequiredInput label="You are" orientation="horizontal">
-                <RoleInput onChange={(val) => field.onChange(val)} value={field.value} />
+                <RoleInput
+                  onChange={(val) => field.onChange(val)}
+                  value={field.value}
+                />
               </RequiredInput>
             )}
           />

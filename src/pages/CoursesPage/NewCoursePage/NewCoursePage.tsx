@@ -9,7 +9,6 @@ const NewCoursePage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit = async (data: ICourseForm) => {
-    console.log("creating courses...");
     setIsLoading(true);
     try {
       const formdata = new FormData();
@@ -24,7 +23,6 @@ const NewCoursePage = () => {
       );
       formdata.append("courseOutline", JSON.stringify(data.courseOutline));
       formdata.append("courseImage", data.courseImage as Blob);
-      console.log(formdata.get("courseImage"));
 
       await TucourApi.call("course/create-course", {
         method: "POST",

@@ -36,7 +36,7 @@ const UnregisteredCard = ({ courseContent }: CourseCardProps) => {
   if (role === "student") {
     if (phase === 1) {
       registrationButton = (
-        <StudenRegistration key={useId()} courseInfo={courseContent}>
+        <StudenRegistration key={Math.random()} courseInfo={courseContent}>
           <button
             type="button"
             className="group flex items-center gap-0 px-2 py-2 bg-green-300 rounded-full overflow-hidden"

@@ -62,7 +62,6 @@ const ClassDetail = () => {
             },
           }
         );
-        console.log(res);
         setCourse({
           ...res,
           courseDescription: JSON.parse(res.courseDescription),

@@ -2,7 +2,7 @@ import { StudyShift } from "./common";
 
 export default interface ITutorRegistration {
   courseId: string;
-  userId: string;
+  tutorId: string;
   evenTimeShift?: StudyShift[];
   oddTimeShift?: StudyShift[];
 }

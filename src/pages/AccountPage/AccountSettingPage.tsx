@@ -1,4 +1,4 @@
-import PwdInput from "@/components/PwdInput";
+import PwdInput from "@/components/Input/PwdInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Label } from "@/components/ui/label";
 import ContentLayout from "@/layouts/ContentLayout";

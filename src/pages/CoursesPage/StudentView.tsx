@@ -3,7 +3,7 @@ import MyPagination, {
   PaginationGoto,
   PaginationNav,
 } from "@/components/Pagination";
-import SearchInput from "@/components/SearchInput";
+import SearchInput from "@/components/Input/SearchInput";
 import { useAppSelector } from "@/hooks/reduxHook";
 import { ICourseCard } from "@/interfaces/ICourse";
 import { coursesPhase1, coursesPhase2 } from "@/utils/fakeData";
@@ -13,7 +13,9 @@ const PRODUCTS_PER_PAGE = 5;
 
 const StudentView = () => {
   const phase = useAppSelector((state) => state.phases.phase);
-  const [courseList, setCourseList] = useState<ICourseCard[]>(phase === 1 ? coursesPhase1 : coursesPhase2);
+  const [courseList, setCourseList] = useState<ICourseCard[]>(
+    phase === 1 ? coursesPhase1 : coursesPhase2
+  );
   const urlParams = new URLSearchParams(window.location.search);
   const myParam = urlParams.get("q");
   const [searchKey, setSearchKey] = useState(myParam || "");

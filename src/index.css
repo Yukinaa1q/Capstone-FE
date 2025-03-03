@@ -251,9 +251,12 @@
   * {
     font-family: "Montserrat", serif;
     border-color: hsl(var(--border));
-    list-style: none;
     box-sizing: border-box;
     interpolate-size: allow-keywords;
+  }
+
+  li[data-sidebar='menu-item'] {
+    list-style: none;
   }
 
   input {

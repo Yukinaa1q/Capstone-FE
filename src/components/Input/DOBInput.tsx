@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import React, { ChangeEvent } from "react";
 import { DayPicker, DropdownProps } from "react-day-picker";
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 
 export default function DOBInput({
   init,

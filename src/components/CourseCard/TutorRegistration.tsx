@@ -45,6 +45,8 @@ import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { cn } from "@/lib/utils";
 import { StudyShift } from "@/interfaces/common";
 import ITutorRegistration from "@/interfaces/ITutorRegistration";
+import TucourApi from "@/utils/http";
+import { useAppSelector } from "@/hooks/reduxHook";
 
 const registrationSchema = object({
   isOddDays: boolean().default(false),
@@ -78,6 +80,8 @@ const TutorRegistrationButton = ({
     "registration"
   );
   const [errMsg, setErrMsg] = useState<string | null>(null);
+
+  const user = useAppSelector((state) => state.auths);
 
   const form = useForm({
     values: {
@@ -192,8 +196,10 @@ const TutorRegistrationButton = ({
               </Button>
               <Button
                 className="bg-green-400 hover:bg-green-500 text-black"
-                onClick={() => {
+                onClick={async () => {
                   const submitData: ITutorRegistration = {
+                    courseId: courseContent.courseId,
+                    tutorId: user.userId,
                     evenTimeShift: form
                       .getValues("evenTimeShift")
                       .filter((v) => v !== undefined),
@@ -201,6 +207,24 @@ const TutorRegistrationButton = ({
                       .getValues("oddTimeShift")
                       .filter((v) => v !== undefined),
                   };
+
+                  // console.log(submitData);
+                  try {
+                    const res = await TucourApi.call("/phase1_register/tutor", {
+                      method: "POST",
+                      headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${localStorage.getItem(
+                          "token"
+                        )}`,
+                      },
+                      body: JSON.stringify(submitData),
+                    });
+                    console.log(res);
+                    window.location.reload();
+                  } catch (err) {
+                    console.error(err);
+                  }
                 }}
               >
                 Submit

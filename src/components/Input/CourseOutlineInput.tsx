@@ -1,12 +1,12 @@
-import { Button } from "./ui/button";
+import { Button } from "@/components/ui/button";
 import { Check, PencilLine, PlusIcon, Trash } from "lucide-react";
-import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
 } from "@/components/ui/accordion";
-import { Input } from "./ui/input";
+import { Input } from "@/components/ui/input";
 import { Updater, useImmer } from "use-immer";
 import { useEffect } from "react";
 

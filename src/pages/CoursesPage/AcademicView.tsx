@@ -23,7 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router";
-import ClearableSearch from "@/components/ClearableSearch";
+import ClearableSearch from "@/components/Input/ClearableSearch";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 import TucourApi from "@/utils/http";

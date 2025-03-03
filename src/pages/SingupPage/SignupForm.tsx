@@ -1,12 +1,12 @@
-import PwdInput from "@/components/PwdInput";
-import RequiredInput from "@/components/RequiredInput";
-import RoleInput from "@/components/RoleInput";
+import PwdInput from "@/components/Input/PwdInput";
+import RequiredInput from "@/components/Input/RequiredInput";
+import RoleInput from "@/components/Input/RoleInput";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router";
 import { useForm } from "react-hook-form";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import PhoneInp from "@/components/PhoneInput";
+import PhoneInp from "@/components/Input/PhoneInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TucourApi from "@/utils/http";
@@ -48,7 +48,6 @@ const SignupForm = () => {
   });
   const navigate = useNavigate();
   const handleSubmit = async (formData: SignUpData) => {
-    console.log(formData);
     const stringify = JSON.stringify(formData);
     try {
       if (formData.role === "student") {
