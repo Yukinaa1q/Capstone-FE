@@ -4,7 +4,6 @@ import Login from "@/pages/Login/Login";
 import Signup from "@/pages/SingupPage/Signup";
 import RegisteredCoursesPage from "@/pages/RegisteredCoursesPage/RegisteredCoursesPage";
 import MyCoursesPage from "@/pages/MyCoursesPage/MyCoursesPage";
-import TestPage from "./pages/TestPage/TestPage";
 import SchedulePage from "./pages/SchedulePage.tsx/SchedulePage";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import ChatPage from "./pages/ChatPage/ChatPage";

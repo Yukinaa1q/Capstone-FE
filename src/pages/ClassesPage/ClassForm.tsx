@@ -2,10 +2,10 @@ import RequiredInput from "@/components/Input/RequiredInput";
 import SearchSelect, { ListItem } from "@/components/Input/SearchSelect";
 import StudentInput from "@/components/Input/StudentInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import {
   Select,
   SelectContent,
@@ -33,12 +33,12 @@ const classFormSchema = object({
   studyWeek: string<StudyWeek | "">().required("Study week is required"),
   studyShift: string<StudyShift | "">().required("Study shift is required"),
   isOnline: boolean().default(false),
-  classRoom: string().when("isOnline", {
-    is: true,
-    then: (schema) => schema.optional(),
-    otherwise: (schema) =>
-      schema.required("Class room is required when class is not online"),
-  }),
+  // classRoom: string().when("isOnline", {
+  //   is: true,
+  //   then: (schema) => schema.optional(),
+  //   otherwise: (schema) =>
+  //     schema.required("Class room is required when class is not online"),
+  // }),
   tutorCode: string().required("Tutor is required"),
   studentIdList: array().of(string().defined()).required().defined(),
 }).required();
@@ -53,7 +53,7 @@ const initValue: IClassForm = {
   studyWeek: "",
   studyShift: "",
   isOnline: false,
-  classRoom: "",
+  // classRoom: "",
   tutorCode: "",
   studentIdList: [],
 };
@@ -260,8 +260,8 @@ const ClassForm = ({
               </RequiredInput>
             )}
           />
-          <div>
-            <FormField
+
+          {/* <FormField
               control={form.control}
               name="classRoom"
               render={({ field }) => (
@@ -274,25 +274,32 @@ const ClassForm = ({
                   />
                 </RequiredInput>
               )}
-            />
+            /> */}
 
-            <FormField
-              control={form.control}
-              name="isOnline"
-              render={({ field }) => (
-                <div className="flex items-center mt-1">
-                  <Checkbox
-                    id="isonline"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />{" "}
-                  <Label htmlFor="isonline" className="ml-1">
-                    Online
-                  </Label>
-                </div>
-              )}
-            />
-          </div>
+          <FormField
+            control={form.control}
+            name="isOnline"
+            render={({ field }) => (
+              <RequiredInput label="Learning Type">
+                <RadioGroup
+                  value={field.value ? "online" : "offline"}
+                  onValueChange={(val) =>
+                    field.onChange(val === "online" ? true : false)
+                  }
+                  className="flex mt-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="online" id="r1" />
+                    <Label htmlFor="r1">online</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="offline" id="r2" />
+                    <Label htmlFor="r2">offline</Label>
+                  </div>
+                </RadioGroup>
+              </RequiredInput>
+            )}
+          />
         </div>
         <div className="grid lg:grid-cols-3 gap-4">
           <FormField

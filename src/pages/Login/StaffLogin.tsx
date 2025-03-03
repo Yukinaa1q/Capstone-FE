@@ -1,3 +1,4 @@
+import AuthenAPI from "@/api/AuthenticationApi";
 import BrandLogo from "@/components/BrandLogo";
 import PwdInput from "@/components/Input/PwdInput";
 import RequiredInput from "@/components/Input/RequiredInput";
@@ -24,6 +25,14 @@ const StaffLogin = () => {
   });
   const onSubmit = async (data: InferType<typeof staffLoginSchema>) => {
     console.log(data);
+    try {
+      const res = await AuthenAPI.loginStaff(data.email, data.password);
+      console.log(res);
+    }
+    catch (err) {
+      
+      console.log(err);
+    }
   };
 
   return (
