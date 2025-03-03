@@ -43,21 +43,21 @@ const LoginForm = () => {
     let res;
     try {
       if (data.accountRole === "student") {
-        res = await TucourApi.call("/authentication/login", {
+        res = (await TucourApi.call("/authentication/login", {
           method: "POST",
           body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json",
           },
-        });
+        })) as { token: string };
       } else {
-        res = await TucourApi.call("/authentication/login/tutor", {
+        res = (await TucourApi.call("/authentication/login/tutor", {
           method: "POST",
           body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json",
           },
-        });
+        })) as { token: string };
       }
       const { payload } = jwtDecoder(res.token);
       const userInfo: AuthState = payload.payload;

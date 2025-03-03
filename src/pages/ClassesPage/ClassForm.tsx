@@ -79,32 +79,33 @@ const ClassForm = ({
   useEffect(() => {
     const fetchCourseCode = async () => {
       try {
-        const res: { courseCode: string; courseTitle: string }[] =
-          await TucourApi.call("/course/course-code-title", {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-        const tutorListApi = await TucourApi.call("/tutor/all-tutor", {
+        const res = (await TucourApi.call("/course/course-code-title", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        });
+        })) as { courseCode: string; courseTitle: string }[];
+        const tutorListApi = (await TucourApi.call("/tutor/all-tutor", {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        })) as { tutorCode: string; name: string; avatarUrl: string }[];
         setTutorList(
-          tutorListApi.map((item: any) => {
-            return {
-              value: item.tutorCode,
-              label: item.name,
-              display: {
-                tutorName: item.name,
-                tutorImage: item.avatarUrl,
-              },
-            };
-          })
+          tutorListApi.map(
+            (item: { tutorCode: string; name: string; avatarUrl: string }) => {
+              return {
+                value: item.tutorCode,
+                label: item.name,
+                display: {
+                  tutorName: item.name,
+                  tutorImage: item.avatarUrl,
+                },
+              };
+            }
+          )
         );
         setCodeList(
           res.map((item) => {

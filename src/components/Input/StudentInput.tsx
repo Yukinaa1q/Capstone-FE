@@ -44,20 +44,22 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
 
   useEffect(() => {
     const fetchStudents = async () => {
-      const students = await TucourApi.call("/student/all-student", {
+      const students = (await TucourApi.call("/student/all-student", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      });
+      })) as { name: string; studentCode: string; avatarUrl: string }[];
 
       setStudentList(
-        students.map((item: any) => ({
-          studentName: item.name,
-          studentId: item.studentCode,
-          studentAvatar: item.avatarUrl,
-        }))
+        students.map(
+          (item: { name: string; studentCode: string; avatarUrl: string }) => ({
+            studentName: item.name,
+            studentId: item.studentCode,
+            studentAvatar: item.avatarUrl,
+          })
+        )
       );
     };
 
@@ -99,11 +101,11 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
                   let newArr: string[] = [];
                   if (prev.includes(student.studentId)) {
                     newArr = [...prev];
-                    onValueChange && onValueChange(newArr);
+                    if (onValueChange) onValueChange(newArr);
                     return [...prev];
                   }
                   newArr = [...prev, student.studentId];
-                  onValueChange && onValueChange(newArr);
+                  if (onValueChange) onValueChange(newArr);
                   return [...prev, student.studentId];
                 });
               }}
@@ -138,7 +140,7 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
               onClick={() =>
                 setIdList((old) => {
                   const newArr = old.filter((oldid) => oldid !== id);
-                  onValueChange && onValueChange(newArr);
+                  if (onValueChange) onValueChange(newArr);
                   return newArr;
                 })
               }
