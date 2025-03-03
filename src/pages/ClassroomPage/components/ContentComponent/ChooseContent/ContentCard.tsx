@@ -17,7 +17,6 @@ const ContentCard = ({
   else if (contentType === "Submission")
     contentAfter = "after:content-['ASSIGN']";
 
-  console.log(isFocused)
   return (
     <button
       {...props}

@@ -6,9 +6,7 @@ import { Navigate, Outlet } from "react-router";
 
 const RootLayout = () => {
   const user = useAppSelector((state) => state.auths);
-  console.log("Render root layout");
   const token = window.localStorage.getItem("token");
-  console.log("token", token);
   const dispatch = useAppDispatch();
   if (!token) {
     return <Navigate to="/login" replace={true} />;

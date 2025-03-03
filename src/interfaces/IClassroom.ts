@@ -1,3 +1,5 @@
+import { Descendant } from "slate";
+
 export interface ClassBrief {
     courseTitle: string;
     courseCode: string;
@@ -22,6 +24,10 @@ export interface Content {
 export interface IFileContent extends Content {
     contentDescription: string;
     file: File;
+}
+
+export interface ITextContent extends Content {
+    contentText: Descendant[];
 }
 
 

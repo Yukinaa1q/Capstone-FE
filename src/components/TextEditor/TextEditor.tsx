@@ -8,6 +8,7 @@ import buildLeaf from "./CustomLeaf";
 import TextFormatter from "./Formatter/TextFormatter";
 import HeadingFormatter from "./Formatter/HeadingFormatter";
 import ListFormatter from "./Formatter/ListFormatter";
+import { cn } from "@/lib/utils";
 
 declare module "slate" {
   interface CustomTypes {
@@ -27,9 +28,11 @@ const initialValue: Descendant[] = [
 const TextEditor = ({
   initValue = initialValue,
   onTextEditorChange,
+  className,
 }: {
   initValue: Descendant[];
   onTextEditorChange: (tree: Descendant[]) => void;
+  className?: string;
 }) => {
   // Create a Slate editor object that won't change across renders.
   const [editor] = useState<Editor>(() => withReact(createEditor()));
@@ -45,13 +48,13 @@ const TextEditor = ({
     >
       <div
         id="textEditor"
-        className="border border-gray-300/70 shadow-xs p-4 rounded-md space-y-4 has-focus-visible:border-t_primary-400 w-full h-fit"
+        className={cn("min-h-0 border border-gray-300/70 shadow-xs p-4 rounded-md space-y-4 has-focus-visible:border-t_primary-400 w-full h-fit")}
       >
         <FormatToolbar />
         <Editable
           renderElement={renderElement}
           renderLeaf={renderLeaf}
-          className="bg-gray-100/40 focus-visible:outline-hidden rounded-md p-2 min-h-40 space-y-2"
+          className={cn("bg-gray-100/40 focus-visible:outline-hidden rounded-md p-2 min-h-40 space-y-2", className)}
         />
       </div>
     </Slate>

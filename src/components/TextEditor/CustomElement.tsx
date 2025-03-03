@@ -1,19 +1,19 @@
 import { RenderElementProps } from "slate-react";
 
 const ParagraphNode = ({ attributes, children }: RenderElementProps) => {
-  return <p {...attributes}>{children}</p>;
+  return <p {...attributes} className="text-sm">{children}</p>;
 };
 
 const Heading1Node = ({ attributes, children }: RenderElementProps) => {
-  return <h1 {...attributes} className="font-semibold text-2xl" style={{fontWeight: "bolder"}}>{children}</h1>;
+  return <h1 {...attributes} className="font-semibold text-xl" style={{fontWeight: "bolder"}}>{children}</h1>;
 }
 
 const Heading2Node = ({ attributes, children }: RenderElementProps) => {
-  return <h2 {...attributes} className="font-semibold text-xl mb-3">{children}</h2>;
+  return <h2 {...attributes} className="font-semibold text-lg">{children}</h2>;
 }
 
 const Heading3Node = ({ attributes, children }: RenderElementProps) => {
-  return <h3 {...attributes} className="font-medium text-lg mb-2">{children}</h3>;
+  return <h3 {...attributes} className="font-medium text-base">{children}</h3>;
 }
 
 const UnorderedListNode = ({ attributes, children }: RenderElementProps) => {

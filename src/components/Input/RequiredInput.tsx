@@ -18,7 +18,7 @@ export default function RequiredInput({
 }: RequiredInputProps) {
   return (
     <FormItem className={className}>
-      <div className={cn(orientation === "horizontal" && "flex gap-8")}>
+      <div className={cn(orientation === "horizontal" && "flex gap-8", "min-h-0")}>
         <FormLabel>
           {label} {isRequired && <span className="text-destructive">*</span>}
         </FormLabel>

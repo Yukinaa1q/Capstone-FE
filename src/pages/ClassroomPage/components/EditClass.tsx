@@ -18,7 +18,7 @@ const EditClass = () => {
           Edit Class
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-full h-full md:max-w-4/5 md:h-4/5 lg:max-w-3/5 xl:max-w-2/5">
+      <DialogContent className="max-w-full h-full md:max-w-4/5 md:max-h-4/5 md:h-4/5 lg:max-w-3/5 xl:max-w-2/5">
         <DialogTitle className="hidden"></DialogTitle>
         <DialogDescription className="hidden"></DialogDescription>
         <Tabs defaultValue="section" className="min-h-0">
