@@ -30,6 +30,12 @@ export interface ITextContent extends Content {
     contentText: Descendant[];
 }
 
+export interface ISubmissionContent extends Content {
+    contentDescription: string;
+    from: Date;
+    to: Date;
+}
+
 
 
 export type ContentType = "file" | "text" | "submission";
