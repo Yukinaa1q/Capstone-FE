@@ -31,7 +31,7 @@ const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
               Authorization: `Bearer ${window.localStorage.getItem("token")}`,
             }
           }
-        );
+        ) as Array<ICourseCardP1 | ICourseCardP2>;
         console.log(randomCourse);
         setCards(randomCourse)
       } catch (error) {

@@ -4,12 +4,57 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useEffect, useState } from "react";
 import TucourApi from "@/utils/http";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CourseOutline } from "@/components/Input/CourseOutlineInput";
+import { StudyShift, StudyWeek } from "@/interfaces/common";
+
+interface ViewClassDetailDTO {
+  courseTitle: string;
+
+  courseCode: string;
+
+  learningDuration: string;
+
+  registrationDuration: string;
+
+  tutor: string;
+
+  courseDescription: string;
+
+  courseOutline: CourseOutline[];
+
+  coursePrice: number;
+
+  classSession: StudyWeek;
+
+  classShift: StudyShift;
+
+  learningType: boolean;
+
+  classCode: string;
+
+  classStudents: number;
+
+  classMaxStudents: number;
+
+  tutorId: string;
+
+  classId: string;
+
+  studentList?: {
+    studentName: string;
+
+    studentId: string;
+
+    avatarLink?: string;
+  }[];
+}
 
 const EditClassPage = () => {
   const params = useParams();
   const [classDetail, setClassDetail] = useState<IClassForm | undefined>(
     undefined
   );
+
   const [classId, setClassId] = useState<string>("");
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -17,7 +62,7 @@ const EditClassPage = () => {
     setIsLoading(true);
     const getClassDetail = async () => {
       try {
-        const res = await TucourApi.call(
+        const res = (await TucourApi.call(
           `/class/view-class-detail/${params.id}`,
           {
             method: "GET",
@@ -26,15 +71,15 @@ const EditClassPage = () => {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }
-        );
+        )) as ViewClassDetailDTO;
         setClassId(res.classId);
         setClassDetail({
           courseTitle: res.courseTitle,
           courseCode: res.courseCode,
           classCode: res.classCode,
-          maxStudents: res.classStudents,
+          maxStudents: res.classMaxStudents,
           isOnline: res.learningType,
-          studentIdList: [],
+          studentIdList: res.studentList?.map((student) => student.studentId) ?? [],
           studyShift: res.classShift,
           studyWeek: res.classSession,
           tutorCode: res.tutorId,
@@ -49,7 +94,6 @@ const EditClassPage = () => {
   }, []);
 
   const onSubmit = async (data: IClassForm) => {
-    console.log(data);
     try {
       await TucourApi.call(`/class/update-class/${classId}`, {
         method: "POST",

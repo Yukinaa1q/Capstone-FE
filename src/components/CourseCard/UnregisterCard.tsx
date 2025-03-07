@@ -65,7 +65,7 @@ const UnregisteredCard = ({ courseContent }: CourseCardProps) => {
     registrationButton = (
       <TutorRegistrationButton
         courseContent={courseContent as ICourseCardP1}
-        key={useId()}
+        key={Math.random()}
       />
     );
   } else throw new Error("Role not found");
@@ -74,7 +74,7 @@ const UnregisteredCard = ({ courseContent }: CourseCardProps) => {
     <Card className="w-full">
       <CardHeader className="space-y-2 w-full">
         <img
-          src="#"
+          src={courseContent.courseImage}
           alt="subject illustation"
           className="aspect-video bg-slate-200 rounded-md object-cover"
         />

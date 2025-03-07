@@ -23,8 +23,8 @@ const itemList: IMenuItem[] = [
     icon: <PresentationIcon />,
     prefixUrl: "/classes",
   },
-  { title: "Tutor", icon: <GraduationCapIcon />, prefixUrl: "/tutors" },
-  { title: "Student", icon: <BackpackIcon />, prefixUrl: "/students" },
+  { title: "Tutors", icon: <GraduationCapIcon />, prefixUrl: "/tutors" },
+  { title: "Students", icon: <BackpackIcon />, prefixUrl: "/students" },
 ];
 
 const AcademicSidebarGroup = ({ label }: { label?: string }) => {

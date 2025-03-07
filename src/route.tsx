@@ -140,11 +140,19 @@ const router = createBrowserRouter([
       },
       {
         path: "tutors",
-        element: <TutorsPage />,
+        element: (
+          <RouteGuard allowed={["academic"]}>
+            <TutorsPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "students",
-        element: <StudentsPage />,
+        element: (
+          <RouteGuard allowed={["academic"]}>
+            <StudentsPage />,
+          </RouteGuard>
+        ),
       },
       {
         path: "staff/accounts",
@@ -155,22 +163,22 @@ const router = createBrowserRouter([
         children: [
           {
             path: "account",
-            element: <AccountSettingPage/>
+            element: <AccountSettingPage />,
           },
           {
             path: "profile",
-            element: <AccountProfilePage/>,
+            element: <AccountProfilePage />,
           },
           {
             path: "time-table",
-            element: <div>Time Table Page</div>
-          }
-        ]
+            element: <div>Time Table Page</div>,
+          },
+        ],
       },
       {
         path: "classroom/:classId",
-        element: <ClassroomPage/>
-      }
+        element: <ClassroomPage />,
+      },
     ],
   },
   {

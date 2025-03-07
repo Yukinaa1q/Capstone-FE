@@ -18,6 +18,7 @@ import { CourseOutline } from "@/components/Input/CourseOutlineInput";
 import TucourApi from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 import { useAppSelector } from "@/hooks/reduxHook";
+import { shortName } from "@/utils/utils";
 
 interface IClassDetail {
   courseTitle: string;
@@ -42,6 +43,7 @@ interface IClassDetail {
 interface StudentBrief {
   studentName: string;
   studentId: string;
+  studentCode: string;
   avatarLink: string;
 }
 
@@ -209,24 +211,24 @@ const ClassDetail = () => {
             <p className="font-semibold text-sm">{course?.classCode}</p>
             <h3 className="text-sm">No. Students</h3>
             <p className="font-semibold text-sm">
-              0/{course?.classMaxStudents}
+              {course?.classStudents ?? 0}/{course?.classMaxStudents}
             </p>
           </div>
 
           <ScrollArea type="hover" className="p-4 border rounded-md h-[280px]">
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((i) => (
+            {course?.studentList.map(studentBrief => (
               <Link
-                key={i}
+                key={studentBrief.studentId}
                 to=""
                 className="flex items-center text-sm gap-2 hover:bg-t_tertiary-100 p-2"
               >
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={studentBrief.avatarLink} />
+                  <AvatarFallback>{shortName(studentBrief.studentName)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <p>Student</p>
-                  <p>2153718</p>
+                  <p>{studentBrief.studentName}</p>
+                  <p>{studentBrief.studentCode}</p>
                 </div>
               </Link>
             ))}

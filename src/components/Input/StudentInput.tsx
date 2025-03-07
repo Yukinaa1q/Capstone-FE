@@ -14,13 +14,15 @@ interface StudentInputProps {
 interface StudentItem {
   studentName: string;
   studentId: string;
+  studentCode: string;
   studentAvatar: string;
 }
 
 const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
   const [isDisplay, setDisplay] = React.useState(false);
   const [searchKey, setSearchKey] = React.useState("");
-  const [idList, setIdList] = React.useState<string[]>(value);
+  const [idList, setIdList] =
+    React.useState<string[]>(value); // Must not change because it is an interface for outer component
   const [studentList, setStudentList] = React.useState<StudentItem[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
@@ -50,13 +52,26 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      })) as { name: string; studentCode: string; avatarUrl: string }[];
+      })) as {
+        name: string;
+        studentCode: string;
+        studentId: string;
+        avatarUrl: string;
+        userId: string;
+      }[];
 
       setStudentList(
         students.map(
-          (item: { name: string; studentCode: string; avatarUrl: string }) => ({
+          (item: {
+            name: string;
+            studentCode: string;
+            studentId: string;
+            avatarUrl: string;
+            userId: string;
+          }) => ({
             studentName: item.name,
-            studentId: item.studentCode,
+            studentCode: item.studentCode,
+            studentId: item.userId,
             studentAvatar: item.avatarUrl,
           })
         )
@@ -89,7 +104,7 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
           .filter(
             (student) =>
               student.studentName.toLowerCase().includes(searchKey) ||
-              student.studentId.includes(searchKey)
+              student.studentCode.includes(searchKey)
           )
           .map((student) => (
             <li
@@ -106,7 +121,7 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
                   }
                   newArr = [...prev, student.studentId];
                   if (onValueChange) onValueChange(newArr);
-                  return [...prev, student.studentId];
+                  return newArr;
                 });
               }}
             >
@@ -121,25 +136,25 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
               </Avatar>
               <div>
                 <p className="font-medium">{student.studentName}</p>
-                <p className="text-gray-600 text-xs">{student.studentId}</p>
+                <p className="text-gray-600 text-xs">{student.studentCode}</p>
               </div>
             </li>
           ))}
       </div>
       <div className="mt-2 flex flex-wrap gap-2">
-        {idList.map((id) => (
+        {idList.map((studentIden) => (
           <span
-            key={id}
+            key={studentIden}
             className="flex w-fit bg-t_primary-700 text-white rounded-sm px-2 py-1 text-sm items-center"
           >
-            {id}{" "}
+            {studentList.find(student => student.studentId === studentIden)?.studentCode}{" "}
             <X
               size={16}
               strokeWidth={3}
               className="ml-1 hover:fill-slate-400"
               onClick={() =>
                 setIdList((old) => {
-                  const newArr = old.filter((oldid) => oldid !== id);
+                  const newArr = old.filter((oldid) => oldid !== studentIden);
                   if (onValueChange) onValueChange(newArr);
                   return newArr;
                 })

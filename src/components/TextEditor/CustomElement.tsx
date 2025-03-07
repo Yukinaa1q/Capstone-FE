@@ -17,11 +17,11 @@ const Heading3Node = ({ attributes, children }: RenderElementProps) => {
 }
 
 const UnorderedListNode = ({ attributes, children }: RenderElementProps) => {
-  return <ul {...attributes} className="list-disc">{children}</ul>;
+  return <ul {...attributes} className="list-disc text-sm">{children}</ul>;
 }
 
 const OrderedListNode = ({ attributes, children }: RenderElementProps) => {
-  return <ol {...attributes} className="list-decimal">{children}</ol>;
+  return <ol {...attributes} className="list-decimal text-sm">{children}</ol>;
 }
 
 export default function buildElement(props: RenderElementProps) {
