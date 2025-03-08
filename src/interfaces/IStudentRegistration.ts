@@ -1,5 +1,5 @@
 export default interface IStudentRegistration {
     courseId: string;
-    studentId: string;
+    userId: string;
     isOnline: boolean;
 }

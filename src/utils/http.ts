@@ -5,12 +5,7 @@ export enum ENV {
   DEV,
 }
 
-export type JsonType =
-  | string
-  | number
-  | boolean
-  | JsonType[]
-  | object;
+export type JsonType = string | number | boolean | JsonType[] | object;
 
 interface ApiArguments {
   method: "GET" | "POST" | "PUT" | "DELETE";
@@ -56,7 +51,7 @@ export default class TucourApi {
     return formattedUrl;
   }
 
-  public static addBearerToken(arg: ApiArguments) {
+  public static addBearerToken(arg: ApiArguments): ApiArguments {
     return {
       ...arg,
       headers: {
@@ -86,26 +81,47 @@ export default class TucourApi {
     throw error;
   }
 
-  public static async get(url: string, arg: ApiArguments): Promise<JsonType> {
-    const authenHeaders: ApiArguments = this.addBearerToken(arg);
-    return await this.call(url, { ...authenHeaders, method: "GET" });
+  public static async get(
+    url: string,
+    arg?: Omit<ApiArguments, "method">
+  ): Promise<JsonType> {
+    const authenHeaders: ApiArguments = this.addBearerToken({
+      method: "GET",
+      ...arg,
+    });
+    return await this.call(url, { ...authenHeaders });
   }
 
-  public static async post(url: string, arg: ApiArguments): Promise<JsonType> {
-    const authenHeaders: ApiArguments = this.addBearerToken(arg);
+  public static async post(
+    url: string,
+    arg?: Omit<ApiArguments, "method">
+  ): Promise<JsonType> {
+    const authenHeaders: ApiArguments = this.addBearerToken({
+      method: "POST",
+      ...arg,
+    });
     return await this.call(url, { ...authenHeaders, method: "POST" });
   }
 
-  public static async put(url: string, arg: ApiArguments): Promise<JsonType> {
-    const authenHeaders: ApiArguments = this.addBearerToken(arg);
+  public static async put(
+    url: string,
+    arg?: Omit<ApiArguments, "method">
+  ): Promise<JsonType> {
+    const authenHeaders: ApiArguments = this.addBearerToken({
+      method: "PUT",
+      ...arg,
+    });
     return await this.call(url, { ...authenHeaders, method: "PUT" });
   }
 
   public static async delete(
     url: string,
-    arg: ApiArguments
+    arg?: Omit<ApiArguments, "method">
   ): Promise<JsonType> {
-    const authenHeaders: ApiArguments = this.addBearerToken(arg);
+    const authenHeaders: ApiArguments = this.addBearerToken({
+      method: "DELETE",
+      ...arg,
+    });
     return await this.call(url, { ...authenHeaders, method: "DELETE" });
   }
 }

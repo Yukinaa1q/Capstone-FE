@@ -1,15 +1,22 @@
+import FetchRegisteredApi from "@/api/FetchRegisteredApi";
 import RegisteredCard from "@/components/CourseCard/RegisteredCard";
-import { useAppSelector } from "@/hooks/reduxHook";
 import IRegisteredCard from "@/interfaces/IRegisteredCard";
-import { coursesPhase1, coursesPhase2 } from "@/utils/fakeData";
+import { useEffect, useState } from "react";
 
 
 const RegisteredCoursesPage = () => {
-  const phase = useAppSelector((state) => state.phases.phase);
-  const myRegisteredCourses: IRegisteredCard[] = (phase === 1 ? coursesPhase1 : coursesPhase2).map(course => ({
-    ...course, 
-    isOnline: Math.random() > 0.5,
-  }));
+  const [myRegisteredCourses, setMyRegisteredCourses] = useState<IRegisteredCard[]>([]);
+
+  useEffect(() => {
+    const getRegisteredCourses = async () => {
+      // Fetch registe  red courses from the server
+      const registerCards = await FetchRegisteredApi.fetchRegisteredCourses() as IRegisteredCard[];
+      console.log(registerCards);
+      setMyRegisteredCourses(registerCards);
+    };
+    getRegisteredCourses();
+  }, [])
+
   return (
     <main className="mx-8 mt-4">
       <h3 className="font-semibold text-xl mb-2">Your Registered Courses</h3>

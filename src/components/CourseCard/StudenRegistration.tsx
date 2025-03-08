@@ -23,6 +23,7 @@ import { ICourseCard } from "@/interfaces/ICourse";
 import TucourApi from "@/utils/http";
 import { useAppSelector } from "@/hooks/reduxHook";
 import IStudentRegistration from "@/interfaces/IStudentRegistration";
+import { useNavigate } from "react-router";
 
 const studentCourseRegistrationSchema = object({
   isOnline: boolean().required("Please choose the learning type"),
@@ -38,6 +39,7 @@ const StudenRegistration = ({
   courseInfo, // used to send a request to the server
 }: StudentRegistrationProps) => {
   const user = useAppSelector((state) => state.auths);
+  const navigate = useNavigate();
   const form = useForm({
     resolver: yupResolver(studentCourseRegistrationSchema),
   });
@@ -48,7 +50,7 @@ const StudenRegistration = ({
     console.log(data);
     const sendData: IStudentRegistration = {
       courseId: courseInfo.courseId,
-      studentId: user.userId,
+      userId: user.userId,
       isOnline: data.isOnline,
     };
     try {
@@ -64,7 +66,7 @@ const StudenRegistration = ({
     } catch (err) {
       console.log(err);
     }
-    window.location.reload();
+    navigate("/registered-courses");
   };
 
   return (

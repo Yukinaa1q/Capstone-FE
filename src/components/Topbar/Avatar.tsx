@@ -7,10 +7,12 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Separator } from "../ui/separator";
 import { Link, useNavigate } from "react-router";
+import { useAppSelector } from "@/hooks/reduxHook";
 // import Image from "next/image";
 
 export default function AvatarPopover() {
   const navigate = useNavigate();
+  const user = useAppSelector((state) => state.auths);
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -33,8 +35,8 @@ export default function AvatarPopover() {
       <PopoverContent className="text-sm p-2 w-60">
         <div className="text-right ">
           <div className="font-medium p-4 bg-t_primary-100 rounded-md">
-            <p className="text-base truncate">Kieu Tien Thanh</p>
-            <p className="font-medium text-gray-700">2153798</p>
+            <p className="text-base truncate">{user.name}</p>
+            <p className="font-medium text-gray-700">{user.userCode}</p>
           </div>
           <div className="flex flex-col space-y-2 py-2 font-medium">
             <Link to="/user/account" className="hover:underline">
