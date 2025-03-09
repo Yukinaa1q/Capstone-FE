@@ -1,4 +1,4 @@
-import FilesUpload from "@/components/Input/FilesSubmission ";
+import FilesUpload from "@/components/Input/FilesSubmission";
 import { Badge } from "@/components/ui/badge";
 import { useAppSelector } from "@/hooks/reduxHook";
 import { ISubmissionContent } from "@/interfaces/IClassroom";
