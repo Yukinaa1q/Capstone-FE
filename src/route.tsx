@@ -24,6 +24,7 @@ import StaffAccountPage from "./pages/StaffAccountPage/StaffAccountPage";
 import AccountSettingPage from "./pages/AccountPage/AccountSettingPage";
 import AccountProfilePage from "./pages/AccountPage/AccountProfilePage";
 import ClassroomPage from "./pages/ClassroomPage/ClassroomPage";
+import TutorPage from "./pages/TutorsPage/Tutor/TutorPage";
 
 const router = createBrowserRouter([
   {
@@ -144,7 +145,15 @@ const router = createBrowserRouter([
           <RouteGuard allowed={["academic"]}>
             <TutorsPage />,
           </RouteGuard>
-        ),
+        )
+      },
+      {
+        path: "tutor/:id",
+        element: (
+          <RouteGuard allowed={["academic"]}>
+            <TutorPage />
+          </RouteGuard>
+        )
       },
       {
         path: "students",

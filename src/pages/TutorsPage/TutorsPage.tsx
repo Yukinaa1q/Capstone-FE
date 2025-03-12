@@ -26,6 +26,7 @@ interface TutorTable {
   tutorCode: string;
   tutorEmail: string;
   tutorPhone: string;
+  isVerified: boolean;
 }
 
 const TutorColumnDefs: ColumnDef<TutorTable>[] = [
@@ -50,6 +51,15 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
     cell: (props) => <div>{props.row.getValue("tutorPhone")}</div>,
   },
   {
+    accessorKey: "isVerified",
+    header: "VERIFIED",
+    cell: (props) => (
+      <div>
+        {props.row.getValue("isVerified") ? "Verified" : "Not Verified"}
+      </div>
+    ),
+  },
+  {
     id: "actions",
     cell: ({ row }) => {
       return (
@@ -62,7 +72,7 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/courses/" + row.getValue("courseId")}>
+              <Link to={"/tutor/" + row.getValue("tutorId")}>
                 View Detail
               </Link>
             </DropdownMenuItem>
@@ -85,6 +95,7 @@ const TutorsPage = () => {
       tutorCode: "T001",
       tutorEmail: "johndoe@gmail.com",
       tutorPhone: "123456789",
+      isVerified: true,
     },
     {
       tutorName: "Jane Doe",
@@ -92,6 +103,7 @@ const TutorsPage = () => {
       tutorCode: "T002",
       tutorEmail: "jane@gmail.com",
       tutorPhone: "987654321",
+      isVerified: false,
     },
     {
       tutorName: "John Smith",
@@ -99,6 +111,7 @@ const TutorsPage = () => {
       tutorCode: "T003",
       tutorEmail: "jhsmth123@gmail.com",
       tutorPhone: "123456789",
+      isVerified: true,
     },
   ]);
   const table = useReactTable({

@@ -40,3 +40,27 @@ export function matchUrl(prefixUrl: string, currentUrl: string) {
   }
   return currentUrl.startsWith(prefixUrl);
 }
+
+export function toHeadCase(str: string): string {
+  return str
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+    .join(" ");
+}
+
+export function levelToString(level: string): string {
+  switch (level) {
+    case "1":
+      return "Beginner";
+    case "2":
+      return "Pre-Intermediate";
+    case "3":
+      return "Intermediate";
+    case "4":
+      return "Upper-Intermediate";
+    case "5":
+      return "Advanced";
+    default:
+      return "Unknown";
+  }
+}

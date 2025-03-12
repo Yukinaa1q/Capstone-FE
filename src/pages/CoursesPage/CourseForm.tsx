@@ -1,8 +1,10 @@
 import CourseOutlineInput, {
   CourseOutline,
 } from "@/components/Input/CourseOutlineInput";
+import PriceInput from "@/components/Input/PriceInput";
 import RequiredInput from "@/components/Input/RequiredInput";
-import SearchSelect, { ListItem } from "@/components/Input/SearchSelect";
+import { ListItem } from "@/components/Input/SearchSelect";
+import SubjectSelect from "@/components/Input/SubjectSelect";
 import TextEditor from "@/components/TextEditor/TextEditor";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -13,15 +15,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import subjects from "@/interfaces/Subject";
 import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { Descendant } from "slate";
 import * as yup from "yup";
 import CourseDetailPlaceholder from "./NewCoursePage/CourseDetailPlaceholder";
-import PriceInput from "@/components/Input/PriceInput";
-import { Descendant } from "slate";
-import { Check } from "lucide-react";
 
 export interface ICourseForm {
   courseTitle: string;
@@ -65,36 +66,13 @@ const defaultForm: ICourseForm = {
   imgUrl: "",
 };
 
-const subjectList: ListItem[] = [
-  {
-    value: "math",
-    label: "Math",
-  },
-  {
-    value: "physic",
-    label: "Physic",
-  },
-  {
-    value: "chemistry",
-    label: "Chemistry",
-  },
-  {
-    value: "geography",
-    label: "Geography",
-  },
-  {
-    value: "history",
-    label: "History",
-  },
-  {
-    value: "biology",
-    label: "Biology",
-  },
-  {
-    value: "english",
-    label: "English",
-  },
-];
+const subjectList: ListItem[] = subjects.map((subject) => ({
+  value: subject,
+  label: subject
+    .split(" ")
+    .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
+    .join(" "),
+}));
 
 const CourseForm = ({
   className,
@@ -145,8 +123,10 @@ const CourseForm = ({
             name="courseSubject"
             render={({ field }) => (
               <RequiredInput label="Subject">
-                <SearchSelect
-                  {...field}
+                <SubjectSelect value={field.value} onValueChange={field.onChange}/>
+                {/* <SearchSelect
+                  value={field.value}
+                  onValueChange={field.onChange}
                   list={subjectList}
                   placeholder="Choose a subject"
                   filterFn={(value, search) => {
@@ -162,7 +142,7 @@ const CourseForm = ({
                       )}
                     </>
                   )}
-                />
+                /> */}
               </RequiredInput>
             )}
           />
