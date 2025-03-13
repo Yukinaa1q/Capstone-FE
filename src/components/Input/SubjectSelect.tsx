@@ -1,6 +1,6 @@
 import subjects from "@/interfaces/Subject";
 import { Check } from "lucide-react";
-import SearchSelect, { ListItem, SearchSelectProps } from "./SearchSelect";
+import SearchSelect, { ListItem } from "./SearchSelect";
 
 const subjectList: ListItem[] = subjects.map((subject) => ({
   value: subject,

@@ -3,7 +3,6 @@ import CourseOutlineInput, {
 } from "@/components/Input/CourseOutlineInput";
 import PriceInput from "@/components/Input/PriceInput";
 import RequiredInput from "@/components/Input/RequiredInput";
-import { ListItem } from "@/components/Input/SearchSelect";
 import SubjectSelect from "@/components/Input/SubjectSelect";
 import TextEditor from "@/components/TextEditor/TextEditor";
 import { Form, FormField } from "@/components/ui/form";
@@ -15,7 +14,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import subjects from "@/interfaces/Subject";
 import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useState } from "react";
@@ -66,13 +64,6 @@ const defaultForm: ICourseForm = {
   imgUrl: "",
 };
 
-const subjectList: ListItem[] = subjects.map((subject) => ({
-  value: subject,
-  label: subject
-    .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.substring(1))
-    .join(" "),
-}));
 
 const CourseForm = ({
   className,

@@ -44,6 +44,7 @@ const columns: ColumnDef<CourseOverview>[] = [
   {
     accessorKey: "courseId",
     header: () => <div className="font-semibold">COURSE ID</div>,
+    cell: (props) => <div className="font-semibold text-t_secondary-600">{props.row.getValue("courseId")}</div>,
   },
   {
     accessorKey: "courseName",

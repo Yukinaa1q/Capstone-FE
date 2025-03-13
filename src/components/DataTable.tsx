@@ -13,6 +13,7 @@ import {
   Table as TanTable
 } from "@tanstack/react-table";
 import { Button } from "./ui/button";
+import { cn } from "@/lib/utils";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -27,11 +28,11 @@ export function DataTable<TData, TValue>({
   return (
     <>
       <Table>
-        <TableHeader>
+        <TableHeader className="bg-t_primary-600">
           {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
+            <TableRow key={headerGroup.id} className="hover:bg-t_primary-600/80">
+              {headerGroup.headers.map((header, idx) => (
+                <TableHead key={header.id} className={cn("text-white font-semibold", idx === 0 && "rounded-ss-md", idx === headerGroup.headers.length - 1 && "rounded-se-md")}>
                   {header.isPlaceholder
                     ? null
                     : flexRender(

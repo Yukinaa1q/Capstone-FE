@@ -39,16 +39,10 @@ interface IClassTable {
 const columnHelper = createColumnHelper<IClassTable>();
 
 const defaultColumns = [
-  // columnHelper.accessor("classId", {
-  //   header: () => <div className="text-center">CLASS ID</div>,
-  //   cell: (props) => {
-  //     return <div className="text-center">{props.row.original.classId}</div>;
-  //   },
-  // }),
   columnHelper.accessor("classCode", {
-    header: () => <div className="text-center">CLASSCODE</div>,
+    header: () => <div className="">CLASSCODE</div>,
     cell: (props) => {
-      return <div className="text-center">{props.row.original.classCode}</div>;
+      return <div className="font-semibold text-t_secondary-600">{props.row.original.classCode}</div>;
     },
   }),
   columnHelper.accessor("classStudents", {
@@ -66,7 +60,7 @@ const defaultColumns = [
     },
   }),
   columnHelper.accessor("tutor", {
-    header: () => <div className="text-center">TUTOR</div>,
+    header: () => <div className="">TUTOR</div>,
     cell: (props) => {
       return <div className="">{props.row.original.tutor}</div>;
     },
@@ -129,7 +123,7 @@ const AcademicView = () => {
         handleChange={(e) => {
           table.setGlobalFilter(e);
         }}
-        className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-2"
+        className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-4"
       />
       <DataTable columns={defaultColumns} table={table} />
     </section>

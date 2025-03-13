@@ -55,12 +55,12 @@ function levelColor(level: string): string {
   }
 }
 
-const TutorPage = () => {
+const StudentPage = () => {
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   // An API to get tutor detail profile
   const [profile] = React.useState({
-    userCode: "TU2001",
+    userCode: "STU2001",
     userId: "1",
     fullName: "Kieu Tien Thanh",
     email: "thanhkieu207@gmail.com",
@@ -114,65 +114,30 @@ const TutorPage = () => {
             <div className="space-y-2">
               <p className="font-bold text-2xl flex items-center">
                 {profile.fullName}
-                {!profile.isVerified && (
-                  <Button
-                    variant="link"
-                    size="sm"
-                    className="group ml-4 font-semibold text-green-500 underline hover:text-white hover:bg-green-400 hover:no-underline"
-                  >
-                    Verify Role
-                    <Verified className="invisible group-hover:visible" />
-                  </Button>
-                )}
               </p>
               <div className="flex gap-4 items-center">
                 <p className="font-semibold">{profile.userCode}</p>
-                {profile.isVerified ? (
-                  <div className="text-green-600 flex gap-1 font-semibold items-center text-sm">
-                    <span>
-                      <CheckCircle size={16} />
-                    </span>
-                    <span>Verified</span>
-                  </div>
-                ) : (
-                  <div className="text-red-600 flex gap-1 font-semibold items-center text-sm">
-                    <span>
-                      <XCircle size={16} />
-                    </span>
-                    <span>Unverified</span>
-                  </div>
-                )}
               </div>
               <div className="text-sm">
-                <p className={infoStyle}>
+                {/* <p className={infoStyle}>
                   <IdCard className="size-6" />
-                  <span className={cn(badgeStyle)}>
-                    {profile.ssid}
-                  </span>
-                </p>
+                  <span className={cn(badgeStyle)}>{profile.ssid}</span>
+                </p> */}
                 <p className={infoStyle}>
                   <Mail className="size-6" />
-                  <span className={cn(badgeStyle)}>
-                    {profile.email}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.email}</span>
                 </p>
                 <p className={infoStyle}>
                   <CakeIcon />
-                  <span className={cn(badgeStyle)}>
-                    {profile.dob}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.dob}</span>
                 </p>
                 <p className={infoStyle}>
                   <Phone />
-                  <span className={cn(badgeStyle)}>
-                    {profile.phoneNumber}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.phoneNumber}</span>
                 </p>
                 <p className={infoStyle}>
                   <MapPin />
-                  <span className={cn(badgeStyle)}>
-                    {profile.address}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.address}</span>
                 </p>
               </div>
             </div>
@@ -224,77 +189,10 @@ const TutorPage = () => {
               ))}
             </TableBody>
           </Table>
-
-          {/* Show a list of subject that tutor is allowed to teach and its level */}
-          <SectionLayout
-            sectionTitle="Allow Teaching Subjects"
-            className="w-full"
-          >
-            <div className="flex flex-col gap-4 lg:flex-row">
-              <SubjectSelect
-                value={newQualification.subject}
-                onValueChange={(val) =>
-                  setNewQualification((old) => ({ ...old, subject: val }))
-                }
-                className="w-48"
-              />
-              <Select
-                onValueChange={(val) =>
-                  setNewQualification((old) => ({ ...old, level: val }))
-                }
-              >
-                <SelectTrigger className="w-48 data-placeholder:text-gray-500 bg-white">
-                  <SelectValue
-                    placeholder="Course Level"
-                    className="text-black"
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">Beginner</SelectItem>
-                  <SelectItem value="2">Pre-intermediate</SelectItem>
-                  <SelectItem value="3">Intermediate</SelectItem>
-                  <SelectItem value="4">Upper-intermediate</SelectItem>
-                  <SelectItem value="5">Advanced</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button
-                className="w-fit bg-t_secondary-400 hover:bg-t_secondary-400/80"
-                onClick={() => {
-                  if (!newQualification.subject || !newQualification.level) {
-                    setErrorMsg("Please select subject and level");
-                    return;
-                  }
-                  setErrorMsg(null);
-                }}
-              >
-                Add
-              </Button>
-            </div>
-            {
-              errorMsg && (
-                <p className="text-sm text-red-500">{errorMsg}</p>
-              )
-            }
-            {(newQualification.subject || newQualification.level) && (
-              <Badge className={cn(levelColor(newQualification.level), "mt-2")}>
-                {newQualification.subject
-                  ? toHeadCase(newQualification.subject)
-                  : "Unknown"}{" "}
-                | {levelToString(newQualification.level)}
-              </Badge>
-            )}
-
-            <div className="flex flex-wrap gap-2 mt-4">
-              {qualifications.map((qual) => (
-
-                <Badge className={levelColor(qual.level)}>{toHeadCase(qual.subject)} | {levelToString(qual.level)}</Badge>
-              ))}
-            </div>
-          </SectionLayout>
         </div>
       </section>
     </ContentLayout>
   );
 };
 
-export default TutorPage;
+export default StudentPage;

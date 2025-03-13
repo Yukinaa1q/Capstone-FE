@@ -33,7 +33,7 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
   {
     accessorKey: "tutorCode",
     header: "TUTOR ID",
-    cell: (props) => <div>{props.row.getValue("tutorCode")}</div>,
+    cell: (props) => <div className="font-semibold text-t_secondary-600">{props.row.getValue("tutorCode")}</div>,
   },
   {
     accessorKey: "tutorName",
@@ -60,7 +60,8 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
     ),
   },
   {
-    id: "actions",
+    accessorKey: "tutorId",
+    header: "",
     cell: ({ row }) => {
       return (
         <DropdownMenu>
@@ -72,7 +73,7 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/tutor/" + row.getValue("tutorId")}>
+              <Link to={"/tutors/" + row.getValue("tutorId")}>
                 View Detail
               </Link>
             </DropdownMenuItem>

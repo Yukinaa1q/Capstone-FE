@@ -9,6 +9,7 @@ const NewCoursePage = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const onSubmit = async (data: ICourseForm) => {
+    // console.log(data);
     setIsLoading(true);
     try {
       const formdata = new FormData();
@@ -36,7 +37,6 @@ const NewCoursePage = () => {
     } catch (err) {
       console.log(err);
     }
-    // setIsLoading(false);
   };
 
   return (

@@ -24,16 +24,14 @@ interface StudentTable {
   studentName: string;
   studentId: string;
   studentCode: string;
-  parentCode: string;
-  parentId: string;
-  parentName: string;
+  studentEmail: string;
 }
 
 const StudentColumnDefs: ColumnDef<StudentTable>[] = [
   {
     accessorKey: "studentCode",
     header: "STUDENT ID",
-    cell: (props) => <div>{props.row.getValue("studentCode")}</div>,
+    cell: (props) => <div className="font-semibold text-t_secondary-600">{props.row.getValue("studentCode")}</div>,
   },
   {
     accessorKey: "studentName",
@@ -41,18 +39,14 @@ const StudentColumnDefs: ColumnDef<StudentTable>[] = [
     cell: (props) => <div>{props.row.getValue("studentName")}</div>,
   },
   {
-    accessorKey: "parentCode",
-    header: "PARENT ID",
-    cell: (props) => <div>{props.row.getValue("parentCode")}</div>,
+    accessorKey: "studentEmail",
+    header: "EMAIL",
+    cell: (props) => <div>{props.row.getValue("studentEmail")}</div>,
   },
   {
-    accessorKey: "parentName",
-    header: "PARENT NAME",
-    cell: (props) => <div>{props.row.getValue("parentName")}</div>,
-  },
-  {
-    id: "actions",
-    cell: ({ row }) => {
+    accessorKey: "studentId",
+    header: "",
+    cell: (props) => {
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -63,7 +57,7 @@ const StudentColumnDefs: ColumnDef<StudentTable>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/courses/" + row.getValue("courseId")}>
+              <Link to={"/students/" + props.cell.getValue()}>
                 View Detail
               </Link>
             </DropdownMenuItem>
@@ -83,18 +77,14 @@ const StudentsPage = () => {
     {
       studentName: "John Doe",
       studentId: "1",
-      studentCode: "STU-001",
-      parentCode: "PAR-001",
-      parentId: "1",
-      parentName: "Jane Doe",
+      studentCode: "STU001",
+      studentEmail: "student01@gmail.com"
     },
     {
       studentName: "Jane Doe",
       studentId: "2",
-      studentCode: "STU-002",
-      parentCode: "PAR-002",
-      parentId: "2",
-      parentName: "John Doe",
+      studentCode: "STU002",
+      studentEmail: "student02@gmail.com"
     }
   ]);
   const table = useReactTable({
