@@ -8,6 +8,7 @@ import TC_SidebarMenuItem from "../SidebarMenuItem/SidebarMenuItem";
 import {
   BackpackIcon,
   BookMarkedIcon,
+  DoorOpen,
   GraduationCapIcon,
   PresentationIcon,
 } from "lucide-react";
@@ -22,6 +23,11 @@ const itemList: IMenuItem[] = [
     title: "Classes",
     icon: <PresentationIcon />,
     prefixUrl: "/classes",
+  },
+  {
+    title: "Classrooms",
+    icon: <DoorOpen/>,
+    prefixUrl: "/rooms",
   },
   { title: "Tutors", icon: <GraduationCapIcon />, prefixUrl: "/tutors" },
   { title: "Students", icon: <BackpackIcon />, prefixUrl: "/students" },
