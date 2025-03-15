@@ -12,8 +12,8 @@ const RootLayout = () => {
     return <Navigate to="/login" replace={true} />;
   } else {
     // If integrating, uncomment this
-    // dispatch(setUser(jwtDecoder(token).payload.payload));
-    dispatch(setUser({role: 'academic', userId: '1', name: 'admin', userCode: 'admin'}));
+    dispatch(setUser(jwtDecoder(token).payload.payload));
+
     if (!user.role) {
       return <Navigate to="/login" replace={true} />;
     }

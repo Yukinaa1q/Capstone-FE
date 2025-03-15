@@ -13,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Role } from "@/interfaces/common";
-import { IStaffAccount } from "@/interfaces/IStaffCRUD";
+import INewStaffAccount, { IStaffAccount } from "@/interfaces/IStaffCRUD";
 import { yupResolver } from "@hookform/resolvers/yup";
 import {
   ColumnDef,
@@ -28,6 +28,7 @@ import { InferType, object, ref, string } from "yup";
 import StaffAccountCtx from "./staffAccCtx";
 import { ActionComponent, EditableCell } from "./util";
 import { AnimatePresence, motion } from "motion/react";
+import StaffApi from "@/api/StaffApi";
 
 export interface IsEditing {
   isEditing: boolean;
@@ -82,7 +83,7 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
           <div>
             <Button
               type="button"
-              variant="outline"
+              variant="ghost"
               size="sm"
               onClick={() => {
                 ctx.setShowForm(true);
@@ -103,6 +104,7 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
 const newStaffSchema = object({
   staffName: string().required("Required"),
   staffRole: string<Role>().required("Required"),
+  staffPhone: string().required("Required"),
   staffEmail: string().email().required("Required"),
   staffPassword: string().required("Required"),
   staffRePassword: string()
@@ -151,7 +153,19 @@ const StaffAccountPage = () => {
 
   const onSubmit = (data: InferType<typeof newStaffSchema>) => {
     console.log(data);
-    // const sendData: INewStaffAccount = {};
+    const sendData: INewStaffAccount = {
+      staffName: data.staffName,
+      staffRole: data.staffRole as Role,
+      staffPhone: data.staffPhone,
+      staffEmail: data.staffEmail,
+      staffPassword: data.staffPassword,
+    };
+    try {
+      StaffApi.createStaff(sendData);
+    }
+    catch(err) {
+      console.log(err);
+    }
   };
 
   return (
@@ -179,15 +193,26 @@ const StaffAccountPage = () => {
                   className="w-full md:w-4/5 lg:w-3/5 xl:w-1/2 mx-auto -z-10"
                   onSubmit={form.handleSubmit(onSubmit)}
                 >
-                  <FormField
-                    name="staffName"
-                    control={form.control}
-                    render={({ field }) => (
-                      <RequiredInput label="Staff Name" className="flex-1">
-                        <Input {...field} />
-                      </RequiredInput>
-                    )}
-                  />
+                  <div className="flex flex-col lg:flex-row gap-4 mt-4">
+                    <FormField
+                      name="staffName"
+                      control={form.control}
+                      render={({ field }) => (
+                        <RequiredInput label="Staff Name" className="flex-1">
+                          <Input {...field} />
+                        </RequiredInput>
+                      )}
+                    />
+                    <FormField
+                      name="staffPhone"
+                      control={form.control}
+                      render={({ field }) => (
+                        <RequiredInput label="Staff Phone" className="flex-1">
+                          <Input {...field} type="text" />
+                        </RequiredInput>
+                      )}
+                    />
+                  </div>
                   <div className="flex flex-col lg:flex-row gap-4 mt-4">
                     <FormField
                       name="staffEmail"

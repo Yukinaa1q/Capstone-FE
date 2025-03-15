@@ -1,3 +1,4 @@
+import TutorApi from "@/api/TutorApi";
 import SubjectSelect from "@/components/Input/SubjectSelect";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -30,11 +31,12 @@ import {
   MapPin,
   Phone,
   Verified,
+  X,
   XCircle,
 } from "lucide-react";
 
 import React from "react";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
 
@@ -56,8 +58,10 @@ function levelColor(level: string): string {
 }
 
 const TutorPage = () => {
+  const tutorId = useParams().id;
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
+  const [isVerified, setIsVerified] = React.useState(false);
   // An API to get tutor detail profile
   const [profile] = React.useState({
     userCode: "TU2001",
@@ -88,17 +92,41 @@ const TutorPage = () => {
     },
   ]);
   // An API to get available semesters
-  // TODO: An API to get tutor's newQualification
+  // TODO: An API to set tutor's newQualification
   const [newQualification, setNewQualification] = React.useState<{
     subject: string;
     level: string;
   }>({ subject: "", level: "" });
-  const [qualifications] = React.useState([
+  // TODO: API to get all qualification of tutor
+  const [qualifications, setQualifications] = React.useState([
     { subject: "geography", level: "3" },
     { subject: "math", level: "4" },
     { subject: "history", level: "2" },
     { subject: "english", level: "5" },
   ]);
+
+  const handleAddNewQualification = async () => {
+    try {
+      const updatedQualifications = (await TutorApi.addQualification(
+        newQualification,
+        tutorId
+      )) as {
+        subject: string;
+        level: string;
+      }[];
+      setQualifications(updatedQualifications);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const verifyTutor = async () => {
+    try {
+      await TutorApi.verifyTutor(tutorId);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <ContentLayout>
@@ -114,8 +142,9 @@ const TutorPage = () => {
             <div className="space-y-2">
               <p className="font-bold text-2xl flex items-center">
                 {profile.fullName}
-                {!profile.isVerified && (
+                {!isVerified && (
                   <Button
+                    onClick={() => verifyTutor()}
                     variant="link"
                     size="sm"
                     className="group ml-4 font-semibold text-green-500 underline hover:text-white hover:bg-green-400 hover:no-underline"
@@ -146,33 +175,23 @@ const TutorPage = () => {
               <div className="text-sm">
                 <p className={infoStyle}>
                   <IdCard className="size-6" />
-                  <span className={cn(badgeStyle)}>
-                    {profile.ssid}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.ssid}</span>
                 </p>
                 <p className={infoStyle}>
                   <Mail className="size-6" />
-                  <span className={cn(badgeStyle)}>
-                    {profile.email}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.email}</span>
                 </p>
                 <p className={infoStyle}>
                   <CakeIcon />
-                  <span className={cn(badgeStyle)}>
-                    {profile.dob}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.dob}</span>
                 </p>
                 <p className={infoStyle}>
                   <Phone />
-                  <span className={cn(badgeStyle)}>
-                    {profile.phoneNumber}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.phoneNumber}</span>
                 </p>
                 <p className={infoStyle}>
                   <MapPin />
-                  <span className={cn(badgeStyle)}>
-                    {profile.address}
-                  </span>
+                  <span className={cn(badgeStyle)}>{profile.address}</span>
                 </p>
               </div>
             </div>
@@ -264,17 +283,14 @@ const TutorPage = () => {
                     setErrorMsg("Please select subject and level");
                     return;
                   }
+                  handleAddNewQualification();
                   setErrorMsg(null);
                 }}
               >
                 Add
               </Button>
             </div>
-            {
-              errorMsg && (
-                <p className="text-sm text-red-500">{errorMsg}</p>
-              )
-            }
+            {errorMsg && <p className="text-sm text-red-500">{errorMsg}</p>}
             {(newQualification.subject || newQualification.level) && (
               <Badge className={cn(levelColor(newQualification.level), "mt-2")}>
                 {newQualification.subject
@@ -286,8 +302,23 @@ const TutorPage = () => {
 
             <div className="flex flex-wrap gap-2 mt-4">
               {qualifications.map((qual) => (
-
-                <Badge className={levelColor(qual.level)}>{toHeadCase(qual.subject)} | {levelToString(qual.level)}</Badge>
+                <Badge className={cn(levelColor(qual.level), "space-x-1")}>
+                  <span>
+                    {toHeadCase(qual.subject)} | {levelToString(qual.level)}
+                  </span>
+                  <button
+                    onClick={() => {
+                      setQualifications((oldQualification) =>
+                        oldQualification.filter((q) => q !== qual)
+                      );
+                    }}
+                    className={cn(
+                      "size-4 p-0.5 rounded-full flex items-center justify-center cursor-pointer bg-white/30"
+                    )}
+                  >
+                    <X />
+                  </button>
+                </Badge>
               ))}
             </div>
           </SectionLayout>

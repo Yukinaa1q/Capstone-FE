@@ -6,11 +6,14 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useAppDispatch } from "@/hooks/reduxHook";
+import { setUser } from "@/store/authenSlice";
+import { jwtDecoder } from "@/utils/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 import { InferType, object, string } from "yup";
 
 const staffLoginSchema = object({
@@ -19,6 +22,8 @@ const staffLoginSchema = object({
 });
 
 const StaffLogin = () => {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const form = useForm({
     resolver: yupResolver(staffLoginSchema),
@@ -28,10 +33,13 @@ const StaffLogin = () => {
     try {
       const res = await AuthenAPI.loginStaff(data.email, data.password);
       console.log(res);
+      const {payload} = jwtDecoder(res);
+      console.log(payload);
+      dispatch(setUser(payload));
+      navigate("/");
     }
     catch (err) {
-      
-      console.log(err);
+      console.log("error: ", err.message);
     }
   };
 
@@ -60,7 +68,7 @@ const StaffLogin = () => {
               control={form.control}
               render={({ field }) => (
                 <RequiredInput label="Email" isRequired={false}>
-                  <Input type="email" {...field} />
+                  <Input type="email" {...field} className="bg-white"/>
                 </RequiredInput>
               )}
             />

@@ -17,9 +17,10 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
 import NewRoom from "./NewRoom/NewRoom";
+import RoomApi from "@/api/RoomApi";
 
 interface Room {
   roomId: string;
@@ -73,9 +74,21 @@ const RoomColumnDefs: ColumnDef<Room>[] = [
     ),
   },
   {
-    accessorKey: "roomCode",
+    accessorKey: "roomId",
     header: () => <NewRoom/>,
     cell: (props) => {
+
+      const handleDeleteRoom = async (roomId: string) => {
+        console.log("Deleting room with id: ", roomId);
+        try {
+          await RoomApi.deleteRoom(roomId);
+          window.location.reload();
+        }
+        catch(err) {
+          console.log(err);
+        }
+      }
+
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild className="block">
@@ -88,7 +101,7 @@ const RoomColumnDefs: ColumnDef<Room>[] = [
             <DropdownMenuItem>
               <Link to={"/rooms/" + props.cell.getValue()}>View Detail</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Delete Room</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => handleDeleteRoom(props.row.getValue('roomId'))}>Delete Room</DropdownMenuItem>
             <DropdownMenuItem>Edit Room</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -99,7 +112,7 @@ const RoomColumnDefs: ColumnDef<Room>[] = [
 
 const RoomsPage = () => {
   // Sample data
-  const [rooms] = React.useState<Room[]>([
+  const [rooms, setRoom] = React.useState<Room[]>([
     {
       roomId: "1",
       roomCode: "R001",
@@ -117,6 +130,15 @@ const RoomsPage = () => {
       maxClasses: 4,
     },
   ]);
+
+  useEffect(() => {
+    const getAllRooms = async () => {
+      const allRooms = await RoomApi.getAllRooms() as Room[];
+      setRoom(allRooms);
+    }
+
+    getAllRooms();
+  }, [])
 
   const table = useReactTable({
     data: rooms,

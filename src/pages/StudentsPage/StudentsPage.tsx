@@ -1,3 +1,4 @@
+import StudentApi from "@/api/StudentApi";
 import DataTable from "@/components/DataTable";
 import ClearableSearch from "@/components/Input/ClearableSearch";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
 
 interface StudentTable {
@@ -31,7 +32,11 @@ const StudentColumnDefs: ColumnDef<StudentTable>[] = [
   {
     accessorKey: "studentCode",
     header: "STUDENT ID",
-    cell: (props) => <div className="font-semibold text-t_secondary-600">{props.row.getValue("studentCode")}</div>,
+    cell: (props) => (
+      <div className="font-semibold text-t_secondary-600">
+        {props.row.getValue("studentCode")}
+      </div>
+    ),
   },
   {
     accessorKey: "studentName",
@@ -57,9 +62,7 @@ const StudentColumnDefs: ColumnDef<StudentTable>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/students/" + props.cell.getValue()}>
-                View Detail
-              </Link>
+              <Link to={"/students/" + props.cell.getValue()}>View Detail</Link>
             </DropdownMenuItem>
             <DropdownMenuItem>Class List</DropdownMenuItem>
             <DropdownMenuItem>Student List</DropdownMenuItem>
@@ -73,22 +76,33 @@ const StudentColumnDefs: ColumnDef<StudentTable>[] = [
 
 const StudentsPage = () => {
   // Need an API to fetch tutors data
-  const [tutors] = React.useState<StudentTable[]>([
+  const [students, setStudents] = React.useState<StudentTable[]>([
     {
       studentName: "John Doe",
       studentId: "1",
       studentCode: "STU001",
-      studentEmail: "student01@gmail.com"
+      studentEmail: "student01@gmail.com",
     },
     {
       studentName: "Jane Doe",
       studentId: "2",
       studentCode: "STU002",
-      studentEmail: "student02@gmail.com"
-    }
+      studentEmail: "student02@gmail.com",
+    },
   ]);
+  useEffect(() => {
+    const fetchStudents = async () => {
+      try {
+        const students = (await StudentApi.getStudents()) as StudentTable[];
+        setStudents(students);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchStudents();
+  }, []);
   const table = useReactTable({
-    data: tutors,
+    data: students,
     columns: StudentColumnDefs,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),

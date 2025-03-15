@@ -1,3 +1,4 @@
+import TutorApi from "@/api/TutorApi";
 import DataTable from "@/components/DataTable";
 import ClearableSearch from "@/components/Input/ClearableSearch";
 import { Button } from "@/components/ui/button";
@@ -17,7 +18,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import React from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router";
 
 interface TutorTable {
@@ -89,7 +90,7 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
 
 const TutorsPage = () => {
   // Need an API to fetch tutors data
-  const [tutors] = React.useState<TutorTable[]>([
+  const [tutors, setTutors] = React.useState<TutorTable[]>([
     {
       tutorName: "John Doe",
       tutorId: "1",
@@ -115,6 +116,17 @@ const TutorsPage = () => {
       isVerified: true,
     },
   ]);
+
+  useEffect(() => {
+    const getTutorTable = async () => {
+      const tutors = await TutorApi.getTutors() as TutorTable[];
+      // console.log(tutors);
+      setTutors(tutors);
+    }
+    getTutorTable()
+  }, [])
+
+
   const table = useReactTable({
     data: tutors,
     columns: TutorColumnDefs,

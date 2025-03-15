@@ -9,7 +9,7 @@ const RouteGuard = ({ allowed, children }: { allowed?: Role[], children: React.R
     return <Navigate to="/login" replace={true}/>;
   }
   const jwt = window.localStorage.getItem("token");
-  if (!jwt || !allowed?.includes(user.role)) {
+  if (!jwt || (!allowed?.includes(user.role) && user.role !== 'admin')) {
     return <Navigate to="/login" replace={true}/>;
   }
   return <>{children}</>;

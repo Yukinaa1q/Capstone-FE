@@ -1,3 +1,4 @@
+import RoomApi from "@/api/RoomApi";
 import RequiredInput from "@/components/Input/RequiredInput";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -15,7 +16,6 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { PlusCircleIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { boolean, InferType, object, string } from "yup";
-import { v4 as uuidv4 } from "uuid";
 
 const NewRoomSchema = object({
   isOnline: boolean().required().default(false),
@@ -39,12 +39,18 @@ const NewRoom = () => {
     resolver: yupResolver(NewRoomSchema),
   });
 
-  const onSubmit = (data: InferType<typeof NewRoomSchema>) => {
+  const onSubmit = async (data: InferType<typeof NewRoomSchema>) => {
     console.log(data);
+    try {
+      await RoomApi.addRoom(data);
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   return (
-    <Dialog onOpenChange={open => !open && form.reset()}>
+    <Dialog onOpenChange={(open) => !open && form.reset()}>
       <DialogTrigger className="mx-auto block">
         <PlusCircleIcon />
       </DialogTrigger>
