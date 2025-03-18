@@ -98,6 +98,7 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
       return <FormTrigger />;
     },
     cell: (props) => <ActionComponent cell={props} />,
+    
   },
 ];
 
