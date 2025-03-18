@@ -8,8 +8,10 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/hooks/reduxHook";
 import { setUser } from "@/store/authenSlice";
+import { StatusError } from "@/utils/http";
 import { jwtDecoder } from "@/utils/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { set } from "date-fns";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -30,16 +32,15 @@ const StaffLogin = () => {
   });
   const onSubmit = async (data: InferType<typeof staffLoginSchema>) => {
     console.log(data);
-    try {
-      const res = await AuthenAPI.loginStaff(data.email, data.password);
-      console.log(res);
-      const {payload} = jwtDecoder(res);
-      console.log(payload);
+
+    const res = await AuthenAPI.loginStaff(data.email, data.password);
+    if (res) {
+      const { payload } = jwtDecoder(window.localStorage.getItem("token") || "");
       dispatch(setUser(payload));
       navigate("/");
     }
-    catch (err) {
-      console.log("error: ", err.message);
+    else {
+      setErrorMsg("Incorrect email or password");
     }
   };
 
@@ -68,7 +69,7 @@ const StaffLogin = () => {
               control={form.control}
               render={({ field }) => (
                 <RequiredInput label="Email" isRequired={false}>
-                  <Input type="email" {...field} className="bg-white"/>
+                  <Input type="email" {...field} className="bg-white" />
                 </RequiredInput>
               )}
             />

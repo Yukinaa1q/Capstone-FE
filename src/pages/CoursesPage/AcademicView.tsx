@@ -22,11 +22,11 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import ClearableSearch from "@/components/Input/ClearableSearch";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
-import TucourApi from "@/utils/http";
+import TucourApi, { StatusError } from "@/utils/http";
 import ICourseBE from "@/interfaces/ICourseBE";
 
 // 1 Define type and data
@@ -106,6 +106,7 @@ const columns: ColumnDef<CourseOverview>[] = [
 ];
 
 const AcademicView = () => {
+  const navigate = useNavigate();
   const [courselist, setCourseList] = useState<CourseOverview[]>([]);
   useEffect(() => {
     const getCourse = async () => {
@@ -126,7 +127,14 @@ const AcademicView = () => {
           }))
         );
       } catch (error) {
-        console.log(error);
+        if (error instanceof StatusError) {
+          console.error(error);
+          if (error.statusCode === 401) {
+            navigate("/staff/login");
+          }
+        }
+        else 
+          console.log("Not relate to fetching error");
       }
     };
     getCourse();

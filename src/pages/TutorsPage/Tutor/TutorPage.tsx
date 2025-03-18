@@ -35,8 +35,13 @@ import {
   XCircle,
 } from "lucide-react";
 
-import React from "react";
-import { useNavigate, useParams } from "react-router";
+import React, { useEffect, useMemo } from "react";
+import {
+  useActionData,
+  useLoaderData,
+  useNavigate,
+  useParams,
+} from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
 
@@ -59,21 +64,12 @@ function levelColor(level: string): string {
 
 const TutorPage = () => {
   const tutorId = useParams().id;
+  const queryData = useLoaderData();
+  console.log("QueryDat", queryData);
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
-  const [isVerified, setIsVerified] = React.useState(false);
   // An API to get tutor detail profile
-  const [profile] = React.useState({
-    userCode: "TU2001",
-    userId: "1",
-    fullName: "Kieu Tien Thanh",
-    email: "thanhkieu207@gmail.com",
-    isVerified: false,
-    dob: "20/07/2003",
-    ssid: "078267861872",
-    address: "148/1/2 Nguyen Van Cu, P.1, Q.5, TP.HCM",
-    phoneNumber: "0123456789",
-  });
+  const [profile] = React.useState(queryData.tutorDetail);
   // An API to get tutor's classes base on semester
   const [classes] = React.useState([
     {
@@ -98,12 +94,9 @@ const TutorPage = () => {
     level: string;
   }>({ subject: "", level: "" });
   // TODO: API to get all qualification of tutor
-  const [qualifications, setQualifications] = React.useState([
-    { subject: "geography", level: "3" },
-    { subject: "math", level: "4" },
-    { subject: "history", level: "2" },
-    { subject: "english", level: "5" },
-  ]);
+  const [qualifications, setQualifications] = React.useState<
+    { subject: string; level: string }[]
+  >(queryData.qualifications);
 
   const handleAddNewQualification = async () => {
     try {
@@ -120,9 +113,21 @@ const TutorPage = () => {
     }
   };
 
-  const verifyTutor = async () => {
+  const handleRemoveQualification = async (
+    qualification: {
+      subject: string;
+      level: string;
+    }[]
+  ) => {
     try {
-      await TutorApi.verifyTutor(tutorId);
+      const qualificationList = (await TutorApi.removeQualification(
+        qualification,
+        tutorId
+      )) as {
+        subject: string;
+        level: string;
+      }[];
+      setQualifications(qualificationList);
     } catch (err) {
       console.log(err);
     }
@@ -131,7 +136,7 @@ const TutorPage = () => {
   return (
     <ContentLayout>
       <section className="flex flex-col lg:flex-row gap-10 p-10 rounded-lg bg-t_primary-100 justify-between">
-        <div className="lg:basis-lg shrink-0">
+        <div className="basis-1/2">
           <div className="flex flex-col items-center gap-4 w-fit mb-4">
             <Avatar className="size-24 border">
               <AvatarImage src="#" />
@@ -142,9 +147,8 @@ const TutorPage = () => {
             <div className="space-y-2">
               <p className="font-bold text-2xl flex items-center">
                 {profile.fullName}
-                {!isVerified && (
+                {!profile.isVerified && (
                   <Button
-                    onClick={() => verifyTutor()}
                     variant="link"
                     size="sm"
                     className="group ml-4 font-semibold text-green-500 underline hover:text-white hover:bg-green-400 hover:no-underline"
@@ -224,6 +228,7 @@ const TutorPage = () => {
             <TableBody>
               {classes.map((cls) => (
                 <TableRow
+                  key={cls.classId}
                   className="group cursor-pointer"
                   onClick={() => navigate(`/classes/${cls.classId}`)}
                 >
@@ -284,6 +289,7 @@ const TutorPage = () => {
                     return;
                   }
                   handleAddNewQualification();
+                  setNewQualification({ subject: "", level: "" });
                   setErrorMsg(null);
                 }}
               >
@@ -302,15 +308,16 @@ const TutorPage = () => {
 
             <div className="flex flex-wrap gap-2 mt-4">
               {qualifications.map((qual) => (
-                <Badge className={cn(levelColor(qual.level), "space-x-1")}>
+                <Badge
+                  className={cn(levelColor(qual.level), "space-x-1")}
+                  key={qual.subject}
+                >
                   <span>
                     {toHeadCase(qual.subject)} | {levelToString(qual.level)}
                   </span>
                   <button
                     onClick={() => {
-                      setQualifications((oldQualification) =>
-                        oldQualification.filter((q) => q !== qual)
-                      );
+                      handleRemoveQualification([qual]);
                     }}
                     className={cn(
                       "size-4 p-0.5 rounded-full flex items-center justify-center cursor-pointer bg-white/30"

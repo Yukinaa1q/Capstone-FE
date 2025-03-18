@@ -34,7 +34,7 @@ import {
 } from "lucide-react";
 
 import React from "react";
-import { useNavigate } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
 
@@ -57,19 +57,10 @@ function levelColor(level: string): string {
 
 const StudentPage = () => {
   const navigate = useNavigate();
+  const queryData = useLoaderData();
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   // An API to get tutor detail profile
-  const [profile] = React.useState({
-    userCode: "STU2001",
-    userId: "1",
-    fullName: "Kieu Tien Thanh",
-    email: "thanhkieu207@gmail.com",
-    isVerified: false,
-    dob: "20/07/2003",
-    ssid: "078267861872",
-    address: "148/1/2 Nguyen Van Cu, P.1, Q.5, TP.HCM",
-    phoneNumber: "0123456789",
-  });
+  const [profile] = React.useState(queryData.studentDetail);
   // An API to get tutor's classes base on semester
   const [classes] = React.useState([
     {
@@ -103,14 +94,14 @@ const StudentPage = () => {
   return (
     <ContentLayout>
       <section className="flex flex-col lg:flex-row gap-10 p-10 rounded-lg bg-t_primary-100 justify-between">
-        <div className="lg:basis-lg shrink-0">
+        <div className="basis:1/2 shrink-0">
           <div className="flex flex-col items-center gap-4 w-fit mb-4">
             <Avatar className="size-24 border">
               <AvatarImage src="#" />
               <AvatarFallback> {shortName(profile.fullName)} </AvatarFallback>
             </Avatar>
           </div>
-          <div className="gap-24">
+          <div>
             <div className="space-y-2">
               <p className="font-bold text-2xl flex items-center">
                 {profile.fullName}
@@ -170,6 +161,7 @@ const StudentPage = () => {
             <TableBody>
               {classes.map((cls) => (
                 <TableRow
+                  key={cls.classId}
                   className="group cursor-pointer"
                   onClick={() => navigate(`/classes/${cls.classId}`)}
                 >

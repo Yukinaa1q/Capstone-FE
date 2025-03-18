@@ -5,8 +5,6 @@ export enum ENV {
   DEV,
 }
 
-export type JsonType = string | number | boolean | JsonType[] | object;
-
 interface ApiArguments {
   method: "GET" | "POST" | "PUT" | "DELETE";
   queryString?: Record<string, string>;
@@ -22,6 +20,20 @@ export class StatusError extends Error {
     this.statusCode = status;
     this.errorBody = info;
   }
+}
+
+export type JsonType =
+  | StatusResponse
+  | PrimitiveType[]
+  | PrimitiveType;
+
+type PrimitiveType = string | number | boolean | object | null;
+// string | number | boolean | JsonType[] | object;
+
+export interface StatusResponse {
+  statusCode: number;
+  statusText: string;
+  data: JsonType;
 }
 
 /*
@@ -63,22 +75,31 @@ export default class TucourApi {
 
   public static async call(url: string, arg: ApiArguments): Promise<JsonType> {
     const formatUrl = this.urlFormatter(url, arg?.queryString);
-    const res = await fetch(formatUrl, {
-      method: arg.method,
-      headers: arg.headers,
-      body: arg.body,
-    });
-    // Directly return the data if the status code is < 400
-    if (res.ok) {
-      try {
+    try {
+      const res = await fetch(formatUrl, {
+        method: arg.method,
+        headers: arg.headers,
+        body: arg.body,
+      });
+
+      // const returnResult = await res.text();
+      // return isJSON(returnResult) ? JSON.parse(returnResult) : returnResult;
+      if (res.ok) {
         const returnResult = await res.text();
         return isJSON(returnResult) ? JSON.parse(returnResult) : returnResult;
-      } catch {
-        throw new Error("Cannot convert to json or text");
+      } else {
+        console.log(
+          "Server Connection Successfully But Status >= 300............"
+        );
+        throw await res.json();
       }
+    } catch (err) {
+      throw {
+        statusCode: 555,
+        statusText: "Error Not Because of Server",
+        data: (err as Error).message,
+      };
     }
-    const error = new StatusError(res.status, res.statusText, await res.json());
-    throw error;
   }
 
   public static async get(
@@ -89,7 +110,7 @@ export default class TucourApi {
       method: "GET",
       ...arg,
     });
-    return await this.call(url, { ...authenHeaders });
+    return this.call(url, { ...authenHeaders });
   }
 
   public static async post(
@@ -100,7 +121,7 @@ export default class TucourApi {
       method: "POST",
       ...arg,
     });
-    return await this.call(url, { ...authenHeaders, method: "POST" });
+    return this.call(url, { ...authenHeaders, method: "POST" });
   }
 
   public static async put(
@@ -111,7 +132,7 @@ export default class TucourApi {
       method: "PUT",
       ...arg,
     });
-    return await this.call(url, { ...authenHeaders, method: "PUT" });
+    return this.call(url, { ...authenHeaders, method: "PUT" });
   }
 
   public static async delete(
@@ -122,6 +143,6 @@ export default class TucourApi {
       method: "DELETE",
       ...arg,
     });
-    return await this.call(url, { ...authenHeaders, method: "DELETE" });
+    return this.call(url, { ...authenHeaders, method: "DELETE" });
   }
 }
