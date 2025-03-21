@@ -2,7 +2,7 @@ import TutorApi from "@/api/TutorApi";
 import SubjectSelect from "@/components/Input/SubjectSelect";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -30,17 +30,18 @@ import {
   Mail,
   MapPin,
   Phone,
+  UserCog,
   Verified,
   X,
   XCircle,
 } from "lucide-react";
 
-import React, { useEffect, useMemo } from "react";
+import React from "react";
 import {
-  useActionData,
-  useLoaderData,
+  Link,
   useNavigate,
   useParams,
+  useRouteLoaderData
 } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
@@ -64,7 +65,7 @@ function levelColor(level: string): string {
 
 const TutorPage = () => {
   const tutorId = useParams().id;
-  const queryData = useLoaderData();
+  const queryData = useRouteLoaderData("tutor");
   console.log("QueryDat", queryData);
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
@@ -137,7 +138,17 @@ const TutorPage = () => {
     <ContentLayout>
       <section className="flex flex-col lg:flex-row gap-10 p-10 rounded-lg bg-t_primary-100 justify-between">
         <div className="basis-1/2">
-          <div className="flex flex-col items-center gap-4 w-fit mb-4">
+          <div className="w-full mb-4 space-y-4">
+            <Link
+              to={"/tutors/" + tutorId + "/edit"}
+              className={cn(
+                buttonVariants(),
+                "group bg-t_primary-500 hover:bg-t_primary-500/80"
+              )}
+            >
+              <UserCog className="relative group-hover:animate-[zoom-in-out_0.5s_ease-in]" />{" "}
+              Update
+            </Link>
             <Avatar className="size-24 border">
               <AvatarImage src="#" />
               <AvatarFallback> {shortName(profile.fullName)} </AvatarFallback>

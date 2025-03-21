@@ -73,7 +73,7 @@ export default class TutorApi {
       fullName: "Kieu Tien Thanh",
       email: "thanhkieu207@gmail.com",
       isVerified: false,
-      dob: "20/07/2003",
+      dob: "07/20/2003",
       ssid: "078267861872",
       address: "148/1/2 Nguyen Van Cu, P.1, Q.5, TP.HCM",
       phoneNumber: "0123456789",

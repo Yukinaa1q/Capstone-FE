@@ -5,7 +5,7 @@ export interface TutorInitContent {
     subject: string;
     level: string;
   }[];
-  tutorDetail?: {
+  tutorDetail: {
     userCode: string;
     userId: string;
     fullName: string;
@@ -20,7 +20,20 @@ export interface TutorInitContent {
 
 export default async function getTutorInitContent({ params }) {
   // console.log(params);
-  const res: TutorInitContent = { qualifications: [], tutorDetail: undefined };
+  const res: TutorInitContent = {
+    qualifications: [],
+    tutorDetail: {
+      userCode: "",
+      userId: "",
+      fullName: "",
+      email: "",
+      isVerified: false,
+      dob: "",
+      ssid: "",
+      address: "",
+      phoneNumber: "",
+    },
+  };
   try {
     const qualifications = (await TutorApi.getQualifications(params.id)) as {
       subject: string;

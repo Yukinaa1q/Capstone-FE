@@ -29,6 +29,8 @@ import StudentPage from "./pages/StudentsPage/StudentPage/StudentPage";
 import RoomsPage from "./pages/RoomsPage/RoomsPage";
 import getTutorInitContent from "./pages/TutorsPage/Tutor/TutorAction";
 import getStudentInit from "./pages/StudentsPage/StudentPage/StudentAction";
+import TutorLayout from "./pages/TutorsPage/Tutor/TutorLayout";
+import TutorEdit from "./pages/TutorsPage/Tutor/Edit/TutorEdit";
 
 const router = createBrowserRouter([
   {
@@ -163,10 +165,22 @@ const router = createBrowserRouter([
         path: "tutors/:id",
         element: (
           <RouteGuard allowed={["academic"]}>
-            <TutorPage />
+            <TutorLayout />
           </RouteGuard>
         ),
         loader: getTutorInitContent,
+        id: "tutor",
+        children: [
+          {
+            index: true,
+            element: <TutorPage />,
+          },
+          {
+            path: "edit",
+            element: <TutorEdit />,
+            loader: getTutorInitContent,
+          },
+        ],
       },
       {
         path: "students",
