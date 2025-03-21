@@ -64,12 +64,12 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
     cell: (props) => <div>{props.row.getValue("staffEmail")}</div>,
   },
   {
-    accessorKey: "staffPassword",
-    header: "PASSWORD",
+    accessorKey: "staffPhone",
+    header: "PHONE NUMBER",
     cell: (props) => (
       <div className="w-32">
-        <EditableCell cell={props} columnKey="staffPassword">
-          {props.row.getValue("staffPassword")}
+        <EditableCell cell={props} columnKey="staffPhone">
+          {props.row.getValue("staffPhone")}
         </EditableCell>
       </div>
     ),
@@ -121,7 +121,7 @@ const StaffAccountPage = () => {
       staffName: "John Doe Do di do di",
       staffRole: "academic",
       staffEmail: "johndoe01@gmail.com",
-      staffPassword: "password",
+      staffPhone: "0987287178",
       isEditing: false,
       prevName: "John Doe",
       prevPassword: "password",
@@ -132,7 +132,7 @@ const StaffAccountPage = () => {
       staffName: "Jane Doe",
       staffRole: "support",
       staffEmail: "janethebooba111@gmail.com",
-      staffPassword: "password",
+      staffPhone: "0987287178",
       isEditing: false,
       prevName: "Jane Doe",
       prevPassword: "password",

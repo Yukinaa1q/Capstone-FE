@@ -1,22 +1,13 @@
+import PwdInput from "@/components/Input/PwdInput";
+import RequiredInput from "@/components/Input/RequiredInput";
 import { Button } from "@/components/ui/button";
+import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
-import { CellContext } from "@tanstack/react-table";
-import { Edit, LucideTrash, Save, Undo } from "lucide-react";
-import { JSX, useContext } from "react";
-import StaffAccountCtx from "./staffAccCtx";
-import { IsEditing } from "./StaffAccountPage";
-import { IStaffAccount } from "@/interfaces/IStaffCRUD";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Form, FormField } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { InferType, object, string } from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import RequiredInput from "@/components/Input/RequiredInput";
 import {
   Select,
   SelectContent,
@@ -24,7 +15,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import PwdInput from "@/components/Input/PwdInput";
+import { IStaffAccount } from "@/interfaces/IStaffCRUD";
+import { cn } from "@/lib/utils";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { CellContext } from "@tanstack/react-table";
+import { Edit, LucideTrash } from "lucide-react";
+import { JSX, useContext } from "react";
+import { useForm } from "react-hook-form";
+import { InferType, object, string } from "yup";
+import StaffAccountCtx from "./staffAccCtx";
+import { IsEditing } from "./StaffAccountPage";
 
 export const EditableCell = ({
   cell,
@@ -62,10 +62,11 @@ export const EditableCell = ({
 };
 
 const EditStaffSchema = object({
-  staffName: string().required("Staff name is required"),
-  staffPassword: string().required("Password is required"),
-  staffRole: string().required("Role is required"),
-  staffEmail: string().email("Invalid email").required("Email is required"),
+  staffName: string(),
+  staffPassword: string(),
+  staffRole: string(),
+  staffPhone: string(),
+  staffEmail: string().email("Invalid email"),
 });
 
 export function ActionComponent({
@@ -79,6 +80,12 @@ export function ActionComponent({
   )!;
 
   const form = useForm({
+    defaultValues: {
+      staffName: targetStaff.staffName,
+      staffEmail: targetStaff.staffEmail,
+      staffPhone: targetStaff.staffPhone,
+      staffRole: targetStaff.staffRole,
+    },
     resolver: yupResolver(EditStaffSchema),
   });
 
@@ -95,7 +102,7 @@ export function ActionComponent({
             <Edit />
           </Button>
         </PopoverTrigger>
-        <PopoverContent collisionPadding={32} className="text-sm">
+        <PopoverContent collisionPadding={32} side="left" className="text-sm">
           <h3 className="text-lg font-semibold">Edit Staff</h3>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -118,11 +125,20 @@ export function ActionComponent({
                 )}
               />
               <FormField
+                name="staffPhone"
+                control={form.control}
+                render={({ field }) => (
+                  <RequiredInput label="Staff Phone" {...field}>
+                    <Input {...field} />
+                  </RequiredInput>
+                )}
+              />
+              <FormField
                 name="staffRole"
                 control={form.control}
                 render={({ field }) => (
                   <RequiredInput label="Staff Role" {...field}>
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <SelectTrigger value={field.value}>
                         <SelectValue placeholder="Please select role" />
                       </SelectTrigger>

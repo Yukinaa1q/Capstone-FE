@@ -8,7 +8,7 @@ export default interface INewStaffAccount {
   staffPassword: string;
 }
 
-export interface IStaffAccount extends Omit<INewStaffAccount, "staffPhone"> {
+export interface IStaffAccount extends Omit<INewStaffAccount, "staffPassword"> {
   staffCode: string;
   staffId: string;
 }
