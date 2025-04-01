@@ -1,4 +1,9 @@
-import { Button } from "../ui/button";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import {
   Dialog,
   DialogContent,
@@ -9,27 +14,31 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Button } from "../ui/button";
 
-import { ICourseCardP1 } from "@/interfaces/ICourse";
+import { useAppSelector } from "@/hooks/reduxHook";
+import { StudyShift } from "@/interfaces/common";
+import { ICourseCard } from "@/interfaces/ICourse";
+import ITutorRegistration from "@/interfaces/ITutorRegistration";
+import { cn } from "@/lib/utils";
+import TucourApi from "@/utils/http";
+import { yupResolver } from "@hookform/resolvers/yup";
 import {
   ArrowLeft,
   ArrowRight,
-  TriangleAlert,
-  UserRoundPen,
+  TriangleAlert
 } from "lucide-react";
-import { useId, useState } from "react";
+import React, { useState } from "react";
+import { useForm, UseFormReturn } from "react-hook-form";
+import { array, boolean, InferType, object, string } from "yup";
+import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
+import { Checkbox } from "../ui/checkbox";
 import {
   Form,
   FormControl,
@@ -37,16 +46,6 @@ import {
   FormItem,
   FormMessage,
 } from "../ui/form";
-import { useForm, UseFormReturn } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { array, boolean, InferType, object, string } from "yup";
-import { Checkbox } from "../ui/checkbox";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { cn } from "@/lib/utils";
-import { StudyShift } from "@/interfaces/common";
-import ITutorRegistration from "@/interfaces/ITutorRegistration";
-import TucourApi from "@/utils/http";
-import { useAppSelector } from "@/hooks/reduxHook";
 
 const registrationSchema = object({
   isOddDays: boolean().default(false),
@@ -71,10 +70,12 @@ const registrationSchema = object({
     .default([]),
 }).required();
 
-const TutorRegistrationButton = ({
+const TutorRegistration = ({
   courseContent,
+  children,
 }: {
-  courseContent: ICourseCardP1;
+  courseContent: ICourseCard;
+  children: React.ReactNode;
 }) => {
   const [activity, setActivity] = useState<"registration" | "confirmation">(
     "registration"
@@ -106,15 +107,7 @@ const TutorRegistrationButton = ({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <button
-          type="button"
-          className="group flex items-center gap-0 px-2 py-2 bg-green-300 rounded-full overflow-hidden"
-        >
-          <UserRoundPen size={20} />
-          <p className="text-sm font-medium invisible w-0 group-hover:visible group-hover:w-16 group-hover:transition-all transition-all">
-            Register
-          </p>
-        </button>
+        {children}
       </DialogTrigger>
       <DialogContent className="">
         <DialogHeader>
@@ -437,4 +430,4 @@ const Confirmation = ({
   );
 };
 
-export default TutorRegistrationButton;
+export default TutorRegistration;

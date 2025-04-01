@@ -1,35 +1,31 @@
-import React, {
-  createContext,
-  useState,
-  useContext,
-  useEffect,
-} from "react";
 import {
   Pagination,
   PaginationContent,
   PaginationItem,
   PaginationLink,
 } from "@/components/ui/pagination";
+import { cn } from "@/lib/utils";
 import {
   ChevronFirst,
   ChevronLast,
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import React, { createContext, useContext, useState } from "react";
 import { Button } from "./ui/button";
-import { cn } from "@/lib/utils";
 
 interface PaginationProps {
   children?: React.ReactNode;
   size: number;
   total: number;
-  onPageChange?: (pageInfo: {currentPage: number, perPage: number, totalItem: number}) => void;
+  onPageChange?: (currentPage: number) => void;
 }
 
 interface PaginationCtxProps {
   currentPage: number;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   MAX_PAGE: number;
+  onPageChange?: (currentPage: number) => void;
 }
 
 const PaginationCtx = createContext<PaginationCtxProps>({
@@ -38,6 +34,14 @@ const PaginationCtx = createContext<PaginationCtxProps>({
   MAX_PAGE: 1,
 });
 
+/**
+ *
+ * @param total - total number of items available
+ * @param size - number of items per page
+ * @param onPageChange - callback function to be called when the page changes
+ * @param children - children components must be **\<PaginationNav/>** or **\<PaginationGoto/>**
+ *
+ */
 const MyPagination = ({
   children,
   total,
@@ -46,11 +50,10 @@ const MyPagination = ({
 }: PaginationProps) => {
   const MAX_PAGE = Math.ceil(total / size);
   const [currentPage, setCurrentPage] = useState(1);
-  useEffect(() => {
-    onPageChange && onPageChange({currentPage, perPage: size, totalItem: total});
-  }, [currentPage]);
   return (
-    <PaginationCtx.Provider value={{ currentPage, setCurrentPage, MAX_PAGE }}>
+    <PaginationCtx.Provider
+      value={{ currentPage, setCurrentPage, MAX_PAGE, onPageChange }}
+    >
       {children}
     </PaginationCtx.Provider>
   );
@@ -72,7 +75,10 @@ export const PaginationNav = ({ className }: { className?: string }) => {
           <Button
             variant={"ghost"}
             disabled={ctx.currentPage === 1 ? true : false}
-            onClick={() => ctx.setCurrentPage(1)}
+            onClick={() => {
+              ctx.setCurrentPage(1);
+              if (ctx.onPageChange) ctx.onPageChange(1);
+            }}
             className="size-9 rounded-md flex items-center justify-center"
           >
             <ChevronFirst size={16} />
@@ -82,7 +88,10 @@ export const PaginationNav = ({ className }: { className?: string }) => {
           <Button
             variant={"ghost"}
             disabled={ctx.currentPage === 1 ? true : false}
-            onClick={() => ctx.setCurrentPage((prev) => prev - 1)}
+            onClick={() => {
+              ctx.setCurrentPage((prev) => prev - 1);
+              if (ctx.onPageChange) ctx.onPageChange(ctx.currentPage - 1);
+            }}
             className="size-9 hover:bg-slate-100 rounded-md flex items-center justify-center"
           >
             <ChevronLeft size={16} />
@@ -94,7 +103,10 @@ export const PaginationNav = ({ className }: { className?: string }) => {
         ).map((page, idx) => (
           <PaginationItem key={idx}>
             <PaginationLink
-              onClick={() => ctx.setCurrentPage(page)}
+              onClick={() => {
+                ctx.setCurrentPage(page);
+                if (ctx.onPageChange) ctx.onPageChange(page);
+              }}
               className={cn(
                 ctx.currentPage === page && "bg-slate-100",
                 "hover:cursor-default"
@@ -108,7 +120,10 @@ export const PaginationNav = ({ className }: { className?: string }) => {
           <Button
             variant={"ghost"}
             disabled={ctx.currentPage === ctx.MAX_PAGE ? true : false}
-            onClick={() => ctx.setCurrentPage((prev) => prev + 1)}
+            onClick={() => {
+              ctx.setCurrentPage((prev) => prev + 1);
+              if (ctx.onPageChange) ctx.onPageChange(ctx.currentPage + 1);
+            }}
             className="size-9 hover:bg-slate-100 rounded-md flex items-center justify-center"
           >
             <ChevronRight size={16} />
@@ -118,7 +133,10 @@ export const PaginationNav = ({ className }: { className?: string }) => {
           <Button
             variant={"ghost"}
             disabled={ctx.currentPage === ctx.MAX_PAGE ? true : false}
-            onClick={() => ctx.setCurrentPage(ctx.MAX_PAGE)}
+            onClick={() => {
+              ctx.setCurrentPage(ctx.MAX_PAGE);
+              if (ctx.onPageChange) ctx.onPageChange(ctx.MAX_PAGE);
+            }}
             className="size-9 hover:bg-slate-100 rounded-md flex items-center justify-center"
           >
             <ChevronLast size={16} />
