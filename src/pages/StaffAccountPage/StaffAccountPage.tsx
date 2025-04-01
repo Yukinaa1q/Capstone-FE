@@ -29,6 +29,7 @@ import StaffAccountCtx from "./staffAccCtx";
 import { ActionComponent, EditableCell } from "./util";
 import { AnimatePresence, motion } from "motion/react";
 import StaffApi from "@/api/StaffApi";
+import { useLoaderData, useNavigate } from "react-router";
 
 export interface IsEditing {
   isEditing: boolean;
@@ -114,30 +115,9 @@ const newStaffSchema = object({
 });
 
 const StaffAccountPage = () => {
-  const [data, setData] = useState<(IStaffAccount & IsEditing)[]>([
-    {
-      staffCode: "STF001",
-      staffId: "1",
-      staffName: "John Doe Do di do di",
-      staffRole: "academic",
-      staffEmail: "johndoe01@gmail.com",
-      staffPhone: "0987287178",
-      isEditing: false,
-      prevName: "John Doe",
-      prevPassword: "password",
-    },
-    {
-      staffCode: "STF002",
-      staffId: "2",
-      staffName: "Jane Doe",
-      staffRole: "support",
-      staffEmail: "janethebooba111@gmail.com",
-      staffPhone: "0987287178",
-      isEditing: false,
-      prevName: "Jane Doe",
-      prevPassword: "password",
-    },
-  ]);
+  const queryData = useLoaderData();
+  const navigate = useNavigate();
+  const [data, setData] = useState<(IStaffAccount & IsEditing)[]>(queryData);
   const [showForm, setShowForm] = useState(false);
 
   const form = useForm({
@@ -163,6 +143,7 @@ const StaffAccountPage = () => {
     };
     try {
       StaffApi.createStaff(sendData);
+      navigate(0);
     }
     catch(err) {
       console.log(err);

@@ -65,7 +65,7 @@ const TutorEdit = () => {
           <div className="flex justify-end gap-4">
             <Link
               className={cn(buttonVariants({ variant: "destructive" }))}
-              to={"/tutors" + query.tutorDetail.userId}
+              to={"/tutors/" + query.tutorDetail.userId}
             >
               Cancel
             </Link>

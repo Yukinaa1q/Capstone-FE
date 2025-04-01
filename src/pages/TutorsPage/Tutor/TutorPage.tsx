@@ -134,6 +134,16 @@ const TutorPage = () => {
     }
   };
 
+  const handleVerify = async () => {
+    try {
+      await TutorApi.verifyTutor(tutorId);
+      navigate(0);
+    }
+    catch(err) {
+      console.log(err);
+    }
+  }
+
   return (
     <ContentLayout>
       <section className="flex flex-col lg:flex-row gap-10 p-10 rounded-lg bg-t_primary-100 justify-between">
@@ -162,6 +172,7 @@ const TutorPage = () => {
                   <Button
                     variant="link"
                     size="sm"
+                    onClick={handleVerify}
                     className="group ml-4 font-semibold text-green-500 underline hover:text-white hover:bg-green-400 hover:no-underline"
                   >
                     Verify Role

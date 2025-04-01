@@ -31,6 +31,7 @@ import getTutorInitContent from "./pages/TutorsPage/Tutor/TutorAction";
 import getStudentInit from "./pages/StudentsPage/StudentPage/StudentAction";
 import TutorLayout from "./pages/TutorsPage/Tutor/TutorLayout";
 import TutorEdit from "./pages/TutorsPage/Tutor/Edit/TutorEdit";
+import initStaffData from "./pages/StaffAccountPage/StaffAction";
 
 const router = createBrowserRouter([
   {
@@ -202,6 +203,7 @@ const router = createBrowserRouter([
       {
         path: "staff/accounts",
         element: <StaffAccountPage />,
+        loader: initStaffData,
       },
       {
         path: "user",

@@ -1,7 +1,4 @@
-import SubjectSelect from "@/components/Input/SubjectSelect";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -18,47 +15,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import ContentLayout from "@/layouts/ContentLayout";
-import SectionLayout from "@/layouts/SectionLayout";
 import { cn } from "@/lib/utils";
-import { levelToString, shortName, toHeadCase } from "@/utils/utils";
-import {
-  CakeIcon,
-  CheckCircle,
-  ChevronRight,
-  IdCard,
-  Mail,
-  MapPin,
-  Phone,
-  Verified,
-  XCircle,
-} from "lucide-react";
+import { shortName } from "@/utils/utils";
+import { CakeIcon, ChevronRight, Mail, MapPin, Phone } from "lucide-react";
 
 import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
 
-function levelColor(level: string): string {
-  switch (level) {
-    case "1":
-      return "bg-teal-600 hover:bg-teal-600/80";
-    case "2":
-      return "bg-cyan-600 hover:bg-cyan-600/80";
-    case "3":
-      return "bg-green-600 hover:bg-green-600/80";
-    case "4":
-      return "bg-sky-600 hover:bg-sky-600/80";
-    case "5":
-      return "bg-amber-600 hover:bg-amber-600/80";
-    default:
-      return "bg-gray-500 hover:bg-gray-500/80";
-  }
-}
-
 const StudentPage = () => {
   const navigate = useNavigate();
   const queryData = useLoaderData();
-  const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   // An API to get tutor detail profile
   const [profile] = React.useState(queryData.studentDetail);
   // An API to get tutor's classes base on semester
@@ -78,22 +46,10 @@ const StudentPage = () => {
       studyShift: "17h45 - 19h15",
     },
   ]);
-  // An API to get available semesters
-  // TODO: An API to get tutor's newQualification
-  const [newQualification, setNewQualification] = React.useState<{
-    subject: string;
-    level: string;
-  }>({ subject: "", level: "" });
-  const [qualifications] = React.useState([
-    { subject: "geography", level: "3" },
-    { subject: "math", level: "4" },
-    { subject: "history", level: "2" },
-    { subject: "english", level: "5" },
-  ]);
 
   return (
     <ContentLayout>
-      <section className="flex flex-col lg:flex-row gap-10 p-10 rounded-lg bg-t_primary-100 justify-between">
+      <section className="flex flex-col lg:flex-row gap-8 p-10 rounded-lg bg-t_primary-100 justify-between">
         <div className="basis:1/2 shrink-0">
           <div className="flex flex-col items-center gap-4 w-fit mb-4">
             <Avatar className="size-24 border">
@@ -134,7 +90,7 @@ const StudentPage = () => {
             </div>
           </div>
         </div>
-        <div className="grow">
+        <div className="">
           {/* A table to show tutor's classes during a selected semester */}
           <Select>
             <SelectTrigger className="w-[180px] bg-white">

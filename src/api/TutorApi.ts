@@ -67,16 +67,21 @@ export default class TutorApi {
   }
 
   public static async getTutorDetail(tutorId: string | undefined) {
-    return {
-      userCode: "TU2001",
-      userId: "1",
-      fullName: "Kieu Tien Thanh",
-      email: "thanhkieu207@gmail.com",
-      isVerified: false,
-      dob: "07/20/2003",
-      ssid: "078267861872",
-      address: "148/1/2 Nguyen Van Cu, P.1, Q.5, TP.HCM",
-      phoneNumber: "0123456789",
-    };
+    try {
+      const res = await TucourApi.get("/tutor/detail/" + tutorId);
+      return res as {
+        userCode: string;
+        userId: string;
+        fullName: string;
+        email: string;
+        isVerified: boolean;
+        dob: string;
+        ssid: string;
+        address: string;
+        phoneNumber: string;
+      };
+    } catch (err) {
+      console.log(err);
+    }
   }
 }

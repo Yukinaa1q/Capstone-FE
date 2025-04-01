@@ -36,6 +36,8 @@ const StaffLogin = () => {
     const res = await AuthenAPI.loginStaff(data.email, data.password);
     if (res) {
       const { payload } = jwtDecoder(window.localStorage.getItem("token") || "");
+      // window.localStorage.setItem("token", res.token);
+      console.log(payload);
       dispatch(setUser(payload));
       navigate("/");
     }

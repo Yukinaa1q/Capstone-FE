@@ -22,7 +22,7 @@ export default class AuthenAPI extends TucourApi {
         },
         body: JSON.stringify(authen),
       }) as {token: string};
-      // console.log(res);
+      console.log(res);
       window.localStorage.setItem("token", res.token);
   
       // return res.token;

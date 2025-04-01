@@ -22,4 +22,43 @@ export default class StaffApi {
       return err;
     }
   }
+
+  public static async editStaffAccount(id: string, data: any) {
+    try {
+      const res = await TucourApi.post("/staff/update/" + id, {
+        body: JSON.stringify(data),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  public static async getAllStaff() {
+    try {
+      const res = TucourApi.get("/staff/all-staff-table") as {
+        staffName: string;
+        staffId: string;
+        staffCode: string;
+        staffRole: string;
+        staffPhone: string;
+        staffEmail: string;
+      }
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
+  public static async deleteStaffAccount(id: string) {
+    try {
+      const res = TucourApi.delete("/staff/delete-staff/" + id);
+      return res;
+    } catch (err) {
+      console.log(err);
+    }
+  }
 }

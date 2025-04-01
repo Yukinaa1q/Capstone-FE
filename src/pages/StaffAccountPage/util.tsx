@@ -25,6 +25,8 @@ import { useForm } from "react-hook-form";
 import { InferType, object, string } from "yup";
 import StaffAccountCtx from "./staffAccCtx";
 import { IsEditing } from "./StaffAccountPage";
+import StaffApi from "@/api/StaffApi";
+import { useNavigate } from "react-router";
 
 export const EditableCell = ({
   cell,
@@ -78,6 +80,16 @@ export function ActionComponent({
   const targetStaff = ctx.data.find(
     (staff) => staff.staffCode === cell.row.getValue("staffCode")
   )!;
+  const navigate = useNavigate();
+
+  const handleDeleteStaff = async () => {
+    try {
+      await StaffApi.deleteStaffAccount(targetStaff.staffId);
+      navigate(0);
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const form = useForm({
     defaultValues: {
@@ -89,8 +101,15 @@ export function ActionComponent({
     resolver: yupResolver(EditStaffSchema),
   });
 
-  const onSubmit = (data: InferType<typeof EditStaffSchema>) => {
+  const onSubmit = async (data: InferType<typeof EditStaffSchema>) => {
     console.log(data);
+    try {
+      await StaffApi.editStaffAccount(targetStaff.staffId, data);
+      navigate(0);
+    }
+    catch (err) {
+      console.log(err);
+    }
   };
 
   // If user in editing mode, show edit and delete button
@@ -175,11 +194,7 @@ export function ActionComponent({
       <Button
         variant="ghost"
         size="icon"
-        onClick={() => {
-          ctx.setData((prev) =>
-            prev.filter((staff) => staff.staffCode !== targetStaff.staffCode)
-          );
-        }}
+        onClick={handleDeleteStaff}
       >
         <LucideTrash />
       </Button>
