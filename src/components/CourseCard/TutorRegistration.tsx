@@ -1,10 +1,4 @@
 import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -14,61 +8,21 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
-
-import { useAppSelector } from "@/hooks/reduxHook";
-import { StudyShift } from "@/interfaces/common";
+  Table,
+  TableBody,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { StudyShift, StudyWeek } from "@/interfaces/common";
 import { ICourseCard } from "@/interfaces/ICourse";
-import ITutorRegistration from "@/interfaces/ITutorRegistration";
-import { cn } from "@/lib/utils";
-import TucourApi from "@/utils/http";
-import { yupResolver } from "@hookform/resolvers/yup";
-import {
-  ArrowLeft,
-  ArrowRight,
-  TriangleAlert
-} from "lucide-react";
+import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
+import { ArrowLeft, PlusIcon, SendHorizonal, Trash2 } from "lucide-react";
 import React, { useState } from "react";
-import { useForm, UseFormReturn } from "react-hook-form";
-import { array, boolean, InferType, object, string } from "yup";
-import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
-import { Checkbox } from "../ui/checkbox";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormMessage,
-} from "../ui/form";
-
-const registrationSchema = object({
-  isOddDays: boolean().default(false),
-  oddTimeShift: array(string<StudyShift>())
-    .when("isOddDays", {
-      is: true,
-      then: (schema) =>
-        schema
-          .min(1, "Choose at leat one timeshift")
-          .required("Time Shift is required"),
-    })
-    .default([]),
-  isEvenDays: boolean().default(false),
-  evenTimeShift: array(string<StudyShift>())
-    .when("isEvenDays", {
-      is: true,
-      then: (schema) =>
-        schema
-          .min(1, "Choose at least one timeshift")
-          .required("Time Shift is required"),
-    })
-    .default([]),
-}).required();
+import Selection from "../Input/Selection";
+import { Button } from "../ui/button";
 
 const TutorRegistration = ({
   courseContent,
@@ -80,96 +34,162 @@ const TutorRegistration = ({
   const [activity, setActivity] = useState<"registration" | "confirmation">(
     "registration"
   );
-  const [errMsg, setErrMsg] = useState<string | null>(null);
 
-  const user = useAppSelector((state) => state.auths);
+  const [scheduleList, setScheduleList] = useState<TutorRegistrationSchedule[]>(
+    []
+  );
 
-  const form = useForm({
-    values: {
-      isEvenDays: false,
-      isOddDays: false,
-      evenTimeShift: [],
-      oddTimeShift: [],
-    },
-    resolver: yupResolver(registrationSchema),
-  });
+  const [studyWeek, setStudyWeek] = React.useState<StudyWeek | undefined>(
+    undefined
+  );
+  const [studyShift, setStudyShift] = React.useState<StudyShift | undefined>(
+    undefined
+  );
 
-  const onSubmit = (data: InferType<typeof registrationSchema>) => {
-    if (!data.isOddDays && !data.isEvenDays) {
-      setErrMsg("You must choose at least one teaching schedule");
-      return;
-    } else {
-      setErrMsg(null);
-      setActivity("confirmation");
-    }
+  const verboseTeachingWeek = (value: StudyWeek) => {
+    if (value === "2-4") return "Monday - Wednesday";
+    else if (value === "3-5") return "Tuesday - Thursday";
+    else if (value === "4-6") return "Wednesday - Friday";
+    else if (value === "7") return "Saturday";
+    else if (value === "8") return "Sunday";
+    return "Choose Weekdays";
   };
 
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        {children}
-      </DialogTrigger>
-      <DialogContent className="">
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="max-w-xl">
         <DialogHeader>
           <DialogTitle>Teaching Registration Form</DialogTitle>
           <DialogDescription>
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem
-                  className={activity === "registration" ? "text-black" : ""}
-                >
-                  Registration
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem
-                  className={activity === "confirmation" ? "text-black" : ""}
-                >
-                  Confirmation
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
+            Select Your Desire Teaching Time
           </DialogDescription>
         </DialogHeader>
         <div>
-          <div>
-            <h1 className="font-semibold text-2xl uppercase">
-              {courseContent.courseTitle}
-            </h1>
-            <p className="text-sm font-semibold text-gray-600">
-              {courseContent.courseCode}
-            </p>
-          </div>
-          <Alert
-            className={cn("my-2", !errMsg ? "invisible" : "visible")}
-            variant="destructive"
-          >
-            <TriangleAlert size={20} />
-            <AlertTitle>Invalid Submission</AlertTitle>
-            <AlertDescription>{errMsg}</AlertDescription>
-          </Alert>
-          <div>
-            <h3 className="font-semibold text-sm">Teaching Schedule</h3>
-            {activity === "registration" ? (
-              <Registration form={form} onSubmit={onSubmit} />
-            ) : (
-              <Confirmation form={form} />
-            )}
-          </div>
+          <h1 className="font-semibold text-xl uppercase">
+            {courseContent.courseTitle}
+          </h1>
+          <p className="text-sm font-semibold">{courseContent.courseCode}</p>
+        </div>
+        <div>
+          <h3 className="font-semibold text-sm">Teaching Schedule</h3>
+          <Table>
+            <TableHeader className="sticky top-0">
+              <TableRow>
+                <TableHead className="text-center">Weekdays</TableHead>
+                <TableHead className="text-center">Time Shift</TableHead>
+                <TableHead className="text-center">Action</TableHead>
+              </TableRow>
+              <TableRow>
+                <TableCell className="text-center">
+                  <Selection
+                    className="w-52"
+                    placeholder="Choose Weekdays"
+                    selectList={["2-4", "3-5", "4-6", "7", "8"]}
+                    display={(value) => {
+                      if (value === "2-4") return "Monday - Wednesday";
+                      else if (value === "3-5") return "Tuesday - Thursday";
+                      else if (value === "4-6") return "Wednesday - Friday";
+                      else if (value === "7") return "Saturday";
+                      else if (value === "8") return "Sunday";
+                      return "Choose Weekdays";
+                    }}
+                    onSelect={(value) => setStudyWeek(value as StudyWeek)}
+                  />
+                </TableCell>
+                <TableCell className="text-center">
+                  <Selection
+                    className="w-36"
+                    disabled={!studyWeek}
+                    placeholder="Time Shift"
+                    selectList={
+                      ["7", "8"].includes(studyWeek!)
+                        ? [
+                            "08h00 - 11h00",
+                            "13h00 - 16h00",
+                            "16h15 - 19h15",
+                            "19h30 - 21h30",
+                          ]
+                        : ["17h45 - 19h15", "19h30 - 21h00"]
+                    }
+                    onSelect={(value) => setStudyShift(value as StudyShift)}
+                  />
+                </TableCell>
+                <TableCell className="text-center">
+                  <div className="w-20 mx-auto">
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      className="gap-0 group"
+                      onClick={() => {
+                        if (studyWeek && studyShift) {
+                          setScheduleList((prev) => [
+                            ...prev.filter(
+                              (schedule) =>
+                                schedule.studyWeek !== studyWeek &&
+                                schedule.studyShift !== studyShift
+                            ),
+                            { studyShift, studyWeek },
+                          ]);
+                        }
+                      }}
+                    >
+                      <PlusIcon className="text-t_primary-500 transition-transform -rotate-180 group-hover:rotate-180 group-hover:transition-transform" />
+                      <span className="text-t_primary-500 w-0 overflow-x-hidden group-hover:w-10 group-hover:transition-all transition-all">
+                        Add
+                      </span>
+                    </Button>
+                  </div>
+                </TableCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {scheduleList.map((schedule, index) => (
+                <TableRow key={index}>
+                  <TableCell className="text-center">
+                    {verboseTeachingWeek(schedule.studyWeek)}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {schedule.studyShift}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="text-t_primary-500"
+                      onClick={() =>
+                        setScheduleList((prev) =>
+                          prev.filter((_, i) => i !== index)
+                        )
+                      }
+                    >
+                      <Trash2 />
+                      <span>Delete</span>
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+            <TableFooter></TableFooter>
+          </Table>
         </div>
         <DialogFooter>
           {activity === "registration" && (
             <>
+              <Button variant="destructive" type="button">
+                Cancel
+              </Button>
               <Button
                 type="submit"
                 form="tutorRegistration"
                 variant="outline"
-                className="border-t_primary-500 hover:bg-t_primary-100"
+                className="border-t_primary-500 hover:bg-t_primary-100 group"
               >
-                <ArrowRight />
-                Continue
-              </Button>
-              <Button variant="destructive" type="button">
-                Cancel
+                Submit
+                <div className="size-4 overflow-hidden relative">
+                  <SendHorizonal className="absolute group-hover:hidden"/>
+                  <SendHorizonal className="absolute -ml-4 group-hover:ml-0 group-hover:transition-all group-hover:duration-500"/>
+                </div>
               </Button>
             </>
           )}
@@ -187,39 +207,7 @@ const TutorRegistration = ({
                 <ArrowLeft />
                 Back
               </Button>
-              <Button
-                className="bg-green-400 hover:bg-green-500 text-black"
-                onClick={async () => {
-                  const submitData: ITutorRegistration = {
-                    courseId: courseContent.courseId,
-                    tutorId: user.userId,
-                    evenTimeShift: form
-                      .getValues("evenTimeShift")
-                      .filter((v) => v !== undefined),
-                    oddTimeShift: form
-                      .getValues("oddTimeShift")
-                      .filter((v) => v !== undefined),
-                  };
-
-                  // console.log(submitData);
-                  try {
-                    const res = await TucourApi.call("/phase1_register/tutor", {
-                      method: "POST",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem(
-                          "token"
-                        )}`,
-                      },
-                      body: JSON.stringify(submitData),
-                    });
-                    console.log(res);
-                    window.location.reload();
-                  } catch (err) {
-                    console.error(err);
-                  }
-                }}
-              >
+              <Button className="bg-green-400 hover:bg-green-500 text-black">
                 Submit
               </Button>
             </>
@@ -227,206 +215,6 @@ const TutorRegistration = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
-
-const Registration = ({
-  form,
-  onSubmit,
-}: {
-  form: UseFormReturn<InferType<typeof registrationSchema>>;
-  onSubmit: (data: InferType<typeof registrationSchema>) => void;
-}) => {
-  return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} id="tutorRegistration">
-        <div></div>
-        <div className="grid grid-cols-[36px_1fr_1fr] gap-4">
-          <div></div>
-          <p className="text-center">Teaching Weekdays</p>
-          <p className="text-center">Time Shift</p>
-          <FormField
-            control={form.control}
-            name="isEvenDays"
-            render={({ field }) => (
-              <FormItem className="flex items-center gap-2">
-                <FormControl>
-                  <Checkbox
-                    className="mx-auto mb-auto mt-2"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <p className="text-center mb-auto h-9 leading-9">2/4/6</p>
-          <FormField
-            control={form.control}
-            name="evenTimeShift"
-            render={({ field }) => (
-              <FormItem className="h-16">
-                <FormControl>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        disabled={!form.getValues("isEvenDays")}
-                      >
-                        Choose Time
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-50">
-                      <DropdownMenuSeparator />
-                      <DropdownMenuCheckboxItem
-                        checked={field.value?.includes("17h45 - 19h15")}
-                        onCheckedChange={(val) => {
-                          if (val) {
-                            field.onChange([...field.value, "17h45 - 19h15"]);
-                          } else {
-                            field.onChange(
-                              field.value?.filter((v) => v !== "17h45 - 19h15")
-                            );
-                          }
-                        }}
-                      >
-                        17h45 - 19h15
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem
-                        checked={field.value?.includes("19h30 - 21h00")}
-                        onCheckedChange={(val) => {
-                          if (val) {
-                            field.onChange([...field.value, "19h30 - 21h00"]);
-                          } else {
-                            field.onChange(
-                              field.value?.filter((v) => v !== "19h30 - 21h00")
-                            );
-                          }
-                        }}
-                      >
-                        19h30 - 21h00
-                      </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="isOddDays"
-            render={({ field }) => (
-              <FormItem className="flex items-center gap-2">
-                <FormControl>
-                  <Checkbox
-                    className="mx-auto mb-auto mt-2"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <p className="text-center mb-auto h-9 leading-9">3/5/7</p>
-          <FormField
-            control={form.control}
-            name="oddTimeShift"
-            render={({ field }) => (
-              <FormItem className="h-16">
-                <FormControl>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button
-                        variant="outline"
-                        className="w-full"
-                        disabled={!form.getValues("isOddDays")}
-                      >
-                        Choose Time
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-50">
-                      <DropdownMenuSeparator />
-                      <DropdownMenuCheckboxItem
-                        checked={field.value?.includes("17h45 - 19h15")}
-                        onCheckedChange={(val) => {
-                          if (val) {
-                            field.onChange([
-                              ...(field.value as Array<string>),
-                              "17h45 - 19h15",
-                            ]);
-                          } else {
-                            field.onChange(
-                              field.value?.filter((v) => v !== "17h45 - 19h15")
-                            );
-                          }
-                        }}
-                      >
-                        17h45 - 19h15
-                      </DropdownMenuCheckboxItem>
-                      <DropdownMenuCheckboxItem
-                        checked={field.value?.includes("19h30 - 21h00")}
-                        onCheckedChange={(val) => {
-                          if (val) {
-                            field.onChange([
-                              ...(field.value as Array<string>),
-                              "19h30 - 21h00",
-                            ]);
-                          } else {
-                            field.onChange(
-                              field.value?.filter((v) => v !== "19h30 - 21h00")
-                            );
-                          }
-                        }}
-                      >
-                        19h30 - 21h00
-                      </DropdownMenuCheckboxItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        </div>
-      </form>
-    </Form>
-  );
-};
-
-const Confirmation = ({
-  form,
-}: {
-  form: UseFormReturn<InferType<typeof registrationSchema>>;
-}) => {
-  return (
-    <div className="grid grid-cols-2 gap-4 text-center">
-      <p className="font-semibold">Teaching Weekdays</p>
-      <p className="font-semibold">Time Shift</p>
-      {form.getValues("isEvenDays") && (
-        <>
-          <p className="font-medium">2/4/6</p>
-          <div>
-            {form.getValues("evenTimeShift").map((time) => (
-              <p>{time}</p>
-            ))}
-          </div>
-        </>
-      )}
-      {form.getValues("isOddDays") && (
-        <>
-          <p className="font-medium">3/5/7</p>
-          <div>
-            {form.getValues("oddTimeShift").map((time) => (
-              <p>{time}</p>
-            ))}
-          </div>
-        </>
-      )}
-    </div>
   );
 };
 

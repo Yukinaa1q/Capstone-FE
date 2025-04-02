@@ -34,7 +34,7 @@ const TutorViewAvailableCourse = () => {
         <SearchInput />
       </form>
 
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
         {courseList.map((course) => (
           <TutorCourseCard key={course.courseCode} cardInfo={course} />
         ))}
