@@ -1,3 +1,4 @@
+import TutorApi from "@/api/TutorApi";
 import {
   Dialog,
   DialogContent,
@@ -19,10 +20,11 @@ import {
 import { StudyShift, StudyWeek } from "@/interfaces/common";
 import { ICourseCard } from "@/interfaces/ICourse";
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
-import { ArrowLeft, PlusIcon, SendHorizonal, Trash2 } from "lucide-react";
+import { PlusIcon, SendHorizonal, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import Selection from "../Input/Selection";
 import { Button } from "../ui/button";
+import { useNavigate } from "react-router";
 
 const TutorRegistration = ({
   courseContent,
@@ -31,20 +33,16 @@ const TutorRegistration = ({
   courseContent: ICourseCard;
   children: React.ReactNode;
 }) => {
-  const [activity, setActivity] = useState<"registration" | "confirmation">(
-    "registration"
-  );
-
   const [scheduleList, setScheduleList] = useState<TutorRegistrationSchedule[]>(
     []
   );
-
   const [studyWeek, setStudyWeek] = React.useState<StudyWeek | undefined>(
     undefined
   );
   const [studyShift, setStudyShift] = React.useState<StudyShift | undefined>(
     undefined
   );
+  const navigate = useNavigate();
 
   const verboseTeachingWeek = (value: StudyWeek) => {
     if (value === "2-4") return "Monday - Wednesday";
@@ -53,6 +51,19 @@ const TutorRegistration = ({
     else if (value === "7") return "Saturday";
     else if (value === "8") return "Sunday";
     return "Choose Weekdays";
+  };
+
+  const onTutorSubmitRequest = async () => {
+    if (scheduleList.length === 0) {
+      alert("Please select at least one schedule");
+      return;
+    }
+    await TutorApi.sendTeachingRequest(scheduleList);
+    setScheduleList([]);
+    setStudyWeek(undefined);
+    setStudyShift(undefined);
+    alert("Request sent successfully");
+    navigate(0);
   };
 
   return (
@@ -83,7 +94,7 @@ const TutorRegistration = ({
               <TableRow>
                 <TableCell className="text-center">
                   <Selection
-                    className="w-52"
+                    className="w-52 mx-auto"
                     placeholder="Choose Weekdays"
                     selectList={["2-4", "3-5", "4-6", "7", "8"]}
                     display={(value) => {
@@ -99,7 +110,7 @@ const TutorRegistration = ({
                 </TableCell>
                 <TableCell className="text-center">
                   <Selection
-                    className="w-36"
+                    className="w-36 mx-auto"
                     disabled={!studyWeek}
                     placeholder="Time Shift"
                     selectList={
@@ -174,44 +185,20 @@ const TutorRegistration = ({
           </Table>
         </div>
         <DialogFooter>
-          {activity === "registration" && (
-            <>
-              <Button variant="destructive" type="button">
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                form="tutorRegistration"
-                variant="outline"
-                className="border-t_primary-500 hover:bg-t_primary-100 group"
-              >
-                Submit
-                <div className="size-4 overflow-hidden relative">
-                  <SendHorizonal className="absolute group-hover:hidden"/>
-                  <SendHorizonal className="absolute -ml-4 group-hover:ml-0 group-hover:transition-all group-hover:duration-500"/>
-                </div>
-              </Button>
-            </>
-          )}
-          {activity === "confirmation" && (
-            <>
-              <Button
-                type="button"
-                variant={"outline"}
-                className="border-t_tertiary-500 hover:bg-t_tertiary-100"
-                onClick={() => {
-                  console.log("Back button");
-                  setActivity("registration");
-                }}
-              >
-                <ArrowLeft />
-                Back
-              </Button>
-              <Button className="bg-green-400 hover:bg-green-500 text-black">
-                Submit
-              </Button>
-            </>
-          )}
+          <Button variant="destructive" type="button">
+            Cancel
+          </Button>
+          <Button
+            onClick={onTutorSubmitRequest}
+            variant="outline"
+            className="border-t_primary-500 hover:bg-t_primary-100 group"
+          >
+            Submit
+            <div className="size-4 overflow-hidden relative">
+              <SendHorizonal className="absolute group-hover:hidden stroke-t_primary-500" />
+              <SendHorizonal className="absolute -ml-4 group-hover:ml-0 group-hover:transition-all group-hover:duration-300 stroke-t_primary-500" />
+            </div>
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

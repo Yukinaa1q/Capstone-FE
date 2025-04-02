@@ -1,3 +1,4 @@
+import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
 import TucourApi from "@/utils/http";
 
 export default class TutorApi {
@@ -82,6 +83,19 @@ export default class TutorApi {
       };
     } catch (err) {
       console.log(err);
+    }
+  }
+
+  public static async sendTeachingRequest(
+    scheduleList: TutorRegistrationSchedule[]
+  ) {
+    try {
+      console.log(
+        "Đã gửi thông tin đăng ký dạy học, thông tin là: ",
+        scheduleList
+      );
+    } catch {
+      console.log("Error sending teaching request");
     }
   }
 }
