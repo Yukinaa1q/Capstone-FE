@@ -1,21 +1,20 @@
-import FetchRegisteredApi from "@/api/FetchRegisteredApi";
 import RegisteredCard from "@/components/CourseCard/RegisteredCard";
-import IRegisteredCard from "@/interfaces/IRegisteredCard";
-import { useEffect, useState } from "react";
+import { IClassCard } from "@/interfaces/ICourse";
+import { useState } from "react";
 
 
 const RegisteredCoursesPage = () => {
-  const [myRegisteredCourses, setMyRegisteredCourses] = useState<IRegisteredCard[]>([]);
+  const [myRegisteredCourses, setMyRegisteredCourses] = useState<IClassCard[]>([]);
 
-  useEffect(() => {
-    const getRegisteredCourses = async () => {
-      // Fetch registe  red courses from the server
-      const registerCards = await FetchRegisteredApi.fetchRegisteredCourses() as IRegisteredCard[];
-      console.log(registerCards);
-      setMyRegisteredCourses(registerCards);
-    };
-    getRegisteredCourses();
-  }, [])
+  // useEffect(() => {
+  //   const getRegisteredCourses = async () => {
+  //     // Fetch registe  red courses from the server
+  //     const registerCards = await FetchRegisteredApi.fetchRegisteredCourses() as IRegisteredCard[];
+  //     console.log(registerCards);
+  //     setMyRegisteredCourses(registerCards);
+  //   };
+  //   getRegisteredCourses();
+  // }, [])
 
   return (
     <main className="mx-8 mt-4">

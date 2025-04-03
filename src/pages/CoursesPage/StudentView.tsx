@@ -1,4 +1,4 @@
-import CourseCard from "@/components/CourseCard/UnregisterCard";
+import CourseCard from "@/components/CourseCard/StudentClassCard";
 import MyPagination, {
   PaginationGoto,
   PaginationNav,
@@ -24,20 +24,23 @@ const StudentView = () => {
   const [totalItems, setTotalItems] = useState(10);
 
   useEffect(() => {
-    const getCourseList = async() => {
-      const courses = await FetchUnregisteredAPI.getAllWithPagination(searchKey, currentPage) as {
+    const getCourseList = async () => {
+      const courses = (await FetchUnregisteredAPI.getAllWithPagination(
+        searchKey,
+        currentPage
+      )) as {
         meta: {
           currentPage: number;
           itemsPerPage: number;
           totalItems: number;
           totalPages: number;
-        },
-        data: ICourseCard[]
+        };
+        data: ICourseCard[];
       };
 
       setCourseList(courses.data);
       setTotalItems(courses.meta.totalItems);
-    }
+    };
 
     getCourseList();
   }, []);
@@ -48,22 +51,24 @@ const StudentView = () => {
         onSubmit={async (e) => {
           e.preventDefault();
           const searchValue = (e.currentTarget[0] as HTMLInputElement).value;
-          console.log("Search Key", searchValue)
+          console.log("Search Key", searchValue);
           setSearchKey(searchValue);
           try {
-            const res = await FetchUnregisteredAPI.getAllWithPagination(searchValue, currentPage) as {
+            const res = (await FetchUnregisteredAPI.getAllWithPagination(
+              searchValue,
+              currentPage
+            )) as {
               meta: {
                 currentPage: number;
                 itemsPerPage: number;
                 totalItems: number;
                 totalPages: number;
-              },
-              data: ICourseCard[]
+              };
+              data: ICourseCard[];
             };
             setCourseList(res.data);
             setTotalItems(res.meta.totalItems);
-          }
-          catch(err) {
+          } catch (err) {
             console.log(err);
           }
         }}
@@ -74,31 +79,35 @@ const StudentView = () => {
       <MyPagination
         size={PRODUCTS_PER_PAGE}
         total={totalItems}
-        onPageChange={ async (pageInfo) => {
+        onPageChange={async (pageInfo) => {
           setCurrentPage(pageInfo.currentPage);
           try {
-            const courses = await FetchUnregisteredAPI.getAllWithPagination(searchKey, pageInfo.currentPage) as {
+            const courses = (await FetchUnregisteredAPI.getAllWithPagination(
+              searchKey,
+              pageInfo.currentPage
+            )) as {
               meta: {
                 currentPage: number;
                 itemsPerPage: number;
                 totalItems: number;
                 totalPages: number;
-              },
-              data: ICourseCard[]
+              };
+              data: ICourseCard[];
             };
 
             console.log(courses);
 
             setCourseList(courses.data);
             setTotalItems(courses.meta.totalItems);
-          }
-          catch(err) {
+          } catch (err) {
             console.log(err);
           }
         }}
       >
         <div className="px-10 mt-10 flex justify-between items-center">
-          <p className="text-lg font-semibold">{totalItems} results for "{searchKey}"</p>
+          <p className="text-lg font-semibold">
+            {totalItems} results for "{searchKey}"
+          </p>
           <div className="flex gap-4">
             <PaginationNav className="w-fit mx-0" />
             <PaginationGoto />

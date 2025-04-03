@@ -1,3 +1,11 @@
+import FetchRegisteredApi from "@/api/FetchRegisteredApi";
+import { MoreDetailIcon, PriceIcon } from "@/assets/icons";
+import { useAppSelector } from "@/hooks/reduxHook";
+import { IClassCard } from "@/interfaces/ICourse";
+import toVND from "@/utils/currencyFormat";
+import { ClipboardPen, GraduationCap, Users, X } from "lucide-react";
+import { Link } from "react-router";
+import { Badge } from "../ui/badge";
 import {
   Card,
   CardContent,
@@ -6,27 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Badge } from "../ui/badge";
-import { useAppSelector } from "@/hooks/reduxHook";
-import { ICourseCardP1, ICourseCardP2 } from "@/interfaces/ICourse";
-import CourseCardP1 from "./CardPhase1";
-import CourseCardP2 from "./CardPhase2";
-import { Info, X } from "lucide-react";
-import { MoreDetailIcon, PriceIcon } from "@/assets/icons";
-import toVND from "@/utils/currencyFormat";
-import IRegisteredCard from "@/interfaces/IRegisteredCard";
-import FetchRegisteredApi from "@/api/FetchRegisteredApi";
-import { Link, useNavigate } from "react-router";
 
-const RegisteredCard = ({ cardInfo }: { cardInfo: IRegisteredCard }) => {
+const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
   const phase = useAppSelector((state) => state.phases.phase);
-  const navigate = useNavigate();
   const user = useAppSelector((state) => state.auths);
 
   const handleUnregister = async () => {
@@ -77,43 +67,34 @@ const RegisteredCard = ({ cardInfo }: { cardInfo: IRegisteredCard }) => {
           <p>{cardInfo.courseCode}</p>
         </CardDescription>
       </CardHeader>
-      <CardContent className="text-sm w-full">
-        {phase === 1 ? (
-          <CourseCardP1 courseContent={cardInfo as ICourseCardP1} />
-        ) : (
-          <CourseCardP2 courseContent={cardInfo as ICourseCardP2} />
-        )}
-        <div className="flex justify-between items-center mt-2">
-          <div className="flex items-center gap-2 font-semibold">
-            <img src={PriceIcon} alt="price" className="size-5" />
-            <p className="text-base">{toVND(cardInfo.coursePrice)}</p>
+      <CardContent className="w-full space-y-2">
+        <div className="flex gap-2 items-center text-sm">
+          <ClipboardPen size={20} className="stroke-gray-500" />
+          <div className="flex">
+            <p className="p-1 bg-t_primary-100 rounded-md">
+              {cardInfo.registrationStartDate}
+            </p>
+            <p>&nbsp;-&nbsp;</p>
+            <p className="p-1 bg-t_tertiary-100 rounded-md">
+              {cardInfo.registrationEndDate}
+            </p>
           </div>
-          {user.role === "student" && (
-            <TooltipProvider delayDuration={0}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Info size={16} className="stroke-blue-700" />
-                </TooltipTrigger>
-                <TooltipContent className="bg-gray-100/10 border border-t_primary-700/20 text-black backdrop-blur-2xl">
-                  <h4 className="text-base font-semibold">
-                    Your Registration Information
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2 gap-x-4 mt-4">
-                    <p className="text-sm">Course Name</p>
-                    <p className="text-sm font-medium">
-                      {cardInfo.courseTitle}
-                    </p>
-                    <p className="text-sm ">Course Code</p>
-                    <p className="text-sm font-medium">{cardInfo.courseCode}</p>
-                    <p className="text-sm">Desire learning type</p>
-                    <p className="text-sm font-medium">
-                      {cardInfo.isOnline ? "Online" : "Offline"}
-                    </p>
-                  </div>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
+        </div>
+        <div className="flex gap-2 items-center text-sm">
+          <GraduationCap size={20} className="stroke-gray-500" />
+          <p className="p-1 bg-t_secondary-200/80 rounded-md">
+            {cardInfo.tutor}
+          </p>
+        </div>
+        <div className="flex gap-2 items-center text-sm">
+          <Users size={20} className="stroke-gray-500" />
+          <p className="p-1 bg-t_secondary-400/50 rounded-md">
+            {cardInfo.currentStudents}/{cardInfo.maxStudents}
+          </p>
+        </div>
+        <div className="flex items-center gap-2 mt-4 font-semibold text-lg">
+          <img src={PriceIcon} alt="price" className="size-5" />
+          <p className="text-base">{toVND(cardInfo.coursePrice)}</p>
         </div>
       </CardContent>
 

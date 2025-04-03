@@ -51,10 +51,16 @@ export default function AvatarPopover() {
           </div>
         </div>
         <Separator />
-        <Button variant="ghost" className="w-full mt-2 hover:bg-red-100" onClick={() => {
-          localStorage.removeItem("token");
-          navigate("/login");
-        }}>
+        <Button
+          variant="ghost"
+          className="w-full mt-2 hover:bg-red-100"
+          onClick={() => {
+            localStorage.removeItem("token");
+            if (user.role === "student" || user.role === "tutor")
+              navigate("/login");
+            else navigate("/staff/login");
+          }}
+        >
           Log out
         </Button>
       </PopoverContent>
