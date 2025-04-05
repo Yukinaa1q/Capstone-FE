@@ -22,6 +22,7 @@ const NewCoursePage = () => {
         "courseDescription",
         JSON.stringify(data.courseDescription)
       );
+      formdata.append("courseDuration", data.courseDuration.toString());
       formdata.append("courseOutline", JSON.stringify(data.courseOutline));
       formdata.append("courseImage", data.courseImage as Blob);
 

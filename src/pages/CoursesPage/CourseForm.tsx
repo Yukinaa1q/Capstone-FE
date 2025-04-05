@@ -28,6 +28,7 @@ export interface ICourseForm {
   courseSubject: string;
   courseLevel: string;
   coursePrice: number;
+  courseDuration: number;
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   courseImage?: File;
@@ -40,6 +41,7 @@ const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
     courseCode: yup.string().required("Course code is required"),
     courseSubject: yup.string().required("Course subject is required"),
     courseLevel: yup.string().required("Course level is required"),
+    courseDuration: yup.number().required("Learning duration is required"),
     coursePrice: yup
       .number()
       .min(0, "Course price must be greater than or equal to 0")
@@ -59,11 +61,11 @@ const defaultForm: ICourseForm = {
   courseSubject: "",
   courseLevel: "",
   coursePrice: 0,
+  courseDuration: 0,
   courseDescription: [{ type: "p", children: [{ text: "" }] }],
   courseOutline: [],
   imgUrl: "",
 };
-
 
 const CourseForm = ({
   className,
@@ -101,7 +103,7 @@ const CourseForm = ({
             </RequiredInput>
           )}
         />
-        <div className="grid lg:grid-cols-3 gap-4 flex-wrap">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
           <FormField
             name="courseCode"
             render={({ field }) => (
@@ -114,26 +116,10 @@ const CourseForm = ({
             name="courseSubject"
             render={({ field }) => (
               <RequiredInput label="Subject">
-                <SubjectSelect value={field.value} onValueChange={field.onChange}/>
-                {/* <SearchSelect
+                <SubjectSelect
                   value={field.value}
                   onValueChange={field.onChange}
-                  list={subjectList}
-                  placeholder="Choose a subject"
-                  filterFn={(value, search) => {
-                    return value.toLowerCase().includes(search.toLowerCase())
-                      ? 1
-                      : 0;
-                  }}
-                  renderChild={(item, value) => (
-                    <>
-                      {item.label}
-                      {value === item.value && (
-                        <Check size={16} strokeWidth={2} className="ml-auto" />
-                      )}
-                    </>
-                  )}
-                /> */}
+                />
               </RequiredInput>
             )}
           />
@@ -156,6 +142,23 @@ const CourseForm = ({
                     <SelectItem value="5">Advanced</SelectItem>
                   </SelectContent>
                 </Select>
+              </RequiredInput>
+            )}
+          />
+          <FormField
+            name="courseDuration"
+            render={({ field }) => (
+              <RequiredInput label="Learning Duration">
+                <div className="flex items-stretch border border-gray-200 rounded-md shadow-muted">
+                  <Input
+                    type="number"
+                    {...field}
+                    className="border-none focus-visible:outline-none focus-visible:ring-0"
+                  />
+                  <div className="flex items-center bg-gray-100 px-2">
+                    <p className="text-sm font-medium text-gray-700">week(s)</p>
+                  </div>
+                </div>
               </RequiredInput>
             )}
           />

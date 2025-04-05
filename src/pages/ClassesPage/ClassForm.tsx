@@ -1,18 +1,12 @@
 import RequiredInput from "@/components/Input/RequiredInput";
 import SearchSelect, { ListItem } from "@/components/Input/SearchSelect";
+import Selection from "@/components/Input/Selection";
 import StudentInput from "@/components/Input/StudentInput";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { StudyShift, StudyWeek } from "@/interfaces/common";
 import { cn } from "@/lib/utils";
 import TucourApi from "@/utils/http";
@@ -33,12 +27,6 @@ const classFormSchema = object({
   studyWeek: string<StudyWeek | "">().required("Study week is required"),
   studyShift: string<StudyShift | "">().required("Study shift is required"),
   isOnline: boolean().default(false),
-  // classRoom: string().when("isOnline", {
-  //   is: true,
-  //   then: (schema) => schema.optional(),
-  //   otherwise: (schema) =>
-  //     schema.required("Class room is required when class is not online"),
-  // }),
   tutorCode: string().required("Tutor is required"),
   studentIdList: array().of(string().defined()).required().defined(),
 }).required();
@@ -53,7 +41,6 @@ const initValue: IClassForm = {
   studyWeek: "",
   studyShift: "",
   isOnline: false,
-  // classRoom: "",
   tutorCode: "",
   studentIdList: [],
 };
@@ -71,6 +58,8 @@ const ClassForm = ({
 }) => {
   const [codeList, setCodeList] = useState<ListItem[]>([]);
   const [tutorList, setTutorList] = useState<ListItem[]>([]);
+  const [studyWeek, setStudyWeek] = useState<StudyWeek | "">(""); // A workaround to reset the list of study shifts
+  // Because the list can only be set when their is a rerender in ClassForm, however, useForm won't trigger a rerender
   const form = useForm({
     values: defaultValues,
     resolver: yupResolver(classFormSchema),
@@ -153,9 +142,13 @@ const ClassForm = ({
                     {...field}
                     list={codeList}
                     placeholder="Search"
-                    onValueChange={(value) =>
-                      form.setValue("courseTitle", value.display.courseTitle)
-                    }
+                    onValueChange={(value) => {
+                      form.setValue(
+                        "courseTitle",
+                        codeList.find((item) => item.value === value)?.display
+                          ?.courseTitle ?? ""
+                      );
+                    }}
                     filterFn={(value, search) => {
                       const result = codeList.find(
                         (item) => item.value === value
@@ -230,15 +223,31 @@ const ClassForm = ({
             name="studyWeek"
             render={({ field }) => (
               <RequiredInput label="Study Weekdays">
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Study Weekdays" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="2-4-6">Mon-Wed-Fri</SelectItem>
-                    <SelectItem value="3-5-7">Tue-Thur-Sat</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Selection
+                  placeholder="Study Weekdays"
+                  selectList={["2-4", "4-6", "3-5", "7", "8"]}
+                  value={studyWeek as string}
+                  onSelect={(val) => {
+                    field.onChange(val);
+                    setStudyWeek(val as StudyWeek); // A workaround to reset the list of study shifts
+                  }}
+                  display={(weekdays) => {
+                    switch (weekdays) {
+                      case "2-4":
+                        return "Mon - Wed";
+                      case "4-6":
+                        return "Wed - Fri";
+                      case "3-5":
+                        return "Tue - Thur";
+                      case "7":
+                        return "Sat";
+                      case "8":
+                        return "Sun";
+                      default:
+                        return "";
+                    }
+                  }}
+                />
               </RequiredInput>
             )}
           />
@@ -248,33 +257,25 @@ const ClassForm = ({
             name="studyShift"
             render={({ field }) => (
               <RequiredInput label="Study Shift">
-                <Select onValueChange={field.onChange} value={field.value}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Study Time" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="17h45 - 19h15">17h45 - 19h15</SelectItem>
-                    <SelectItem value="19h30 - 21h00">19h30 - 21h00</SelectItem>
-                  </SelectContent>
-                </Select>
+                <Selection
+                  value={field.value}
+                  disabled={!form.getValues("studyWeek")}
+                  placeholder="Time Shift"
+                  selectList={
+                    ["7", "8"].includes(form.getValues("studyWeek").toString())
+                      ? [
+                          "08h00 - 11h00",
+                          "13h00 - 16h00",
+                          "16h15 - 19h15",
+                          "19h30 - 21h30",
+                        ]
+                      : ["17h45 - 19h15", "19h30 - 21h00"]
+                  }
+                  onSelect={field.onChange}
+                />
               </RequiredInput>
             )}
           />
-
-          {/* <FormField
-              control={form.control}
-              name="classRoom"
-              render={({ field }) => (
-                <RequiredInput label="Class Room">
-                  <Input
-                    className=""
-                    disabled={form.getValues("isOnline")}
-                    {...field}
-                    placeholder="Enter class room"
-                  />
-                </RequiredInput>
-              )}
-            /> */}
 
           <FormField
             control={form.control}

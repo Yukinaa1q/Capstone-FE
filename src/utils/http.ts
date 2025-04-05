@@ -1,4 +1,4 @@
-import { isJSON } from "./utils";
+import { isJSON, jwtDecoder } from "./utils";
 
 export enum ENV {
   PROD,
@@ -94,11 +94,25 @@ export default class TucourApi {
         throw await res.json();
       }
     } catch (err) {
-      throw {
-        statusCode: 555,
-        statusText: "Error Not Because of Server",
-        data: (err as Error).message,
-      };
+      if (err instanceof TypeError)
+        throw {
+          statusCode: 555,
+          statusText: "Error Not Because of Server",
+          data: (err as Error).message,
+        };
+      else {
+        const statusError = err as { statusCode: number; message: string };
+        if (statusError.statusCode === 401) {
+          const token = jwtDecoder(localStorage.getItem("token") || "");
+          console.log(token);
+          localStorage.removeItem("token");
+          if (token.payload.payload.role === "student" || token.payload.payload.role === "tutor")
+            window.location.replace("/login");
+          else 
+            window.location.replace("/staff/login");
+        }
+        throw err;
+      }
     }
   }
 
