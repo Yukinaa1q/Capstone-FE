@@ -8,7 +8,7 @@ type OnePeriodPerSession =
 type StudyWeek = TwiceAWeek | OnceAWeek;
 type TwiceAWeek = "2-4" | "3-5" | "4-6";
 type OnceAWeek = "7" | "8";
-type Role = "admin" | "student" | "parent" | "tutor" | "academic" | "support";
+type Role = "admin" | "student" | "parent" | "tutor" | "academic" | "support" | "accountant";
 
 export type {
   StudyShift,

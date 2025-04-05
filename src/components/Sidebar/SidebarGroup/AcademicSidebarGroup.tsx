@@ -3,15 +3,17 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
 } from "@/components/ui/sidebar";
-import { IMenuItem, SidebarGroupProps } from "./Interface";
-import TC_SidebarMenuItem from "../SidebarMenuItem/SidebarMenuItem";
 import {
   BackpackIcon,
   BookMarkedIcon,
+  Calendar,
   DoorOpen,
+  Gauge,
   GraduationCapIcon,
   PresentationIcon,
 } from "lucide-react";
+import TC_SidebarMenuItem from "../SidebarMenuItem/SidebarMenuItem";
+import { IMenuItem } from "./Interface";
 
 const itemList: IMenuItem[] = [
   {
@@ -26,11 +28,21 @@ const itemList: IMenuItem[] = [
   },
   {
     title: "Classrooms",
-    icon: <DoorOpen/>,
+    icon: <DoorOpen />,
     prefixUrl: "/rooms",
   },
   { title: "Tutors", icon: <GraduationCapIcon />, prefixUrl: "/tutors" },
   { title: "Students", icon: <BackpackIcon />, prefixUrl: "/students" },
+  {
+    title: "Time Table",
+    icon: <Calendar />,
+    prefixUrl: "/timetables",
+  },
+  {
+    title: "Scores",
+    icon: <Gauge />,
+    prefixUrl: "/scores",
+  },
 ];
 
 const AcademicSidebarGroup = ({ label }: { label?: string }) => {

@@ -42,6 +42,9 @@ const TutorRegistration = ({
   const [studyShift, setStudyShift] = React.useState<StudyShift | undefined>(
     undefined
   );
+
+  const [isOnline, setIsOnline] = useState(false);
+
   const navigate = useNavigate();
 
   const verboseTeachingWeek = (value: StudyWeek) => {
@@ -69,7 +72,7 @@ const TutorRegistration = ({
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Teaching Registration Form</DialogTitle>
           <DialogDescription>
@@ -89,12 +92,13 @@ const TutorRegistration = ({
               <TableRow>
                 <TableHead className="text-center">Weekdays</TableHead>
                 <TableHead className="text-center">Time Shift</TableHead>
+                <TableHead className="text-center">Study Method</TableHead>
                 <TableHead className="text-center">Action</TableHead>
               </TableRow>
               <TableRow>
                 <TableCell className="text-center">
                   <Selection
-                    className="w-52 mx-auto"
+                    className="w-40 mx-auto"
                     placeholder="Choose Weekdays"
                     selectList={["2-4", "3-5", "4-6", "7", "8"]}
                     display={(value) => {
@@ -127,6 +131,16 @@ const TutorRegistration = ({
                   />
                 </TableCell>
                 <TableCell className="text-center">
+                  <Selection
+                    className="mx-auto"
+                    placeholder="Method"
+                    selectList={["Online", "Offline"]}
+                    onSelect={(value) =>
+                      setIsOnline(value === "Online" ? true : false)
+                    }
+                  />
+                </TableCell>
+                <TableCell className="text-center">
                   <div className="w-20 mx-auto">
                     <Button
                       size="sm"
@@ -138,9 +152,10 @@ const TutorRegistration = ({
                             ...prev.filter(
                               (schedule) =>
                                 schedule.studyWeek !== studyWeek &&
-                                schedule.studyShift !== studyShift
+                                schedule.studyShift !== studyShift &&
+                                schedule.isOnline !== isOnline
                             ),
-                            { studyShift, studyWeek },
+                            { studyShift, studyWeek, isOnline },
                           ]);
                         }
                       }}
@@ -162,6 +177,9 @@ const TutorRegistration = ({
                   </TableCell>
                   <TableCell className="text-center">
                     {schedule.studyShift}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {schedule.isOnline ? "Online" : "Offline"}
                   </TableCell>
                   <TableCell className="text-center">
                     <Button
@@ -196,7 +214,7 @@ const TutorRegistration = ({
             Submit
             <div className="size-4 overflow-hidden relative">
               <SendHorizonal className="absolute group-hover:hidden stroke-t_primary-500" />
-              <SendHorizonal className="absolute -ml-4 group-hover:ml-0 group-hover:transition-all group-hover:duration-300 stroke-t_primary-500" />
+              <SendHorizonal className="absolute -ml-4 group-hover:ml-0 group-hover:transition-all group-hover:duration-500 stroke-t_primary-500" />
             </div>
           </Button>
         </DialogFooter>

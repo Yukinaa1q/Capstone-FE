@@ -1,12 +1,13 @@
 import { useAppSelector } from "@/hooks/reduxHook";
-import StudentSidebar from "./StudentSidebar";
+import BrandLogo from "../BrandLogo";
+import AcademicAffairSidebar from "./AcademicAffairSidebar";
 import AdminSidebar from "./AdminSidebar";
 import ParentSidebar from "./ParentSidebar";
-import TutorSidebar from "./TutorSidebar";
-import AcademicAffairSidebar from "./AcademicAffairSidebar";
+import StudentSidebar from "./StudentSidebar";
 import SupportSidebar from "./SupportSidebar";
-import BrandLogo from "../BrandLogo";
+import TutorSidebar from "./TutorSidebar";
 
+import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
@@ -15,12 +16,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
-import Topbar from "../Topbar/Topbar";
 import { Role } from "@/interfaces/common";
 import { Link, useLocation } from "react-router";
-import UserSettingSidebar from "./UserSettingSidebar";
+import Topbar from "../Topbar/Topbar";
+import AccountantSidebar from "./AccountantSidebar";
 import ClassroomSidebar from "./ClassroomSidebar";
+import UserSettingSidebar from "./UserSettingSidebar";
 
 interface SidebarFactoryProps {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ const sidebarContent: Record<Role, React.ReactNode> = {
   tutor: <TutorSidebar />,
   academic: <AcademicAffairSidebar />,
   support: <SupportSidebar />,
+  accountant: <AccountantSidebar />,
 };
 
 // Factor Method design pattern, maybe?

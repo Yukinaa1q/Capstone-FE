@@ -221,6 +221,9 @@ const StaffAccountPage = () => {
                               <SelectItem value="academic">
                                 Academic Affair Staff
                               </SelectItem>
+                              <SelectItem value="accountant">
+                                Accountant
+                              </SelectItem>
                             </SelectContent>
                           </Select>
                         </RequiredInput>

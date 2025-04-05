@@ -1,5 +1,6 @@
 import { createContext } from "react";
-import { IsEditing, IStaffAccount } from "./StaffAccountPage";
+import { IsEditing } from "./StaffAccountPage";
+import { IStaffAccount } from "@/interfaces/IStaffCRUD";
 
 const StaffAccountCtx = createContext<{
   data: (IStaffAccount & IsEditing)[];
