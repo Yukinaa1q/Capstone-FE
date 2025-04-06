@@ -1,4 +1,4 @@
-import { ICourseCard } from "@/interfaces/ICourse";
+import { IClassCard, ICourseCard } from "@/interfaces/ICourse";
 import TucourApi from "@/utils/http";
 
 export default class FetchUnregisteredAPI {
@@ -49,11 +49,11 @@ export default class FetchUnregisteredAPI {
     }
   }
 
-  public static async getAllWithPagination(
+  public static async getAllClassWithPagination(
     query: string,
     pageOffSet: number
   ): Promise<{
-    data: ICourseCard[];
+    data: IClassCard[];
     meta: {
       currentPage: number;
       itemsPerPage: number;
@@ -73,7 +73,7 @@ export default class FetchUnregisteredAPI {
           },
         }
       )) as {
-        data: ICourseCard[];
+        data: IClassCard[];
         meta: {
           currentPage: number;
           itemsPerPage: number;

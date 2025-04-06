@@ -82,7 +82,7 @@ const ClassDetail = () => {
     };
 
     getClassDetail();
-  }, []);
+  }, [params.id]);
   return (
     <section
       className="text-white bg-fixed"

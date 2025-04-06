@@ -1,15 +1,12 @@
-import CourseCard from "@/components/CourseCard/StudentClassCard";
+import FetchUnregisteredAPI from "@/api/FetchUnregisteredApi";
+import StudentClassCard from "@/components/CourseCard/StudentClassCard";
+import SearchInput from "@/components/Input/SearchInput";
 import MyPagination, {
   PaginationGoto,
   PaginationNav,
 } from "@/components/Pagination";
-import SearchInput from "@/components/Input/SearchInput";
-import { useAppSelector } from "@/hooks/reduxHook";
-import { IClassCard, ICourseCard } from "@/interfaces/ICourse";
-import { coursesPhase1, coursesPhase2 } from "@/utils/fakeData";
+import { IClassCard } from "@/interfaces/ICourse";
 import { useEffect, useState } from "react";
-import FetchUnregisteredAPI from "@/api/FetchUnregisteredApi";
-import StudentClassCard from "@/components/CourseCard/StudentClassCard";
 
 const PRODUCTS_PER_PAGE = 5;
 
@@ -21,27 +18,27 @@ const StudentView = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(10);
 
-  useEffect(() => {
-    const getCourseList = async () => {
-      const courses = (await FetchUnregisteredAPI.getAllWithPagination(
-        searchKey,
-        currentPage
-      )) as {
-        meta: {
-          currentPage: number;
-          itemsPerPage: number;
-          totalItems: number;
-          totalPages: number;
-        };
-        data: IClassCard[];
+  const getClassesFromServer = async (searchKey: string, currentPage: number) => {
+    const courses = (await FetchUnregisteredAPI.getAllClassWithPagination(
+      searchKey,
+      currentPage
+    )) as {
+      meta: {
+        currentPage: number;
+        itemsPerPage: number;
+        totalItems: number;
+        totalPages: number;
       };
-
-      setClassList(courses.data);
-      setTotalItems(courses.meta.totalItems);
+      data: IClassCard[];
     };
 
-    getCourseList();
-  }, []);
+    setClassList(courses.data);
+    setTotalItems(courses.meta.totalItems);
+  };
+
+  useEffect(() => {
+    getClassesFromServer(searchKey, currentPage);
+  }, [searchKey, currentPage]);
 
   return (
     <div className="py-4">
@@ -51,24 +48,8 @@ const StudentView = () => {
           const searchValue = (e.currentTarget[0] as HTMLInputElement).value;
           console.log("Search Key", searchValue);
           setSearchKey(searchValue);
-          try {
-            const res = (await FetchUnregisteredAPI.getAllClassWithPagination(
-              searchValue,
-              currentPage
-            )) as {
-              meta: {
-                currentPage: number;
-                itemsPerPage: number;
-                totalItems: number;
-                totalPages: number;
-              };
-              data: IClassCard[];
-            };
-            setClassList(res.data);
-            setTotalItems(res.meta.totalItems);
-          } catch (err) {
-            console.log(err);
-          }
+          setCurrentPage(1);
+          // getClassesFromServer(searchValue, 1);
         }}
       >
         <SearchInput className="" />
@@ -79,27 +60,7 @@ const StudentView = () => {
         total={totalItems}
         onPageChange={async (currentPage) => {
           setCurrentPage(currentPage);
-          try {
-            const courses = (await FetchUnregisteredAPI.getAllClassWithPagination(
-              searchKey,
-              currentPage
-            )) as {
-              meta: {
-                currentPage: number;
-                itemsPerPage: number;
-                totalItems: number;
-                totalPages: number;
-              };
-              data: IClassCard[];
-            };
-
-            console.log(courses);
-
-            setClassList(courses.data);
-            setTotalItems(courses.meta.totalItems);
-          } catch (err) {
-            console.log(err);
-          }
+          // getClassesFromServer(searchKey, currentPage);
         }}
       >
         <div className="px-10 mt-10 flex justify-between items-center">
@@ -112,7 +73,7 @@ const StudentView = () => {
           </div>
         </div>
         <div className="mt-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 px-10">
-          {courseList.map((course, idx) => (
+          {classList.map((course, idx) => (
             <div key={idx}>
               <StudentClassCard courseContent={course} />
             </div>

@@ -7,8 +7,8 @@ import { IMenuItem } from "./Interface";
 
 const subMenuList: Omit<IMenuItem, "icon">[] = [
   { title: "Available Courses", prefixUrl: "/" },
-  { title: "Registered Courses", prefixUrl: "/registered-courses" },
-  { title: "My Courses", prefixUrl: "/my-courses" },
+  { title: "Registered Classes", prefixUrl: "/registered-classes" },
+  { title: "My Classes", prefixUrl: "/my-classes" },
 ];
 
 const ClientSidebarGroup = ({ label }: { label?: string }) => {

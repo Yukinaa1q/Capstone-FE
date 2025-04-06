@@ -1,37 +1,37 @@
-import { createBrowserRouter } from "react-router";
 import RootLayout from "@/layouts/RootLayout";
 import Login from "@/pages/Login/Login";
-import Signup from "@/pages/SingupPage/Signup";
-import RegisteredCoursesPage from "@/pages/RegisteredCoursesPage/RegisteredCoursesPage";
 import MyCoursesPage from "@/pages/MyCoursesPage/MyCoursesPage";
-import SchedulePage from "./pages/SchedulePage.tsx/SchedulePage";
-import PaymentPage from "./pages/PaymentPage/PaymentPage";
-import ChatPage from "./pages/ChatPage/ChatPage";
-import CoursesPage from "./pages/CoursesPage/CoursesPage";
-import ClassesPage from "./pages/ClassesPage/ClassesPage";
-import TutorsPage from "./pages/TutorsPage/TutorsPage";
-import StudentsPage from "./pages/StudentsPage/StudentsPage";
-import NewCoursePage from "./pages/CoursesPage/NewCoursePage/NewCoursePage";
-import CourseDetail from "./pages/CoursesPage/CourseDetail/CourseDetail";
+import RegisteredClassesPage from "@/pages/RegisteredClassesPage/RegisteredClassesPage";
+import Signup from "@/pages/SingupPage/Signup";
+import { createBrowserRouter } from "react-router";
 import MainSection from "./layouts/MainSection";
-import EditCoursePage from "./pages/CoursesPage/EditCoursePage/EditCoursePage";
-import ClassDetail from "./pages/ClassesPage/ClassDetailPage/ClassDetailPage";
-import NewClassPage from "./pages/ClassesPage/NewClassPage/NewClassPage";
-import EditClassPage from "./pages/ClassesPage/EditClassPage/EditClassPage";
 import RouteGuard from "./layouts/RouteGuard";
-import StaffLogin from "./pages/Login/StaffLogin";
-import StaffAccountPage from "./pages/StaffAccountPage/StaffAccountPage";
-import AccountSettingPage from "./pages/AccountPage/AccountSettingPage";
 import AccountProfilePage from "./pages/AccountPage/AccountProfilePage";
+import AccountSettingPage from "./pages/AccountPage/AccountSettingPage";
+import ChatPage from "./pages/ChatPage/ChatPage";
+import ClassDetail from "./pages/ClassesPage/ClassDetailPage/ClassDetailPage";
+import ClassesPage from "./pages/ClassesPage/ClassesPage";
+import EditClassPage from "./pages/ClassesPage/EditClassPage/EditClassPage";
+import NewClassPage from "./pages/ClassesPage/NewClassPage/NewClassPage";
 import ClassroomPage from "./pages/ClassroomPage/ClassroomPage";
-import TutorPage from "./pages/TutorsPage/Tutor/TutorPage";
-import StudentPage from "./pages/StudentsPage/StudentPage/StudentPage";
+import CourseDetail from "./pages/CoursesPage/CourseDetail/CourseDetail";
+import CoursesPage from "./pages/CoursesPage/CoursesPage";
+import EditCoursePage from "./pages/CoursesPage/EditCoursePage/EditCoursePage";
+import NewCoursePage from "./pages/CoursesPage/NewCoursePage/NewCoursePage";
+import StaffLogin from "./pages/Login/StaffLogin";
+import PaymentPage from "./pages/PaymentPage/PaymentPage";
 import RoomsPage from "./pages/RoomsPage/RoomsPage";
-import getTutorInitContent from "./pages/TutorsPage/Tutor/TutorAction";
-import getStudentInit from "./pages/StudentsPage/StudentPage/StudentAction";
-import TutorLayout from "./pages/TutorsPage/Tutor/TutorLayout";
-import TutorEdit from "./pages/TutorsPage/Tutor/Edit/TutorEdit";
+import SchedulePage from "./pages/SchedulePage.tsx/SchedulePage";
+import StaffAccountPage from "./pages/StaffAccountPage/StaffAccountPage";
 import initStaffData from "./pages/StaffAccountPage/StaffAction";
+import getStudentInit from "./pages/StudentsPage/StudentPage/StudentAction";
+import StudentPage from "./pages/StudentsPage/StudentPage/StudentPage";
+import StudentsPage from "./pages/StudentsPage/StudentsPage";
+import TutorEdit from "./pages/TutorsPage/Tutor/Edit/TutorEdit";
+import getTutorInitContent from "./pages/TutorsPage/Tutor/TutorAction";
+import TutorLayout from "./pages/TutorsPage/Tutor/TutorLayout";
+import TutorPage from "./pages/TutorsPage/Tutor/TutorPage";
+import TutorsPage from "./pages/TutorsPage/TutorsPage";
 
 const router = createBrowserRouter([
   {
@@ -43,15 +43,15 @@ const router = createBrowserRouter([
         element: <MainSection />,
       },
       {
-        path: "/registered-courses",
+        path: "/registered-classes",
         element: (
           <RouteGuard allowed={["student", "tutor"]}>
-            <RegisteredCoursesPage />
+            <RegisteredClassesPage />
           </RouteGuard>
         ),
       },
       {
-        path: "my-courses",
+        path: "my-classes",
         element: (
           <RouteGuard allowed={["student", "tutor"]}>
             <MyCoursesPage />
@@ -117,7 +117,7 @@ const router = createBrowserRouter([
       {
         path: "classes",
         element: (
-          <RouteGuard allowed={["academic"]}>
+          <RouteGuard allowed={["academic", "student"]}>
             <ClassesPage />
           </RouteGuard>
         ),
