@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { TutorDetail } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import SectionLayout from "@/layouts/SectionLayout";
 import { cn } from "@/lib/utils";
@@ -37,12 +38,7 @@ import {
 } from "lucide-react";
 
 import React from "react";
-import {
-  Link,
-  useNavigate,
-  useParams,
-  useRouteLoaderData
-} from "react-router";
+import { Link, useNavigate, useParams, useRouteLoaderData } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
 
@@ -66,11 +62,12 @@ function levelColor(level: string): string {
 const TutorPage = () => {
   const tutorId = useParams().id;
   const queryData = useRouteLoaderData("tutor");
-  console.log("QueryDat", queryData);
+  console.log("QueryData", queryData);
   const navigate = useNavigate();
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   // An API to get tutor detail profile
-  const [profile] = React.useState(queryData.tutorDetail);
+  const tutorProfile = queryData.tutorDetail as TutorDetail;
+  // const [profile] = React.useState(queryData.tutorDetail);
   // An API to get tutor's classes base on semester
   const [classes] = React.useState([
     {
@@ -138,11 +135,10 @@ const TutorPage = () => {
     try {
       await TutorApi.verifyTutor(tutorId);
       navigate(0);
-    }
-    catch(err) {
+    } catch (err) {
       console.log(err);
     }
-  }
+  };
 
   return (
     <ContentLayout>
@@ -161,14 +157,17 @@ const TutorPage = () => {
             </Link>
             <Avatar className="size-24 border">
               <AvatarImage src="#" />
-              <AvatarFallback> {shortName(profile.fullName)} </AvatarFallback>
+              <AvatarFallback>
+                {" "}
+                {shortName(tutorProfile.fullName)}{" "}
+              </AvatarFallback>
             </Avatar>
           </div>
           <div className="gap-24">
             <div className="space-y-2">
               <p className="font-bold text-2xl flex items-center">
-                {profile.fullName}
-                {!profile.isVerified && (
+                {tutorProfile.fullName}
+                {!tutorProfile.isVerified && (
                   <Button
                     variant="link"
                     size="sm"
@@ -181,8 +180,8 @@ const TutorPage = () => {
                 )}
               </p>
               <div className="flex gap-4 items-center">
-                <p className="font-semibold">{profile.userCode}</p>
-                {profile.isVerified ? (
+                <p className="font-semibold">{tutorProfile.userCode}</p>
+                {tutorProfile.isVerified ? (
                   <div className="text-green-600 flex gap-1 font-semibold items-center text-sm">
                     <span>
                       <CheckCircle size={16} />
@@ -201,23 +200,25 @@ const TutorPage = () => {
               <div className="text-sm">
                 <p className={infoStyle}>
                   <IdCard className="size-6" />
-                  <span className={cn(badgeStyle)}>{profile.ssid}</span>
+                  <span className={cn(badgeStyle)}>{tutorProfile.ssid}</span>
                 </p>
                 <p className={infoStyle}>
                   <Mail className="size-6" />
-                  <span className={cn(badgeStyle)}>{profile.email}</span>
+                  <span className={cn(badgeStyle)}>{tutorProfile.email}</span>
                 </p>
                 <p className={infoStyle}>
                   <CakeIcon />
-                  <span className={cn(badgeStyle)}>{profile.dob}</span>
+                  <span className={cn(badgeStyle)}>{tutorProfile.dob}</span>
                 </p>
                 <p className={infoStyle}>
                   <Phone />
-                  <span className={cn(badgeStyle)}>{profile.phoneNumber}</span>
+                  <span className={cn(badgeStyle)}>
+                    {tutorProfile.phoneNumber}
+                  </span>
                 </p>
                 <p className={infoStyle}>
                   <MapPin />
-                  <span className={cn(badgeStyle)}>{profile.address}</span>
+                  <span className={cn(badgeStyle)}>{tutorProfile.address}</span>
                 </p>
               </div>
             </div>

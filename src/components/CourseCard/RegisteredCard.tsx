@@ -5,7 +5,6 @@ import { IClassCard } from "@/interfaces/ICourse";
 import toVND from "@/utils/currencyFormat";
 import { ClipboardPen, GraduationCap, Users, X } from "lucide-react";
 import { Link } from "react-router";
-import { Badge } from "../ui/badge";
 import {
   Card,
   CardContent,
@@ -16,7 +15,6 @@ import {
 } from "../ui/card";
 
 const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
-  const phase = useAppSelector((state) => state.phases.phase);
   const user = useAppSelector((state) => state.auths);
 
   const handleUnregister = async () => {
@@ -53,15 +51,6 @@ const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
         />
         <CardTitle className="flex justify-between items-center gap-4">
           <p className="truncate">{cardInfo.courseTitle.toUpperCase()}</p>
-          {phase === 1 ? (
-            <Badge className="bg-t_secondary-500 hover:bg-t_secondary-500 text-white text-xs shrink-0 w-fit">
-              Phase 1
-            </Badge>
-          ) : (
-            <Badge className="bg-t_primary-500 hover:bg-t_primary-500 text-white text-xs shrink-0 w-fit h-fit">
-              Phase 2
-            </Badge>
-          )}
         </CardTitle>
         <CardDescription className="flex justify-between text-xs">
           <p>{cardInfo.courseCode}</p>
@@ -100,7 +89,7 @@ const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
 
       <CardFooter className="justify-between w-full">
         <Link
-          to={`/courses/${cardInfo.courseCode}`}
+          to={`/courses/${cardInfo.classCode}`}
           type="button"
           className="group flex items-center justify-between px-2 py-2 bg-t_secondary-300 rounded-full overflow-hidden"
         >

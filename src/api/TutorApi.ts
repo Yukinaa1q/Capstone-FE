@@ -1,4 +1,5 @@
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
+import { TutorDetail } from "@/interfaces/UserProfile";
 import TucourApi from "@/utils/http";
 
 export default class TutorApi {
@@ -67,22 +68,16 @@ export default class TutorApi {
     }
   }
 
-  public static async getTutorDetail(tutorId: string | undefined) {
+  public static async getTutorDetail(
+    tutorId: string | undefined
+  ): Promise<TutorDetail> {
     try {
-      const res = await TucourApi.get("/tutor/detail/" + tutorId);
-      return res as {
-        userCode: string;
-        userId: string;
-        fullName: string;
-        email: string;
-        isVerified: boolean;
-        dob: string;
-        ssid: string;
-        address: string;
-        phoneNumber: string;
-      };
-    } catch (err) {
-      console.log(err);
+      const res = (await TucourApi.get(
+        "/tutor/detail/" + tutorId
+      )) as TutorDetail;
+      return res;
+    } catch {
+      return {} as TutorDetail;
     }
   }
 
@@ -97,12 +92,12 @@ export default class TutorApi {
         },
         body: JSON.stringify({
           courseId: courseId,
-          registrationList:scheduleList.map(schedule => ({
+          registrationList: scheduleList.map((schedule) => ({
             ...schedule,
             online: schedule.isOnline,
-          }))
+          })),
         }),
-      })
+      });
     } catch {
       alert("Error sending teaching request");
     }

@@ -32,6 +32,7 @@ import getTutorInitContent from "./pages/TutorsPage/Tutor/TutorAction";
 import TutorLayout from "./pages/TutorsPage/Tutor/TutorLayout";
 import TutorPage from "./pages/TutorsPage/Tutor/TutorPage";
 import TutorsPage from "./pages/TutorsPage/TutorsPage";
+import getAllRegisteredClasses from "./pages/RegisteredClassesPage/RegisteredClassesLoader";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,7 @@ const router = createBrowserRouter([
             <RegisteredClassesPage />
           </RouteGuard>
         ),
+        loader: getAllRegisteredClasses,
       },
       {
         path: "my-classes",

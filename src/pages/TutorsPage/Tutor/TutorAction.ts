@@ -1,39 +1,17 @@
 import TutorApi from "@/api/TutorApi";
+import { TutorDetail } from "@/interfaces/UserProfile";
 
 export interface TutorInitContent {
   qualifications: {
     subject: string;
     level: string;
   }[];
-  tutorDetail: {
-    userCode: string;
-    userId: string;
-    fullName: string;
-    email: string;
-    isVerified: boolean;
-    dob: string;
-    ssid: string;
-    address: string;
-    phoneNumber: string;
-  };
+  tutorDetail: TutorDetail;
 }
 
 export default async function getTutorInitContent({ params }) {
   // console.log(params);
-  const res: TutorInitContent = {
-    qualifications: [],
-    tutorDetail: {
-      userCode: "",
-      userId: "",
-      fullName: "",
-      email: "",
-      isVerified: false,
-      dob: "",
-      ssid: "",
-      address: "",
-      phoneNumber: "",
-    },
-  };
+  const res = {} as TutorInitContent;
   try {
     const qualifications = (await TutorApi.getQualifications(params.id)) as {
       subject: string;
