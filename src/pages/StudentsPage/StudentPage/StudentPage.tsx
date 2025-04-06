@@ -14,12 +14,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { IClassDetail } from "@/interfaces/ICourseDetail";
+import { StudentDetail } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import { cn } from "@/lib/utils";
 import { shortName } from "@/utils/utils";
 import { CakeIcon, ChevronRight, Mail, MapPin, Phone } from "lucide-react";
 
-import React from "react";
 import { useLoaderData, useNavigate } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
@@ -28,29 +29,22 @@ const StudentPage = () => {
   const navigate = useNavigate();
   const queryData = useLoaderData();
   // An API to get tutor detail profile
-  const [profile] = React.useState(queryData.studentDetail);
+  const profile = queryData.studentDetail as StudentDetail;
   // An API to get tutor's classes base on semester
-  const [classes] = React.useState([
-    {
-      classId: "1",
-      courseCode: "GEO1002",
-      classroom: "B4-502",
-      studyWeek: "2-4-6",
-      studyShift: "17h45 - 19h15",
-    },
-    {
-      classId: "2",
-      courseCode: "GEO1003",
-      classroom: "B4-502",
-      studyWeek: "2-4-6",
-      studyShift: "17h45 - 19h15",
-    },
-  ]);
+  const classes = queryData.classHistory as Pick<
+    IClassDetail,
+    | "courseTitle"
+    | "courseCode"
+    | "classCode"
+    | "classSession"
+    | "classShift"
+    | "studyRoom"
+  >[];
 
   return (
     <ContentLayout>
       <section className="flex flex-col lg:flex-row gap-8 p-10 rounded-lg bg-t_primary-100 justify-between">
-        <div className="basis:1/2 shrink-0">
+        <div className="basis-1/3 shrink-0">
           <div className="flex flex-col items-center gap-4 w-fit mb-4">
             <Avatar className="size-24 border">
               <AvatarImage src="#" />
@@ -66,10 +60,6 @@ const StudentPage = () => {
                 <p className="font-semibold">{profile.userCode}</p>
               </div>
               <div className="text-sm">
-                {/* <p className={infoStyle}>
-                  <IdCard className="size-6" />
-                  <span className={cn(badgeStyle)}>{profile.ssid}</span>
-                </p> */}
                 <p className={infoStyle}>
                   <Mail className="size-6" />
                   <span className={cn(badgeStyle)}>{profile.email}</span>
@@ -90,7 +80,7 @@ const StudentPage = () => {
             </div>
           </div>
         </div>
-        <div className="">
+        <div className="grow">
           {/* A table to show tutor's classes during a selected semester */}
           <Select>
             <SelectTrigger className="w-[180px] bg-white">
@@ -106,6 +96,9 @@ const StudentPage = () => {
             <TableHeader className="rounded-md">
               <TableRow className="text-white bg-t_primary-600 hover:bg-t_primary-600 rounded-s-md">
                 <TableHead className="text-white rounded-s-md">
+                  Course Title
+                </TableHead>
+                <TableHead className="text-white">
                   Course Code
                 </TableHead>
                 <TableHead className="text-white">Classroom</TableHead>
@@ -117,16 +110,17 @@ const StudentPage = () => {
             <TableBody>
               {classes.map((cls) => (
                 <TableRow
-                  key={cls.classId}
+                  key={cls.classCode}
                   className="group cursor-pointer"
-                  onClick={() => navigate(`/classes/${cls.classId}`)}
+                  onClick={() => navigate(`/classes/${cls.classCode}`)}
                 >
                   <TableCell className="font-medium">
-                    {cls.courseCode}
+                    {cls.courseTitle}
                   </TableCell>
-                  <TableCell>{cls.classroom}</TableCell>
-                  <TableCell>{cls.studyWeek}</TableCell>
-                  <TableCell className="">{cls.studyShift}</TableCell>
+                  <TableCell>{cls.courseCode}</TableCell>
+                  <TableCell>{cls.studyRoom}</TableCell>
+                  <TableCell className="">{cls.classSession}</TableCell>
+                  <TableCell className="">{cls.classShift}</TableCell>
                   <TableCell className="">
                     <ChevronRight
                       size={20}

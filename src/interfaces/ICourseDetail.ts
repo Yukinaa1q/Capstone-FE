@@ -20,6 +20,7 @@ export interface IClassDetail {
   registrationEndDate: string;
   studyStartDate: string;
   studyEndDate: string;
+  studyRoom: string; // New field
   tutor: string;
   tutorId: string;
   courseImage: string;

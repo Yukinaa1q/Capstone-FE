@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { TutorDetail } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import SectionLayout from "@/layouts/SectionLayout";
@@ -67,24 +68,16 @@ const TutorPage = () => {
   const [errorMsg, setErrorMsg] = React.useState<string | null>(null);
   // An API to get tutor detail profile
   const tutorProfile = queryData.tutorDetail as TutorDetail;
-  // const [profile] = React.useState(queryData.tutorDetail);
   // An API to get tutor's classes base on semester
-  const [classes] = React.useState([
-    {
-      classId: "1",
-      courseCode: "GEO1002",
-      classroom: "B4-502",
-      studyWeek: "2-4-6",
-      studyShift: "17h45 - 19h15",
-    },
-    {
-      classId: "2",
-      courseCode: "GEO1003",
-      classroom: "B4-502",
-      studyWeek: "2-4-6",
-      studyShift: "17h45 - 19h15",
-    },
-  ]);
+  const classes = queryData.classHistory as Pick<
+    IClassDetail,
+    | "courseTitle"
+    | "courseCode"
+    | "classCode"
+    | "classSession"
+    | "classShift"
+    | "studyRoom"
+  >[];
   // An API to get available semesters
   // TODO: An API to set tutor's newQualification
   const [newQualification, setNewQualification] = React.useState<{
@@ -143,7 +136,7 @@ const TutorPage = () => {
   return (
     <ContentLayout>
       <section className="flex flex-col lg:flex-row gap-10 p-10 rounded-lg bg-t_primary-100 justify-between">
-        <div className="basis-1/2">
+        <div className="basis-1/3">
           <div className="w-full mb-4 space-y-4">
             <Link
               to={"/tutors/" + tutorId + "/edit"}
@@ -240,6 +233,9 @@ const TutorPage = () => {
             <TableHeader className="rounded-md">
               <TableRow className="text-white bg-t_primary-600 hover:bg-t_primary-600 rounded-s-md">
                 <TableHead className="text-white rounded-s-md">
+                  Course Name
+                </TableHead>
+                <TableHead className="text-white">
                   Course Code
                 </TableHead>
                 <TableHead className="text-white">Classroom</TableHead>
@@ -251,16 +247,17 @@ const TutorPage = () => {
             <TableBody>
               {classes.map((cls) => (
                 <TableRow
-                  key={cls.classId}
+                  key={cls.classCode}
                   className="group cursor-pointer"
-                  onClick={() => navigate(`/classes/${cls.classId}`)}
+                  onClick={() => navigate(`/classes/${cls.classCode}`)}
                 >
                   <TableCell className="font-medium">
-                    {cls.courseCode}
+                    {cls.courseTitle}
                   </TableCell>
-                  <TableCell>{cls.classroom}</TableCell>
-                  <TableCell>{cls.studyWeek}</TableCell>
-                  <TableCell className="">{cls.studyShift}</TableCell>
+                  <TableCell>{cls.courseCode}</TableCell>
+                  <TableCell>{cls.studyRoom}</TableCell>
+                  <TableCell className="">{cls.classSession}</TableCell>
+                  <TableCell className="">{cls.classShift}</TableCell>
                   <TableCell className="">
                     <ChevronRight
                       size={20}

@@ -2,53 +2,23 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
+import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Edit, Trash2 } from "lucide-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { useAppSelector } from "@/hooks/reduxHook";
+import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Descendant } from "slate";
-import { CourseOutline } from "@/components/Input/CourseOutlineInput";
 import TucourApi from "@/utils/http";
-import HTMLConverter from "@/components/TextEditor/HTMLConverter";
-import { useAppSelector } from "@/hooks/reduxHook";
 import { shortName } from "@/utils/utils";
+import { Edit, Trash2 } from "lucide-react";
 
-interface IClassDetail {
-  courseTitle: string;
-  courseCode: string;
-  registrationStartDate: string;
-  registrationEndDate: string;
-  studyStartDate: string;
-  studyEndDate: string;
-  tutor: string;
-  tutorId: string;
-  courseImage: string;
-  courseDescription: Descendant[];
-  courseOutline: CourseOutline[];
-  coursePrice: number;
-  classSession: string;
-  classShift: string;
-  learningType: boolean;
-  classCode: string;
-  classId: string;
-  classStudents: number;
-  classMaxStudents: number;
-  studentList: StudentBrief[];
-}
-
-interface StudentBrief {
-  studentName: string;
-  studentId: string;
-  studentCode: string;
-  avatarLink: string;
-}
 
 const ClassDetail = () => {
   const params = useParams();
@@ -213,6 +183,8 @@ const ClassDetail = () => {
             </p>
             <h3 className="text-sm">Class Code</h3>
             <p className="font-semibold text-sm">{course?.classCode}</p>
+            <h3 className="text-sm">Study Room</h3>
+            <p className="font-semibold text-sm">{course?.studyRoom ?? "Cái Nịt"}</p>
             <h3 className="text-sm">No. Students</h3>
             <p className="font-semibold text-sm">
               {course?.classStudents ?? 0}/{course?.classMaxStudents}

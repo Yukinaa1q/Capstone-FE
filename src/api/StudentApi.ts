@@ -1,5 +1,6 @@
+import { IClassDetail } from "@/interfaces/ICourseDetail";
+import { StudentDetail } from "@/interfaces/UserProfile";
 import TucourApi from "@/utils/http";
-import { json } from "stream/consumers";
 
 export default class StudentApi {
   public static async getStudents() {
@@ -11,14 +12,11 @@ export default class StudentApi {
     }
   }
 
-  public static async getStudentDetail(studentId: string | undefined) {
-    try {
-      const studentDetail = await TucourApi.get(`/student/detail/${studentId}`);
-      return studentDetail;
-    }
-    catch (err) {
-      console.log(err);
-    }
+  public static async getStudentDetail(
+    studentId: string | undefined
+  ): Promise<StudentDetail> {
+    const studentDetail = await TucourApi.get(`/student/detail/${studentId}`);
+    return studentDetail as StudentDetail;
   }
 
   public static async registerClass(classId: string) {
@@ -26,11 +24,43 @@ export default class StudentApi {
       await TucourApi.post("/student/register-class", {
         body: JSON.stringify({
           classId: classId,
-        })
-      })
-    }
-    catch {
+        }),
+      });
+    } catch {
       console.log("error");
     }
+  }
+
+  public static async getStudentClassHistory(
+    studentId: string
+  ): Promise<
+    Pick<
+      IClassDetail,
+      | "courseTitle"
+      | "courseCode"
+      | "classCode"
+      | "classSession"
+      | "classShift"
+      | "studyRoom"
+    >[]
+  > {
+    return [
+      {
+        courseTitle: "Introduction to Computer Science",
+        courseCode: "CS101",
+        classCode: "CS101-01",
+        classSession: "2023-2024",
+        classShift: "Morning",
+        studyRoom: "Room 101",
+      },
+      {
+        courseTitle: "Data Structures and Algorithms",
+        courseCode: "CS102",
+        classCode: "CS102-01",
+        classSession: "2023-2024",
+        classShift: "Afternoon",
+        studyRoom: "Room 102",
+      }
+    ]
   }
 }

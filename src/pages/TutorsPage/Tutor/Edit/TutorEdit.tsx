@@ -8,7 +8,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useLoaderData } from "react-router";
 import { date, InferType, object, string } from "yup";
-import { TutorInitContent } from "../TutorAction";
+import { TutorInitContent } from "../TutorLoader";
 import { cn } from "@/lib/utils";
 
 const TutorEditSchema = object({

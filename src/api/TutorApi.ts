@@ -1,3 +1,4 @@
+import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
 import { TutorDetail } from "@/interfaces/UserProfile";
 import TucourApi from "@/utils/http";
@@ -101,5 +102,46 @@ export default class TutorApi {
     } catch {
       alert("Error sending teaching request");
     }
+  }
+
+  public static async getClassHistory(
+    tutorId: string | undefined
+  ): Promise<
+    Pick<
+      IClassDetail,
+      | "courseTitle"
+      | "courseCode"
+      | "classCode"
+      | "classSession"
+      | "classShift"
+      | "studyRoom"
+    >[]
+  > {
+    return [
+      {
+        classCode: "CS101",
+        classSession: "Monday",
+        classShift: "Morning",
+        courseCode: "CS101",
+        courseTitle: "Introduction to Computer Science",
+        studyRoom: "Room 101",
+      },
+      {
+        classCode: "CS102",
+        classSession: "Tuesday",
+        classShift: "Afternoon",
+        courseCode: "CS102",
+        courseTitle: "Data Structures and Algorithms",
+        studyRoom: "Room 102",
+      },
+      {
+        classCode: "CS103",
+        classSession: "Wednesday",
+        classShift: "Evening",
+        courseCode: "CS103",
+        courseTitle: "Database Management Systems",
+        studyRoom: "Room 103",
+      }
+    ]
   }
 }

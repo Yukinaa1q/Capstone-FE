@@ -24,3 +24,13 @@ export interface TutorDetail {
   address: string;
   phoneNumber: string;
 }
+
+export interface StudentDetail {
+  userCode: string;
+  userId: string;
+  fullName: string;
+  email: string;
+  dob: string;
+  address: string;
+  phoneNumber: string;
+}
