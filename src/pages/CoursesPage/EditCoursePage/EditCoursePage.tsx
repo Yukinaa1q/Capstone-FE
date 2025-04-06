@@ -35,6 +35,7 @@ const EditCoursePage = () => {
           courseSubject: courseDetail.courseSubject,
           courseLevel: courseDetail.courseLevel,
           coursePrice: courseDetail.coursePrice,
+          duration: courseDetail.duration,
           courseDescription: JSON.parse(courseDetail.courseDescription),
           courseOutline: courseDetail.courseOutline,
           courseImage: new File([], "courseImage"),
@@ -53,6 +54,7 @@ const EditCoursePage = () => {
 
   const onSubmit = async (data: ICourseForm) => {
     setIsSubmitting(true);
+    console.log("Edit Data: ", data);
     try {
       const formdata = new FormData();
       formdata.append("courseCode", data.courseCode);
@@ -60,6 +62,7 @@ const EditCoursePage = () => {
       formdata.append("courseSubject", data.courseSubject);
       formdata.append("courseLevel", data.courseLevel);
       formdata.append("coursePrice", data.coursePrice.toString());
+      formdata.append("duration", data.duration.toString());
       formdata.append(
         "courseDescription",
         JSON.stringify(data.courseDescription)
@@ -74,6 +77,7 @@ const EditCoursePage = () => {
         courseSubject: data.courseSubject,
         courseLevel: data.courseLevel,
         coursePrice: data.coursePrice,
+        duration: data.duration,
         courseDescription: JSON.stringify(data.courseDescription),
         courseOutline: data.courseOutline,
       });

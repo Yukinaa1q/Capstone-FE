@@ -1,4 +1,5 @@
 import TucourApi from "@/utils/http";
+import { json } from "stream/consumers";
 
 export default class StudentApi {
   public static async getStudents() {
@@ -17,6 +18,19 @@ export default class StudentApi {
     }
     catch (err) {
       console.log(err);
+    }
+  }
+
+  public static async registerClass(classId: string) {
+    try {
+      await TucourApi.post("/student/register-class", {
+        body: JSON.stringify({
+          classId: classId,
+        })
+      })
+    }
+    catch {
+      console.log("error");
     }
   }
 }

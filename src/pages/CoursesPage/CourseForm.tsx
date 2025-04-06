@@ -28,7 +28,7 @@ export interface ICourseForm {
   courseSubject: string;
   courseLevel: string;
   coursePrice: number;
-  courseDuration: number;
+  duration: number;
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   courseImage?: File;
@@ -41,7 +41,7 @@ const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
     courseCode: yup.string().required("Course code is required"),
     courseSubject: yup.string().required("Course subject is required"),
     courseLevel: yup.string().required("Course level is required"),
-    courseDuration: yup.number().required("Learning duration is required"),
+    duration: yup.number().required("Learning duration is required"),
     coursePrice: yup
       .number()
       .min(0, "Course price must be greater than or equal to 0")
@@ -61,7 +61,7 @@ const defaultForm: ICourseForm = {
   courseSubject: "",
   courseLevel: "",
   coursePrice: 0,
-  courseDuration: 0,
+  duration: 0,
   courseDescription: [{ type: "p", children: [{ text: "" }] }],
   courseOutline: [],
   imgUrl: "",
@@ -146,7 +146,7 @@ const CourseForm = ({
             )}
           />
           <FormField
-            name="courseDuration"
+            name="duration"
             render={({ field }) => (
               <RequiredInput label="Learning Duration">
                 <div className="flex items-stretch border border-gray-200 rounded-md shadow-muted">
@@ -156,7 +156,7 @@ const CourseForm = ({
                     className="border-none focus-visible:outline-none focus-visible:ring-0"
                   />
                   <div className="flex items-center bg-gray-100 px-2">
-                    <p className="text-sm font-medium text-gray-700">week(s)</p>
+                    <p className="text-sm font-medium text-gray-700">month(s)</p>
                   </div>
                 </div>
               </RequiredInput>

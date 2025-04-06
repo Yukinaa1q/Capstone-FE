@@ -61,11 +61,10 @@ const TutorRegistration = ({
       alert("Please select at least one schedule");
       return;
     }
-    await TutorApi.sendTeachingRequest(scheduleList);
+    await TutorApi.sendTeachingRequest(courseContent.courseId, scheduleList);
     setScheduleList([]);
     setStudyWeek(undefined);
     setStudyShift(undefined);
-    alert("Request sent successfully");
     navigate(0);
   };
 
@@ -151,9 +150,8 @@ const TutorRegistration = ({
                           setScheduleList((prev) => [
                             ...prev.filter(
                               (schedule) =>
-                                schedule.studyWeek !== studyWeek &&
-                                schedule.studyShift !== studyShift &&
-                                schedule.isOnline !== isOnline
+                                !(schedule.studyWeek == studyWeek &&
+                                schedule.studyShift == studyShift)
                             ),
                             { studyShift, studyWeek, isOnline },
                           ]);

@@ -21,7 +21,7 @@ import { useAppSelector } from "@/hooks/reduxHook";
 interface ICourseDetail {
   courseTitle: string;
   courseCode: string;
-  learningDuration: string;
+  learningDuration: number;
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   coursePrice: number;
@@ -36,6 +36,7 @@ const CourseDetail = () => {
   const navigate = useNavigate();
   const [showFull, setShowFull] = useState(false);
   const [course, setCourse] = useState<ICourseDetail>();
+  const currentYear = new Date().getFullYear();
 
   useEffect(() => {
     const getCourse = async () => {
@@ -51,9 +52,7 @@ const CourseDetail = () => {
         setCourse({
           courseTitle: res.courseTitle,
           courseCode: res.courseCode,
-          learningDuration: "23/8/2024 - 23/12/2024",
-          // preregistrationDuration: "23/8/2024 - 23/12/2024",
-          // preregistrationNumber: res.participantNumber,
+          learningDuration: res.duration,
           courseDescription: courseDesc,
           courseOutline: res.courseOutline,
           coursePrice: res.coursePrice,
@@ -81,15 +80,15 @@ const CourseDetail = () => {
       <section className="p-10 flex justify-between">
         <div>
           <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
-          <h2>{course?.courseCode} | 6 weeks</h2>
-          {/* <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
+          <h2>{course?.courseCode} | {currentYear} - {currentYear + 1}</h2>
+          <div className="grid grid-cols-[160px_auto] mt-4 text-sm">
             <div>Learning Duration</div>
-            <div className="font-semibold">6 weeks</div>
-            <div>Pre-registraiton Duration</div>
+            <div className="font-semibold">{course?.learningDuration} {course?.learningDuration > 1 ? "months" : "month"}</div>
+            {/* <div>Pre-registraiton Duration</div>
             <div className="font-semibold">23/8/2024 - 23/12/2024</div>
             <div>Pre-registraiton Number</div>
-            <div className="font-semibold">{course?.participantNumber}</div>
-          </div> */}
+            <div className="font-semibold">{course?.participantNumber}</div> */}
+          </div>
         </div>
         {user.role === "academic" && (
           <div>

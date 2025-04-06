@@ -18,7 +18,7 @@ const AvailableCourses = () => {
                 .value;
               console.log(searchValue);
               navigate(
-                "/courses?" + new URLSearchParams({ q: searchValue }).toString()
+                "/classes?" + new URLSearchParams({ q: searchValue }).toString()
               ); // make searchValue compatible with base64Url
             }}
           >

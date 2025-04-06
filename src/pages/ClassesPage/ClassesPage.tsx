@@ -7,6 +7,9 @@ const ClassesPage = () => {
   if (role === "academic" || role === "admin") {
     return <AcademicView />;
   }
+  // else (role === "student") {
+    
+  // }
 };
 
 export default ClassesPage;

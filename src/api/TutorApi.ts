@@ -87,15 +87,24 @@ export default class TutorApi {
   }
 
   public static async sendTeachingRequest(
+    courseId: string,
     scheduleList: TutorRegistrationSchedule[]
   ) {
     try {
-      console.log(
-        "Đã gửi thông tin đăng ký dạy học, thông tin là: ",
-        scheduleList
-      );
+      await TucourApi.post("/phase1_register/new-tutor-register-class", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseId: courseId,
+          registrationList:scheduleList.map(schedule => ({
+            ...schedule,
+            online: schedule.isOnline,
+          }))
+        }),
+      })
     } catch {
-      console.log("Error sending teaching request");
+      alert("Error sending teaching request");
     }
   }
 }

@@ -6,15 +6,17 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { useAppSelector } from "@/hooks/reduxHook";
 import { IClassCard } from "@/interfaces/ICourse";
-import { useState } from "react";
+import TucourApi from "@/utils/http";
+import { useEffect, useState } from "react";
 
 interface RecomCoursesLayoutProps {
   title: string;
 }
 
 const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
-  // const phase = useAppSelector((state) => state.phases.phase);
+  const user = useAppSelector((state) => state.auths);
   const [cards, setCards] = useState<Array<IClassCard>>([
     {
       courseTitle: "Course Title",
@@ -43,27 +45,27 @@ const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
       maxStudents: 40,
     },
   ]);
-  // useEffect(() => {
-  //   const getRandomCourses = async () => {
-  //     try {
-  //       const randomCourse = (await TucourApi.call(
-  //         `/phase1_register/random-5-courses/${user.userId}`,
-  //         {
-  //           method: "GET",
-  //           headers: {
-  //             Authorization: `Bearer ${window.localStorage.getItem("token")}`,
-  //           },
-  //         }
-  //       )) as Array<ICourseCardP1 | ICourseCardP2>;
-  //       console.log(randomCourse);
-  //       setCards(randomCourse);
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  useEffect(() => {
+    const getRandomCourses = async () => {
+      try {
+        const randomCourse = (await TucourApi.call(
+          `/phase2_register/view-random-unregistered-classes`,
+          {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${window.localStorage.getItem("token")}`,
+            },
+          }
+        )) as IClassCard[];
+        console.log(randomCourse);
+        setCards(randomCourse);
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  //   getRandomCourses();
-  // }, []);
+    getRandomCourses();
+  }, []);
 
   return (
     <section className="mt-4 w-full">

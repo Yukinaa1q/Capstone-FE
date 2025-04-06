@@ -14,7 +14,7 @@ const TutorViewAvailableCourse = () => {
   }, []);
 
   const getCourses = async (searchKey: string, pageOffSet: number) => {
-    const courses = await FetchUnregisteredAPI.getAllWithPagination(
+    const courses = await FetchUnregisteredAPI.getAllCoursesWithPagination(
       searchKey,
       pageOffSet
     );

@@ -8,21 +8,28 @@ import {
   CardTitle,
 } from "../ui/card";
 
+import StudentApi from "@/api/StudentApi";
 import { IClassCard } from "@/interfaces/ICourse";
 import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
 import { ClipboardPen, GraduationCap, Users } from "lucide-react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 
 interface CourseCardProps {
   courseContent: IClassCard;
 }
 
 const StudentClassCard = ({ courseContent }: CourseCardProps) => {
+  const navigate = useNavigate();
 
-  const onRegisterClass = () => {
-    // Handle registration logic here
-    alert("Class registered successfully!");
+  const onRegisterClass = async () => {
+    try {
+      await StudentApi.registerClass(courseContent.classId);
+      navigate(0)
+    }
+    catch {
+      console.log("Register class failed");
+    }
   };
 
   return (
@@ -73,7 +80,7 @@ const StudentClassCard = ({ courseContent }: CourseCardProps) => {
 
       <CardFooter className="justify-between w-full">
         <Link
-          to={`/courses/${courseContent.courseCode}`}
+          to={`/classes/${courseContent.classCode}`}
           className={cn(
             "group flex items-center justify-between px-2 py-2 bg-t_secondary-300 rounded-full overflow-hidden"
           )}

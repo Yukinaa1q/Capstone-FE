@@ -8,6 +8,7 @@ interface ICourseCard {
 
 interface IClassCard extends ICourseCard {
   classId: string;
+  classCode: string;
   registrationStartDate: string;
   registrationEndDate: string;
   tutor: string;

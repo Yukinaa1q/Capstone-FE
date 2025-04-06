@@ -23,10 +23,13 @@ import { shortName } from "@/utils/utils";
 interface IClassDetail {
   courseTitle: string;
   courseCode: string;
-  learningDuration: string;
-  registrationDuration: string;
+  registrationStartDate: string;
+  registrationEndDate: string;
+  studyStartDate: string;
+  studyEndDate: string;
   tutor: string;
   tutorId: string;
+  courseImage: string;
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   coursePrice: number;
@@ -68,6 +71,7 @@ const ClassDetail = () => {
         )) as Omit<IClassDetail, "courseDescription"> & {
           courseDescription: string;
         };
+        console.log(res);
         setCourse({
           ...res,
           courseDescription: JSON.parse(res.courseDescription),
@@ -83,7 +87,7 @@ const ClassDetail = () => {
     <section
       className="text-white bg-fixed"
       style={{
-        background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('https://images.pexels.com/photos/5184957/pexels-photo-5184957.jpeg?auto=compress&cs=tinysrgb&w=600')`,
+        background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.courseImage}')`,
         backgroundPosition: "center",
         backgroundSize: "cover",
         backgroundAttachment: "fixed",
@@ -95,9 +99,9 @@ const ClassDetail = () => {
           <h2>{course?.courseCode} | 2024 - 2025</h2>
           <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
             <div>Learning Duration</div>
-            <div className="font-semibold">23/8/2024 - 23/12/2024</div>
+            <div className="font-semibold">{course?.registrationStartDate} - {course?.registrationEndDate}</div>
             <div>Registration Duration</div>
-            <div className="font-semibold">23/8/2024 - 23/12/2024</div>
+            <div className="font-semibold">{course?.studyStartDate} - {course?.studyEndDate}</div>
             <div>Tutor</div>
             <Link
               to={`/tutors/${course?.tutorId}`}
@@ -216,7 +220,7 @@ const ClassDetail = () => {
           </div>
 
           <ScrollArea type="hover" className="p-4 border rounded-md h-[280px]">
-            {course?.studentList.map(studentBrief => (
+            {course?.studentList.map((studentBrief) => (
               <Link
                 key={studentBrief.studentId}
                 to=""
@@ -224,7 +228,9 @@ const ClassDetail = () => {
               >
                 <Avatar>
                   <AvatarImage src={studentBrief.avatarLink} />
-                  <AvatarFallback>{shortName(studentBrief.studentName)}</AvatarFallback>
+                  <AvatarFallback>
+                    {shortName(studentBrief.studentName)}
+                  </AvatarFallback>
                 </Avatar>
                 <div>
                   <p>{studentBrief.studentName}</p>

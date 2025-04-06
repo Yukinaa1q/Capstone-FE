@@ -1,4 +1,4 @@
-import { CourseOutline } from "@/components/CourseOutlineInput";
+import { CourseOutline } from "@/components/Input/CourseOutlineInput";
 
 export default interface ICourseBE {
     courseCode: string;
@@ -7,6 +7,7 @@ export default interface ICourseBE {
     courseImage: string;
     courseLevel: string;
     courseOutline: CourseOutline[];
+    duration: number;
     coursePrice: number;
     courseSubject: string;
     courseTitle: string;
