@@ -1,15 +1,7 @@
-import { useEffect } from "react";
-import { clearTimeout } from "timers";
-
-export default function useDebounce() {
-  useEffect(() => {
-    
-  })
-  return debounce;
-} 
-
-function debounce(fn: () => void, delay: number) {
-  let timeout = undefined;
-  clearTimeout(timeout);
-  timeout = setTimeout(fn, delay);
+export function debounce<T>(fn: (arg: T) => void) {
+  let timer: NodeJS.Timeout;
+  return (arg: T) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => fn(arg), 500);
+  };
 }

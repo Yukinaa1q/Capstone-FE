@@ -33,6 +33,8 @@ import TutorLayout from "./pages/TutorsPage/Tutor/TutorLayout";
 import TutorPage from "./pages/TutorsPage/Tutor/TutorPage";
 import TutorsPage from "./pages/TutorsPage/TutorsPage";
 import getAllRegisteredClasses from "./pages/RegisteredClassesPage/RegisteredClassesLoader";
+import TimetablePage from "./pages/TimetablePage/TimetablePage";
+import StudentEdit from "./pages/StudentsPage/StudentPage/EditStudent/StudentEditPage";
 
 const router = createBrowserRouter([
   {
@@ -203,6 +205,11 @@ const router = createBrowserRouter([
         loader: getStudentInit,
       },
       {
+        path: "students/:id/edit",
+        element: <StudentEdit/>,
+        loader: getStudentInit,
+      },
+      {
         path: "staff/accounts",
         element: <StaffAccountPage />,
         loader: initStaffData,
@@ -227,6 +234,10 @@ const router = createBrowserRouter([
       {
         path: "classroom/:classId",
         element: <ClassroomPage />,
+      },
+      {
+        path: "timetables",
+        element: <TimetablePage />,
       },
     ],
   },

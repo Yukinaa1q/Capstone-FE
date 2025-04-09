@@ -1,4 +1,5 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { buttonVariants } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -19,9 +20,9 @@ import { StudentDetail } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import { cn } from "@/lib/utils";
 import { shortName } from "@/utils/utils";
-import { CakeIcon, ChevronRight, Mail, MapPin, Phone } from "lucide-react";
+import { CakeIcon, ChevronRight, Mail, MapPin, Phone, UserCog } from "lucide-react";
 
-import { useLoaderData, useNavigate } from "react-router";
+import { Link, useLoaderData, useNavigate } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
 
@@ -46,6 +47,16 @@ const StudentPage = () => {
       <section className="flex flex-col lg:flex-row gap-8 p-10 rounded-lg bg-t_primary-100 justify-between">
         <div className="basis-1/3 shrink-0">
           <div className="flex flex-col items-center gap-4 w-fit mb-4">
+            <Link
+              to={"/students/" + profile.userId + "/edit"}
+              className={cn(
+                buttonVariants(),
+                "group bg-t_primary-500 hover:bg-t_primary-500/80"
+              )}
+            >
+              <UserCog className="relative group-hover:animate-[zoom-in-out_0.5s_ease-in]" />{" "}
+              Update
+            </Link>
             <Avatar className="size-24 border">
               <AvatarImage src="#" />
               <AvatarFallback> {shortName(profile.fullName)} </AvatarFallback>
@@ -98,9 +109,7 @@ const StudentPage = () => {
                 <TableHead className="text-white rounded-s-md">
                   Course Title
                 </TableHead>
-                <TableHead className="text-white">
-                  Course Code
-                </TableHead>
+                <TableHead className="text-white">Course Code</TableHead>
                 <TableHead className="text-white">Classroom</TableHead>
                 <TableHead className="text-white">Study Week</TableHead>
                 <TableHead className="text-white">Study Shift</TableHead>
