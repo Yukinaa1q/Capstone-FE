@@ -10,13 +10,14 @@ import { Link, useLoaderData } from "react-router";
 import { date, InferType, object, string } from "yup";
 import { TutorInitContent } from "../TutorLoader";
 import { cn } from "@/lib/utils";
+import TutorApi from "@/api/TutorApi";
 
 const TutorEditSchema = object({
   fullName: string().required(),
   email: string().email().required(),
   dob: date().required(),
   ssid: string().required(),
-  address: string().required(),
+  // address: string().required(),
   phoneNumber: string().required(),
 });
 
@@ -29,12 +30,18 @@ const TutorEdit = () => {
       email: query.tutorDetail.email,
       dob: new Date(query.tutorDetail.dob),
       ssid: query.tutorDetail.ssid,
-      address: query.tutorDetail.address,
+      // address: query.tutorDetail.address,
       phoneNumber: query.tutorDetail.phoneNumber,
     },
   });
   const onSubmit = (data: InferType<typeof TutorEditSchema>) => {
-    console.log(data);
+    TutorApi.updateProfile(
+      data.fullName,
+      data.email,
+      data.dob,
+      data.ssid,
+      data.phoneNumber
+    );
   };
   return (
     <ContentLayout>
@@ -50,7 +57,7 @@ const TutorEdit = () => {
             <BasicInput form={form} field="fullName" label="Full Name" />
             <BasicInput form={form} field="email" label="Email" />
             <BasicInput form={form} field="ssid" label="SSID" />
-            <BasicInput form={form} field="address" label="Address" />
+            {/* <BasicInput form={form} field="address" label="Address" /> */}
             <BasicInput form={form} field="phoneNumber" label="Phone Number" />
             <FormField
               name="dob"

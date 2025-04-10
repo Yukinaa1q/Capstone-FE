@@ -1,3 +1,4 @@
+import StudentApi from "@/api/StudentApi";
 import BasicInput from "@/components/Input/BasicInput";
 import DOBInput from "@/components/Input/DOBInput";
 import RequiredInput from "@/components/Input/RequiredInput";
@@ -14,7 +15,7 @@ const StudentEditSchema = object({
   fullName: string().required(),
   email: string().email().required(),
   dob: date().required(),
-  address: string().required(),
+  // address: string().required(),
   phoneNumber: string().required(),
 });
 
@@ -27,12 +28,12 @@ const StudentEdit = () => {
       fullName: studentDetail.fullName,
       email: studentDetail.email,
       dob: new Date(studentDetail.dob),
-      address: studentDetail.address,
+      // address: studentDetail.address,
       phoneNumber: studentDetail.phoneNumber,
     },
   });
   const onSubmit = (data: InferType<typeof StudentEditSchema>) => {
-    console.log(data);
+    StudentApi.updateProfile(data.fullName, data.email, data.dob, data.phoneNumber)
   };
   return (
     <ContentLayout>
@@ -47,7 +48,7 @@ const StudentEdit = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <BasicInput form={form} field="fullName" label="Full Name" />
             <BasicInput form={form} field="email" label="Email" />
-            <BasicInput form={form} field="address" label="Address" />
+            {/* <BasicInput form={form} field="address" label="Address" /> */}
             <BasicInput form={form} field="phoneNumber" label="Phone Number" />
             <FormField
               name="dob"

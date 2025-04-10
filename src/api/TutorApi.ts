@@ -2,6 +2,7 @@ import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
 import { TutorDetail } from "@/interfaces/UserProfile";
 import TucourApi from "@/utils/http";
+import { AlignVerticalJustifyStart } from "lucide-react";
 
 export default class TutorApi {
   public static async addQualification(
@@ -141,7 +142,24 @@ export default class TutorApi {
         courseCode: "CS103",
         courseTitle: "Database Management Systems",
         studyRoom: "Room 103",
-      }
-    ]
+      },
+    ];
+  }
+
+  public static async updateProfile(
+    name: string,
+    email: string,
+    dob: Date,
+    tutorSSN: string,
+    phone: string
+  ) {
+    const sendingData = {
+      name: name,
+      email: email,
+      DOB: dob,
+      tutorSSN: tutorSSN,
+      phone: phone,
+    };
+    alert("Sending data: " + sendingData);
   }
 }

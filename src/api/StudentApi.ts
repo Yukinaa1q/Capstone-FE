@@ -63,4 +63,19 @@ export default class StudentApi {
       }
     ]
   }
+
+  public static async updateProfile(
+    name: string,
+    email: string,
+    dob: Date,
+    phone: string,
+  ) {
+    const sendingData = {
+      name: name,
+      email: email,
+      DOB: dob,
+      phone: phone,
+    }
+    alert("update profile " + sendingData);
+  }
 }
