@@ -5,9 +5,11 @@ import { useEffect, useId, useState } from "react";
 export default function SearchInput({
   className,
   onValueChange,
+  onFocus,
 }: {
   className?: string;
   onValueChange?: (value: string) => void;
+  onFocus?: () => void;
 }) {
   const [search, setSearch] = useState("");
   // Make control + K work for searchInput
@@ -35,7 +37,7 @@ export default function SearchInput({
         id={inputId}
         value={search}
         className="pe-11 rounded-full"
-        placeholder="Search..."
+        placeholder="Enter user name or id"
         type="search"
         onChange={(e) => {
           setSearch(e.target.value);
@@ -43,6 +45,7 @@ export default function SearchInput({
             onValueChange(e.target.value);
           }
         }}
+        onFocus={onFocus}
       />
       <div className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-2 text-muted-foreground">
         <kbd className="inline-flex h-5 max-h-full items-center rounded border border-border px-1 font-[inherit] text-[0.625rem] font-medium text-muted-foreground/70">

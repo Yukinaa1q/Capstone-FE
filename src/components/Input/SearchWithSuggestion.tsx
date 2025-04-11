@@ -1,43 +1,84 @@
 import { debounce } from "@/utils/debounce";
+import React from "react";
 import SearchInput from "./SearchInput";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
-interface SearchWithSuggestionProps {
+interface SearchWithSuggestionProps<T> {
   className?: string;
   onKeySubmit?: (searchValue: string) => void;
-  value?: string;
+  loadData: (searchKey: string) => Promise<T[]>;
+  itemComponents: (item: T) => React.ReactNode;
+  onSelect: (item: T) => void;
 }
 
-const SearchWithSuggestion = ({
+// Need an api to show students
+
+const SearchWithSuggestion = <T,>({
   onKeySubmit,
-  value = "",
-}: SearchWithSuggestionProps) => {
-  const searchDebounce = debounce<string>((val) => {
+  loadData,
+  itemComponents,
+  onSelect,
+}: SearchWithSuggestionProps<T>) => {
+  const searchDebounce = debounce<string>(async (val) => {
     console.log("searchDebounce", val);
+    const recomList = await loadData(val);
+    setRecomList(recomList);
   });
+  const [showRecommendation, setShowRecommendation] = React.useState(false);
+  const [recomList, setRecomList] = React.useState<T[]>([]);
+
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as HTMLElement;
+      const showArea = document.getElementById("search-input");
+      if (!showArea?.contains(target)) {
+        setShowRecommendation(false);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
 
   return (
-    <div className="relative">
+    <div
+      className="relative z-10 w-full md:w-3/4 lg:w-1/2 left-1/2 -translate-x-1/2"
+      id="search-input"
+    >
       <SearchInput
+        className="block w-full sm:w-full md:w-full lg:w-full xl:w-full"
         onValueChange={(val) => {
           searchDebounce(val);
           if (onKeySubmit) {
             onKeySubmit(val);
           }
         }}
+        onFocus={() => {
+          setShowRecommendation(true);
+        }}
       />
-      <ul className="relative w-full md:w-3/4 lg:w-1/2 left-1/2 -translate-x-1/2 bg-white rounded-lg shadow-lg mt-2 p-2 border">
-        <li className="flex gap-2 hover:bg-t_primary-100/50 p-2 rounded-lg cursor-pointer">
-          <Avatar>
-            <AvatarImage/>
-            <AvatarFallback>CN</AvatarFallback>
-          </Avatar>
-          <div className="text-sm">
-            <p className="font-semibold text-gray-700">Client Full Name</p>
-            <p className="text-t_primary-500">Client ID</p>
-          </div>
-        </li>
-      </ul>
+      {showRecommendation && recomList.length > 0 && (
+        <ul
+          id="search-recommend"
+          className="mt-2 bg-white shadow-lg rounded-lg border border-gray-200 absolute w-full"
+        >
+          {recomList.map((item, idx) => (
+            <li
+              key={idx}
+              onClick={() => {
+                setShowRecommendation(false);
+                if (onSelect) {
+                  onSelect(item);
+                }
+              }}
+            >
+              {itemComponents(item)}
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

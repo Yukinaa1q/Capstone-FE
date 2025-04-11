@@ -34,3 +34,10 @@ export interface StudentDetail {
   address: string;
   phoneNumber: string;
 }
+
+export interface UserBrief {
+  userId: string;
+  userCode: string;
+  name: string;
+  avatarUrl: string;
+}

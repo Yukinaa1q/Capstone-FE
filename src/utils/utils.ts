@@ -1,3 +1,5 @@
+import { StudyWeek } from "@/interfaces/common";
+
 export function shortName(name: string) {
   const wordList = name.split(" ");
   return wordList[0][0] + wordList[wordList.length - 1][0];
@@ -62,5 +64,39 @@ export function levelToString(level: string): string {
       return "Advanced";
     default:
       return "Unknown";
+  }
+}
+
+export function verboseStudyWeek(studyWeek: StudyWeek, isShorten: boolean) {
+  if (isShorten) {
+    switch (studyWeek) {
+      case "2-4":
+        return "Mon - Wed";
+      case "3-5":
+        return "Tue - Thu";
+      case "4-6":
+        return "Wed - Fri";
+      case "7":
+        return "Sat";
+      case "8":
+        return "Sun";
+      default:
+        return "Unknown";
+    }
+  } else {
+    switch (studyWeek) {
+      case "2-4":
+        return "Monday - Wednesday";
+      case "3-5":
+        return "Tuesday - Thursday";
+      case "4-6":
+        return "Wednesday - Friday";
+      case "7":
+        return "Saturday";
+      case "8":
+        return "Sunday";
+      default:
+        return "Unknown";
+    }
   }
 }
