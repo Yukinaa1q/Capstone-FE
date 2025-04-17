@@ -81,7 +81,7 @@ const router = createBrowserRouter([
       {
         path: "chat",
         element: (
-          <RouteGuard>
+          <RouteGuard allowed={["student", "tutor"]}>
             <ChatPage />
           </RouteGuard>
         ),

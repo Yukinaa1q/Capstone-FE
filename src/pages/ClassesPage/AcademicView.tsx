@@ -31,7 +31,10 @@ import { Link } from "react-router";
 interface IClassTable {
   classId: string;
   classCode: string;
+  classRegisteredStudents: number;
+  room: string;
   classStudents: number;
+  openStatus: string;
   tutorId: string;
   tutor: string;
 }

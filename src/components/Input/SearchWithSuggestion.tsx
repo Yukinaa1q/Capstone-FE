@@ -8,11 +8,13 @@ interface SearchWithSuggestionProps<T> {
   loadData: (searchKey: string) => Promise<T[]>;
   itemComponents: (item: T) => React.ReactNode;
   onSelect: (item: T) => void;
+  placeholder?: string;
 }
 
 // Need an api to show students
 
 const SearchWithSuggestion = <T,>({
+  placeholder = "Search",
   onKeySubmit,
   loadData,
   itemComponents,
@@ -48,6 +50,7 @@ const SearchWithSuggestion = <T,>({
       id="search-input"
     >
       <SearchInput
+        placeholder={placeholder}
         className="block w-full sm:w-full md:w-full lg:w-full xl:w-full"
         onValueChange={(val) => {
           searchDebounce(val);

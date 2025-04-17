@@ -23,6 +23,7 @@ import { TutorDetail } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import SectionLayout from "@/layouts/SectionLayout";
 import { cn } from "@/lib/utils";
+import toVND from "@/utils/currencyFormat";
 import { levelToString, shortName, toHeadCase } from "@/utils/utils";
 import {
   CakeIcon,
@@ -42,6 +43,10 @@ import React from "react";
 import { Link, useNavigate, useParams, useRouteLoaderData } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
 const badgeStyle = "rounded-md px-1.5 py-2";
+
+interface ITeachingPrice {
+  pricePaid: number;
+}
 
 function levelColor(level: string): string {
   switch (level) {
@@ -69,7 +74,7 @@ const TutorPage = () => {
   // An API to get tutor detail profile
   const tutorProfile = queryData.tutorDetail as TutorDetail;
   // An API to get tutor's classes base on semester
-  const classes = queryData.classHistory as Pick<
+  const classes = queryData.classHistory as (Pick<
     IClassDetail,
     | "courseTitle"
     | "courseCode"
@@ -77,7 +82,7 @@ const TutorPage = () => {
     | "classSession"
     | "classShift"
     | "studyRoom"
-  >[];
+  > & ITeachingPrice)[];
   // An API to get available semesters
   // TODO: An API to set tutor's newQualification
   const [newQualification, setNewQualification] = React.useState<{
@@ -235,12 +240,13 @@ const TutorPage = () => {
                 <TableHead className="text-white rounded-s-md">
                   Course Name
                 </TableHead>
-                <TableHead className="text-white">
+                {/* <TableHead className="text-white">
                   Course Code
-                </TableHead>
+                </TableHead> */}
                 <TableHead className="text-white">Classroom</TableHead>
                 <TableHead className="text-white">Study Week</TableHead>
                 <TableHead className="text-white">Study Shift</TableHead>
+                <TableHead className="text-white">Price Paid</TableHead>
                 <TableHead className="text-white rounded-e-md"></TableHead>
               </TableRow>
             </TableHeader>
@@ -254,10 +260,11 @@ const TutorPage = () => {
                   <TableCell className="font-medium">
                     {cls.courseTitle}
                   </TableCell>
-                  <TableCell>{cls.courseCode}</TableCell>
+ 
                   <TableCell>{cls.studyRoom}</TableCell>
                   <TableCell className="">{cls.classSession}</TableCell>
                   <TableCell className="">{cls.classShift}</TableCell>
+                  <TableCell className="">{toVND(cls.pricePaid)}</TableCell>
                   <TableCell className="">
                     <ChevronRight
                       size={20}

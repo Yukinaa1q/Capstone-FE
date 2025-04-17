@@ -3,6 +3,7 @@ import { cn } from "@/lib/utils";
 import { useEffect, useId, useState } from "react";
 
 export default function SearchInput({
+  placeholder = "Search",
   className,
   onValueChange,
   onFocus,
@@ -10,6 +11,7 @@ export default function SearchInput({
   className?: string;
   onValueChange?: (value: string) => void;
   onFocus?: () => void;
+  placeholder?: string;
 }) {
   const [search, setSearch] = useState("");
   // Make control + K work for searchInput
@@ -37,7 +39,7 @@ export default function SearchInput({
         id={inputId}
         value={search}
         className="pe-11 rounded-full"
-        placeholder="Enter user name or id"
+        placeholder={placeholder}
         type="search"
         onChange={(e) => {
           setSearch(e.target.value);

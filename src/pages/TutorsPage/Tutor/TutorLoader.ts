@@ -8,7 +8,7 @@ export interface TutorInitContent {
     level: string;
   }[];
   tutorDetail: TutorDetail;
-  classHistory: Pick<IClassDetail, "courseTitle" | "courseCode" | "classCode" | "classSession" | "classShift" | "studyRoom">[]
+  classHistory: (Pick<IClassDetail, "courseTitle" | "courseCode" | "classCode" | "classSession" | "classShift" | "studyRoom"> & {pricePaid: number})[]
 }
 
 export default async function getTutorInitContent({ params }) {

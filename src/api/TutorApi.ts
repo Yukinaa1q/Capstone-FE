@@ -108,7 +108,7 @@ export default class TutorApi {
   public static async getClassHistory(
     tutorId: string | undefined
   ): Promise<
-    Pick<
+    (Pick<
       IClassDetail,
       | "courseTitle"
       | "courseCode"
@@ -116,7 +116,7 @@ export default class TutorApi {
       | "classSession"
       | "classShift"
       | "studyRoom"
-    >[]
+    > & {pricePaid: number})[]
   > {
     return [
       {
@@ -126,6 +126,7 @@ export default class TutorApi {
         courseCode: "CS101",
         courseTitle: "Introduction to Computer Science",
         studyRoom: "Room 101",
+        pricePaid: 1500000
       },
       {
         classCode: "CS102",
@@ -134,6 +135,7 @@ export default class TutorApi {
         courseCode: "CS102",
         courseTitle: "Data Structures and Algorithms",
         studyRoom: "Room 102",
+        pricePaid: 1350000
       },
       {
         classCode: "CS103",
@@ -142,6 +144,7 @@ export default class TutorApi {
         courseCode: "CS103",
         courseTitle: "Database Management Systems",
         studyRoom: "Room 103",
+        pricePaid: 800000
       },
     ];
   }
