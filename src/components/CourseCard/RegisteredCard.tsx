@@ -18,26 +18,12 @@ const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
   const user = useAppSelector((state) => state.auths);
 
   const handleUnregister = async () => {
-    console.log(cardInfo, user);
-    if (user.role === "tutor") {
-      try {
-        await FetchRegisteredApi.deleteTutorRegistration(
-          user.userId,
-          cardInfo.courseId
-        );
-      } catch (error) {
-        console.log(error);
-      }
-    } else if (user.role === "student") {
-      try {
-        await FetchRegisteredApi.deleteStudentRegistration(
-          user.userId,
-          cardInfo.courseId
-        );
-      } catch (error) {
-        console.log(error);
-      }
+    try {
+      await FetchRegisteredApi.deleteStudentRegistration(cardInfo.classId);
+    } catch (error) {
+      console.log(error);
     }
+
     window.location.reload();
   };
 
@@ -89,7 +75,7 @@ const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
 
       <CardFooter className="justify-between w-full">
         <Link
-          to={`/courses/${cardInfo.classCode}`}
+          to={`/classes/${cardInfo.classCode}`}
           type="button"
           className="group flex items-center justify-between px-2 py-2 bg-t_secondary-300 rounded-full overflow-hidden"
         >

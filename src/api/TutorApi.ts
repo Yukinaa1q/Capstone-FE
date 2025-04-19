@@ -2,7 +2,6 @@ import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
 import { TutorDetail } from "@/interfaces/UserProfile";
 import TucourApi from "@/utils/http";
-import { AlignVerticalJustifyStart } from "lucide-react";
 
 export default class TutorApi {
   public static async addQualification(
@@ -77,6 +76,7 @@ export default class TutorApi {
       const res = (await TucourApi.get(
         "/tutor/detail/" + tutorId
       )) as TutorDetail;
+      console.log("res", res)
       return res;
     } catch {
       return {} as TutorDetail;
@@ -116,7 +116,7 @@ export default class TutorApi {
       | "classSession"
       | "classShift"
       | "studyRoom"
-    > & {pricePaid: number})[]
+    > & { pricePaid: number })[]
   > {
     return [
       {
@@ -126,7 +126,7 @@ export default class TutorApi {
         courseCode: "CS101",
         courseTitle: "Introduction to Computer Science",
         studyRoom: "Room 101",
-        pricePaid: 1500000
+        pricePaid: 1500000,
       },
       {
         classCode: "CS102",
@@ -135,7 +135,7 @@ export default class TutorApi {
         courseCode: "CS102",
         courseTitle: "Data Structures and Algorithms",
         studyRoom: "Room 102",
-        pricePaid: 1350000
+        pricePaid: 1350000,
       },
       {
         classCode: "CS103",
@@ -144,7 +144,7 @@ export default class TutorApi {
         courseCode: "CS103",
         courseTitle: "Database Management Systems",
         studyRoom: "Room 103",
-        pricePaid: 800000
+        pricePaid: 800000,
       },
     ];
   }
@@ -165,12 +165,15 @@ export default class TutorApi {
       phoneNumber: phone,
     };
     try {
-      await TucourApi.post("/" + tutorId, {
-        body: JSON.stringify(sendingData)
-      })
+      await TucourApi.post("/tutor/update-tutor-profile/" + tutorId, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify(sendingData),
+      });
       return true;
-    }
-    catch {
+    } catch {
       return false;
     }
   }

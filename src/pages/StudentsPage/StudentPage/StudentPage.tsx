@@ -24,9 +24,8 @@ import {
   CakeIcon,
   ChevronRight,
   Mail,
-  MapPin,
   Phone,
-  UserCog,
+  UserCog
 } from "lucide-react";
 
 import { Link, useLoaderData, useNavigate } from "react-router";

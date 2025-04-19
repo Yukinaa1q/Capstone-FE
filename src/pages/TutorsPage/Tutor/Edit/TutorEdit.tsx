@@ -6,7 +6,7 @@ import { Form, FormField } from "@/components/ui/form";
 import ContentLayout from "@/layouts/ContentLayout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link, useLoaderData, useParams } from "react-router";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router";
 import { date, InferType, object, string } from "yup";
 import { TutorInitContent } from "../TutorLoader";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,7 @@ const TutorEditSchema = object({
 
 const TutorEdit = () => {
   const query: TutorInitContent = useLoaderData();
+  const navigate = useNavigate();
   const tutorId = useParams().id!;
   const form = useForm({
     resolver: yupResolver(TutorEditSchema),
@@ -31,12 +32,11 @@ const TutorEdit = () => {
       email: query.tutorDetail.email,
       dob: new Date(query.tutorDetail.dob),
       ssid: query.tutorDetail.ssid,
-      // address: query.tutorDetail.address,
       phoneNumber: query.tutorDetail.phoneNumber,
     },
   });
-  const onSubmit = (data: InferType<typeof TutorEditSchema>) => {
-    TutorApi.updateProfile(
+  const onSubmit = async (data: InferType<typeof TutorEditSchema>) => {
+    const res = await TutorApi.updateProfile(
       tutorId,
       data.fullName,
       data.email,
@@ -44,6 +44,12 @@ const TutorEdit = () => {
       data.ssid,
       data.phoneNumber
     );
+    if (res) {
+      alert("Update successfully");
+      window.location.href = "/tutors/"+tutorId
+    } else {
+      alert("Update failed");
+    }
   };
   return (
     <ContentLayout>
@@ -59,7 +65,6 @@ const TutorEdit = () => {
             <BasicInput form={form} field="fullName" label="Full Name" />
             <BasicInput form={form} field="email" label="Email" />
             <BasicInput form={form} field="ssid" label="SSID" />
-            {/* <BasicInput form={form} field="address" label="Address" /> */}
             <BasicInput form={form} field="phoneNumber" label="Phone Number" />
             <FormField
               name="dob"

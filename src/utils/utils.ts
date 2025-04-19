@@ -100,3 +100,7 @@ export function verboseStudyWeek(studyWeek: StudyWeek, isShorten: boolean) {
     }
   }
 }
+
+export function formatDate(date: string | undefined) {
+  return date === undefined ? "" : new Date(date).toLocaleDateString("en-GB");
+}

@@ -31,12 +31,11 @@ import {
   ChevronRight,
   IdCard,
   Mail,
-  MapPin,
   Phone,
   UserCog,
   Verified,
   X,
-  XCircle,
+  XCircle
 } from "lucide-react";
 
 import React from "react";
@@ -82,7 +81,8 @@ const TutorPage = () => {
     | "classSession"
     | "classShift"
     | "studyRoom"
-  > & ITeachingPrice)[];
+  > &
+    ITeachingPrice)[];
   // An API to get available semesters
   // TODO: An API to set tutor's newQualification
   const [newQualification, setNewQualification] = React.useState<{
@@ -198,7 +198,9 @@ const TutorPage = () => {
               <div className="text-sm">
                 <p className={infoStyle}>
                   <IdCard className="size-6" />
-                  <span className={cn(badgeStyle)}>{tutorProfile.ssid}</span>
+                  <span className={cn(badgeStyle)}>
+                    {tutorProfile.ssid}
+                  </span>
                 </p>
                 <p className={infoStyle}>
                   <Mail className="size-6" />
@@ -206,17 +208,13 @@ const TutorPage = () => {
                 </p>
                 <p className={infoStyle}>
                   <CakeIcon />
-                  <span className={cn(badgeStyle)}>{tutorProfile.dob}</span>
+                  <span className={cn(badgeStyle)}>{new Date(tutorProfile.dob).toLocaleDateString("en-GB")}</span>
                 </p>
                 <p className={infoStyle}>
                   <Phone />
                   <span className={cn(badgeStyle)}>
                     {tutorProfile.phoneNumber}
                   </span>
-                </p>
-                <p className={infoStyle}>
-                  <MapPin />
-                  <span className={cn(badgeStyle)}>{tutorProfile.address}</span>
                 </p>
               </div>
             </div>
@@ -260,7 +258,7 @@ const TutorPage = () => {
                   <TableCell className="font-medium">
                     {cls.courseTitle}
                   </TableCell>
- 
+
                   <TableCell>{cls.studyRoom}</TableCell>
                   <TableCell className="">{cls.classSession}</TableCell>
                   <TableCell className="">{cls.classShift}</TableCell>

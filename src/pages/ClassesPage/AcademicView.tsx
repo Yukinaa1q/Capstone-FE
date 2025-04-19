@@ -31,6 +31,7 @@ import { Link } from "react-router";
 interface IClassTable {
   classId: string;
   classCode: string;
+  courseName: string;
   classRegisteredStudents: number;
   room: string;
   classStudents: number;
@@ -45,15 +46,45 @@ const defaultColumns = [
   columnHelper.accessor("classCode", {
     header: () => <div className="">CLASSCODE</div>,
     cell: (props) => {
-      return <div className="font-semibold text-t_secondary-600">{props.row.original.classCode}</div>;
+      return (
+        <div className="font-semibold text-t_secondary-600">
+          {props.row.original.classCode}
+        </div>
+      );
+    },
+  }),
+  columnHelper.accessor("courseName", {
+    header: () => <div className="">COURSENAME</div>,
+    cell: (props) => {
+      return (
+        <div className="">
+          {props.row.original.courseName}
+        </div>
+      );
+    },
+  }),
+  columnHelper.accessor("classRegisteredStudents", {
+    header: () => <div className="text-center">REGISTERED</div>,
+    cell: (props) => {
+      return (
+        <div className="text-center">
+          {props.row.original.classRegisteredStudents}
+        </div>
+      );
     },
   }),
   columnHelper.accessor("classStudents", {
-    header: () => <div className="text-center">STUDENTS</div>,
+    header: () => <div className="text-center">TOTAL</div>,
     cell: (props) => {
       return (
         <div className="text-center">{props.row.original.classStudents}</div>
       );
+    },
+  }),
+  columnHelper.accessor("room", {
+    header: () => <div className="text-center">ROOM</div>,
+    cell: (props) => {
+      return <div className="text-center">{props.row.original.room}</div>;
     },
   }),
   columnHelper.accessor("tutorId", {
@@ -66,6 +97,12 @@ const defaultColumns = [
     header: () => <div className="">TUTOR</div>,
     cell: (props) => {
       return <div className="">{props.row.original.tutor}</div>;
+    },
+  }),
+  columnHelper.accessor("openStatus", {
+    header: () => <div className="">STATUS</div>,
+    cell: (props) => {
+      return <div className="">{props.row.original.openStatus}</div>;
     },
   }),
   columnHelper.display({

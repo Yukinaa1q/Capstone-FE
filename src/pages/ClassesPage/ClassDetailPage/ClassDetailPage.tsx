@@ -18,7 +18,8 @@ import toVND from "@/utils/currencyFormat";
 import TucourApi from "@/utils/http";
 import { shortName } from "@/utils/utils";
 import { Edit, Trash2 } from "lucide-react";
-
+import { formatDate } from "@/utils/utils"
+import ClassApi from "@/api/ClassApi";
 
 const ClassDetail = () => {
   const params = useParams();
@@ -69,9 +70,13 @@ const ClassDetail = () => {
           <h2>{course?.courseCode} | 2024 - 2025</h2>
           <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
             <div>Registration Duration</div>
-            <div className="font-semibold">{course?.registrationStartDate} - {course?.registrationEndDate}</div>
+            <div className="font-semibold">
+              {formatDate(course?.registrationStartDate)} - {formatDate(course?.registrationEndDate)}
+            </div>
             <div>Learning Duration</div>
-            <div className="font-semibold">{course?.studyStartDate} - {course?.studyEndDate}</div>
+            <div className="font-semibold">
+              {course?.studyStartDate} - {course?.studyEndDate}
+            </div>
             <div>Tutor</div>
             <Link
               to={`/tutors/${course?.tutorId}`}
@@ -98,19 +103,10 @@ const ClassDetail = () => {
               className="w-24 ml-4"
               onClick={async () => {
                 try {
-                  await TucourApi.call(
-                    `/class/delete-class/${course?.classId}`,
-                    {
-                      method: "DELETE",
-                      headers: {
-                        "Content-Type": "application/json",
-                        Authorization: `Bearer ${localStorage.getItem(
-                          "token"
-                        )}`,
-                      },
-                    }
-                  );
-                  navigate("/classes");
+                  const res = await ClassApi.deleteClass(course?.classId ?? "");
+                  if (res) {
+                    navigate("/classes");
+                  }
                 } catch (err) {
                   console.log(err);
                 }
@@ -184,33 +180,39 @@ const ClassDetail = () => {
             <h3 className="text-sm">Class Code</h3>
             <p className="font-semibold text-sm">{course?.classCode}</p>
             <h3 className="text-sm">Study Room</h3>
-            <p className="font-semibold text-sm">{course?.studyRoom ?? "Cái Nịt"}</p>
+            <p className="font-semibold text-sm">
+              {course?.studyRoom ?? "Cái Nịt"}
+            </p>
             <h3 className="text-sm">No. Students</h3>
             <p className="font-semibold text-sm">
               {course?.classStudents ?? 0}/{course?.classMaxStudents}
             </p>
           </div>
-
-          <ScrollArea type="hover" className="p-4 border rounded-md h-[280px]">
-            {course?.studentList?.map((studentBrief) => (
-              <Link
-                key={studentBrief.studentId}
-                to=""
-                className="flex items-center text-sm gap-2 hover:bg-t_tertiary-100 p-2"
-              >
-                <Avatar>
-                  <AvatarImage src={studentBrief.avatarLink} />
-                  <AvatarFallback>
-                    {shortName(studentBrief.studentName)}
-                  </AvatarFallback>
-                </Avatar>
-                <div>
-                  <p>{studentBrief.studentName}</p>
-                  <p>{studentBrief.studentCode}</p>
-                </div>
-              </Link>
-            ))}
-          </ScrollArea>
+          {user.role === "academic" && (
+            <ScrollArea
+              type="hover"
+              className="p-4 border rounded-md h-[280px]"
+            >
+              {course?.studentList?.map((studentBrief) => (
+                <Link
+                  key={studentBrief.studentId}
+                  to=""
+                  className="flex items-center text-sm gap-2 hover:bg-t_tertiary-100 p-2"
+                >
+                  <Avatar>
+                    <AvatarImage src={studentBrief.avatarLink} />
+                    <AvatarFallback>
+                      {shortName(studentBrief.studentName)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <div>
+                    <p>{studentBrief.studentName}</p>
+                    <p>{studentBrief.studentCode}</p>
+                  </div>
+                </Link>
+              ))}
+            </ScrollArea>
+          )}
         </div>
       </section>
     </section>
