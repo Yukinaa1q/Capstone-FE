@@ -6,7 +6,7 @@ import { Form, FormField } from "@/components/ui/form";
 import ContentLayout from "@/layouts/ContentLayout";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useParams } from "react-router";
 import { date, InferType, object, string } from "yup";
 import { TutorInitContent } from "../TutorLoader";
 import { cn } from "@/lib/utils";
@@ -23,6 +23,7 @@ const TutorEditSchema = object({
 
 const TutorEdit = () => {
   const query: TutorInitContent = useLoaderData();
+  const tutorId = useParams().id!;
   const form = useForm({
     resolver: yupResolver(TutorEditSchema),
     defaultValues: {
@@ -36,6 +37,7 @@ const TutorEdit = () => {
   });
   const onSubmit = (data: InferType<typeof TutorEditSchema>) => {
     TutorApi.updateProfile(
+      tutorId,
       data.fullName,
       data.email,
       data.dob,

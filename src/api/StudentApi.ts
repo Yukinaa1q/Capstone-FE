@@ -1,5 +1,5 @@
 import { IClassDetail } from "@/interfaces/ICourseDetail";
-import { StudentDetail } from "@/interfaces/UserProfile";
+import { StudentDetail, UserBrief } from "@/interfaces/UserProfile";
 import TucourApi from "@/utils/http";
 
 export default class StudentApi {
@@ -60,22 +60,59 @@ export default class StudentApi {
         classSession: "2023-2024",
         classShift: "Afternoon",
         studyRoom: "Room 102",
-      }
-    ]
+      },
+    ];
   }
 
   public static async updateProfile(
+    studentId: string,
     name: string,
     email: string,
     dob: Date,
-    phone: string,
-  ) {
+    phone: string
+  ): Promise<boolean> {
     const sendingData = {
       name: name,
       email: email,
-      DOB: dob,
-      phone: phone,
+      dob: dob,
+      phoneNumber: phone,
+    };
+    try {
+      await TucourApi.post("/student/update-student-profile/"+studentId, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(sendingData),
+      });
+      return true;
+    } catch {
+      return false;
     }
     alert("update profile " + sendingData);
+  }
+
+  public static async getStudentBriefList(
+    keyword: string
+  ): Promise<UserBrief[]> {
+    return [
+      {
+        avatarUrl: "https://example.com/avatar1.jpg",
+        name: "Nguyen Van A",
+        userId: "2157982",
+        userCode: "ST27891",
+      },
+      {
+        avatarUrl: "https://example.com/avatar2.jpg",
+        name: "Nguyen Van B",
+        userId: "2157983",
+        userCode: "ST57983",
+      },
+      {
+        avatarUrl: "https://example.com/avatar3.jpg",
+        name: "Nguyen Van C",
+        userId: "2157984",
+        userCode: "ST57984",
+      },
+    ];
   }
 }

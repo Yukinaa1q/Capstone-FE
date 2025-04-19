@@ -35,6 +35,7 @@ import TutorsPage from "./pages/TutorsPage/TutorsPage";
 import getAllRegisteredClasses from "./pages/RegisteredClassesPage/RegisteredClassesLoader";
 import TimetablePage from "./pages/TimetablePage/TimetablePage";
 import StudentEdit from "./pages/StudentsPage/StudentPage/EditStudent/StudentEditPage";
+import ScorePage from "./pages/ScorePage/ScorePage";
 
 const router = createBrowserRouter([
   {
@@ -206,7 +207,7 @@ const router = createBrowserRouter([
       },
       {
         path: "students/:id/edit",
-        element: <StudentEdit/>,
+        element: <StudentEdit />,
         loader: getStudentInit,
       },
       {
@@ -238,6 +239,10 @@ const router = createBrowserRouter([
       {
         path: "timetables",
         element: <TimetablePage />,
+      },
+      {
+        path: "scores",
+        element: <ScorePage />,
       },
     ],
   },

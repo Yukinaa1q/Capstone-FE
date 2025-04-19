@@ -34,7 +34,11 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
   {
     accessorKey: "tutorCode",
     header: "TUTOR ID",
-    cell: (props) => <div className="font-semibold text-t_secondary-600">{props.row.getValue("tutorCode")}</div>,
+    cell: (props) => (
+      <div className="font-semibold text-t_secondary-600">
+        {props.row.getValue("tutorCode")}
+      </div>
+    ),
   },
   {
     accessorKey: "tutorName",
@@ -74,13 +78,8 @@ const TutorColumnDefs: ColumnDef<TutorTable>[] = [
           <DropdownMenuContent align="end">
             <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem>
-              <Link to={"/tutors/" + row.getValue("tutorId")}>
-                View Detail
-              </Link>
+              <Link to={"/tutors/" + row.getValue("tutorId")}>View Detail</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Class List</DropdownMenuItem>
-            <DropdownMenuItem>Student List</DropdownMenuItem>
-            <DropdownMenuItem>Tutor List</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
@@ -119,13 +118,12 @@ const TutorsPage = () => {
 
   useEffect(() => {
     const getTutorTable = async () => {
-      const tutors = await TutorApi.getTutors() as TutorTable[];
+      const tutors = (await TutorApi.getTutors()) as TutorTable[];
       // console.log(tutors);
       setTutors(tutors);
-    }
-    getTutorTable()
-  }, [])
-
+    };
+    getTutorTable();
+  }, []);
 
   const table = useReactTable({
     data: tutors,

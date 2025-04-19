@@ -98,16 +98,18 @@ const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
             Detail
           </p>
         </Link>
-        <button
-          type="button"
-          className="group flex items-center gap-0 px-2 py-2 bg-red-300 rounded-full overflow-hidden"
-          onClick={handleUnregister}
-        >
-          <X size={20} strokeWidth={2} />
-          <p className="text-sm font-medium invisible w-0 group-hover:visible group-hover:w-12 group-hover:transition-all transition-all">
-            Cancel
-          </p>
-        </button>
+        {user.role === "student" && (
+          <button
+            type="button"
+            className="group flex items-center gap-0 px-2 py-2 bg-red-300 rounded-full overflow-hidden"
+            onClick={handleUnregister}
+          >
+            <X size={20} strokeWidth={2} />
+            <p className="text-sm font-medium invisible w-0 group-hover:visible group-hover:w-12 group-hover:transition-all transition-all">
+              Cancel
+            </p>
+          </button>
+        )}
       </CardFooter>
     </Card>
   );

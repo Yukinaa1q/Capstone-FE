@@ -85,9 +85,6 @@ const defaultColumns = [
                 View Detail
               </Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Class List</DropdownMenuItem>
-            <DropdownMenuItem>Student List</DropdownMenuItem>
-            <DropdownMenuItem>Tutor List</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

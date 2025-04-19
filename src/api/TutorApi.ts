@@ -150,6 +150,7 @@ export default class TutorApi {
   }
 
   public static async updateProfile(
+    tutorId: string,
     name: string,
     email: string,
     dob: Date,
@@ -159,10 +160,18 @@ export default class TutorApi {
     const sendingData = {
       name: name,
       email: email,
-      DOB: dob,
+      dob: dob,
       tutorSSN: tutorSSN,
-      phone: phone,
+      phoneNumber: phone,
     };
-    alert("Sending data: " + sendingData);
+    try {
+      await TucourApi.post("/" + tutorId, {
+        body: JSON.stringify(sendingData)
+      })
+      return true;
+    }
+    catch {
+      return false;
+    }
   }
 }

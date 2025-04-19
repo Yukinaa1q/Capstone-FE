@@ -8,7 +8,7 @@ import ContentLayout from "@/layouts/ContentLayout";
 import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link, useLoaderData } from "react-router";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router";
 import { date, InferType, object, string } from "yup";
 
 const StudentEditSchema = object({
@@ -32,8 +32,16 @@ const StudentEdit = () => {
       phoneNumber: studentDetail.phoneNumber,
     },
   });
-  const onSubmit = (data: InferType<typeof StudentEditSchema>) => {
-    StudentApi.updateProfile(data.fullName, data.email, data.dob, data.phoneNumber)
+  const studentId = useParams().id!;
+  const navigate = useNavigate();
+  const onSubmit = async (data: InferType<typeof StudentEditSchema>) => {
+    const result = await StudentApi.updateProfile(studentId, data.fullName, data.email, data.dob, data.phoneNumber)
+    if (result) {
+      alert("Update successfully");
+      navigate("/students/" + studentDetail.userId);
+    } else {
+      alert("Update failed");
+    }
   };
   return (
     <ContentLayout>

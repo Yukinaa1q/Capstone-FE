@@ -76,37 +76,7 @@ const RoomColumnDefs: ColumnDef<Room>[] = [
   {
     accessorKey: "roomId",
     header: () => <NewRoom/>,
-    cell: (props) => {
-
-      const handleDeleteRoom = async (roomId: string) => {
-        console.log("Deleting room with id: ", roomId);
-        try {
-          await RoomApi.deleteRoom(roomId);
-          window.location.reload();
-        }
-        catch(err) {
-          console.log(err);
-        }
-      }
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild className="block">
-            <Button variant="ghost" className="block mx-auto">
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem>
-              <Link to={"/rooms/" + props.cell.getValue()}>View Detail</Link>
-            </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleDeleteRoom(props.row.getValue('roomId'))}>Delete Room</DropdownMenuItem>
-            <DropdownMenuItem>Edit Room</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
+    cell: () => <></>
   },
 ];
 

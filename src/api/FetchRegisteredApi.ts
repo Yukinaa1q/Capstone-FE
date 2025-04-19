@@ -3,6 +3,14 @@ import TucourApi from "@/utils/http";
 
 export default class FetchRegisteredApi {
   static async fetchRegisteredClasses(): Promise<IClassCard[]> {
+    try {
+      const res = await TucourApi.get("/phase2_register/view-registered-classes") as IClassCard[];
+      console.log(res)
+      return res
+    }
+    catch {
+      throw new Error("Error fetching registered classes");
+    }
     return [{
       courseCode: "CS101",
       courseTitle: "Computer Science 101",

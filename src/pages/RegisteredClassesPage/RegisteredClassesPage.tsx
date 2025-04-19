@@ -6,8 +6,6 @@ import { useLoaderData } from "react-router";
 const RegisteredClassesPage = () => {
   const registeredClasses = useLoaderData() as IClassCard[];
 
-
-
   return (
     <main className="mx-8 mt-4">
       <h3 className="font-semibold text-xl mb-2">Your Registered Courses</h3>

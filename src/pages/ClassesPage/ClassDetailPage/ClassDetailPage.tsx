@@ -68,9 +68,9 @@ const ClassDetail = () => {
           <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
           <h2>{course?.courseCode} | 2024 - 2025</h2>
           <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
-            <div>Learning Duration</div>
-            <div className="font-semibold">{course?.registrationStartDate} - {course?.registrationEndDate}</div>
             <div>Registration Duration</div>
+            <div className="font-semibold">{course?.registrationStartDate} - {course?.registrationEndDate}</div>
+            <div>Learning Duration</div>
             <div className="font-semibold">{course?.studyStartDate} - {course?.studyEndDate}</div>
             <div>Tutor</div>
             <Link
@@ -192,7 +192,7 @@ const ClassDetail = () => {
           </div>
 
           <ScrollArea type="hover" className="p-4 border rounded-md h-[280px]">
-            {course?.studentList.map((studentBrief) => (
+            {course?.studentList?.map((studentBrief) => (
               <Link
                 key={studentBrief.studentId}
                 to=""

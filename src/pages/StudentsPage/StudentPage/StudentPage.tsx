@@ -20,7 +20,14 @@ import { StudentDetail } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import { cn } from "@/lib/utils";
 import { shortName } from "@/utils/utils";
-import { CakeIcon, ChevronRight, Mail, MapPin, Phone, UserCog } from "lucide-react";
+import {
+  CakeIcon,
+  ChevronRight,
+  Mail,
+  MapPin,
+  Phone,
+  UserCog,
+} from "lucide-react";
 
 import { Link, useLoaderData, useNavigate } from "react-router";
 const infoStyle = "font-semibold flex w-fit items-center gap-2 cursor-default";
@@ -77,15 +84,13 @@ const StudentPage = () => {
                 </p>
                 <p className={infoStyle}>
                   <CakeIcon />
-                  <span className={cn(badgeStyle)}>{profile.dob}</span>
+                  <span className={cn(badgeStyle)}>
+                    {new Date(profile.dob).toLocaleDateString("en-GB")}
+                  </span>
                 </p>
                 <p className={infoStyle}>
                   <Phone />
                   <span className={cn(badgeStyle)}>{profile.phoneNumber}</span>
-                </p>
-                <p className={infoStyle}>
-                  <MapPin />
-                  <span className={cn(badgeStyle)}>{profile.address}</span>
                 </p>
               </div>
             </div>

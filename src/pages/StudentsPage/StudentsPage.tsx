@@ -64,9 +64,6 @@ const StudentColumnDefs: ColumnDef<StudentTable>[] = [
             <DropdownMenuItem>
               <Link to={"/students/" + props.cell.getValue()}>View Detail</Link>
             </DropdownMenuItem>
-            <DropdownMenuItem>Class List</DropdownMenuItem>
-            <DropdownMenuItem>Student List</DropdownMenuItem>
-            <DropdownMenuItem>Tutor List</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );
