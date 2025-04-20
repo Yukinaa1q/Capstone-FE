@@ -3,6 +3,8 @@ interface IClass {
   courseCode: string;
   tutor: string;
   class: string;
+  courseImg: string;
+  classUrl: string;
 }
 
 export type { IClass };

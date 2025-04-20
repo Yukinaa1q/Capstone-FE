@@ -1,13 +1,6 @@
+import RoomApi from "@/api/RoomApi";
 import DataTable from "@/components/DataTable";
 import ClearableSearch from "@/components/Input/ClearableSearch";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import ContentLayout from "@/layouts/ContentLayout";
 import {
   ColumnDef,
@@ -16,11 +9,8 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
 import React, { useEffect } from "react";
-import { Link } from "react-router";
 import NewRoom from "./NewRoom/NewRoom";
-import RoomApi from "@/api/RoomApi";
 
 interface Room {
   roomId: string;
@@ -55,24 +45,24 @@ const RoomColumnDefs: ColumnDef<Room>[] = [
           rel="noopener noreferrer"
           className="text-blue-500 underline"
         >
-          {props.row.getValue("onlineRoom")}
+          {"Online Room Link"}
         </a>
       ),
   },
-  {
-    accessorKey: "currentClasses",
-    header: () => <div className="text-center">OCCUPIED CLASSES</div>,
-    cell: (props) => (
-      <div className="text-center">{props.row.getValue("currentClasses")}</div>
-    ),
-  },
-  {
-    accessorKey: "maxClasses",
-    header: () => <div className="text-center">MAX CLASSES</div>,
-    cell: (props) => (
-      <div className="text-center">{props.row.getValue("maxClasses")}</div>
-    ),
-  },
+  // {
+  //   accessorKey: "currentClasses",
+  //   header: () => <div className="text-center">OCCUPIED CLASSES</div>,
+  //   cell: (props) => (
+  //     <div className="text-center">{props.row.getValue("currentClasses")}</div>
+  //   ),
+  // },
+  // {
+  //   accessorKey: "maxClasses",
+  //   header: () => <div className="text-center">MAX CLASSES</div>,
+  //   cell: (props) => (
+  //     <div className="text-center">{props.row.getValue("maxClasses")}</div>
+  //   ),
+  // },
   {
     accessorKey: "roomId",
     header: () => <NewRoom/>,

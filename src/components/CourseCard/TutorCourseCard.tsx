@@ -9,6 +9,8 @@ import {
   CardTitle,
 } from "../ui/card";
 import TutorRegistration from "./TutorRegistration";
+import { Book, SignalHigh } from "lucide-react";
+import { capitalizeFirstLetter, levelToString } from "@/utils/utils";
 
 const TutorCourseCard = ({ cardInfo }: { cardInfo: ICourseCard }) => {
   return (
@@ -25,6 +27,16 @@ const TutorCourseCard = ({ cardInfo }: { cardInfo: ICourseCard }) => {
         <CardDescription className="flex justify-between text-xs">
           <p>{cardInfo.courseCode}</p>
         </CardDescription>
+        <div>
+          <div className="flex gap-2 items-center text-sm">
+            <Book size={20} className="stroke-amber-500" />
+            <p className="text-amber-500">{capitalizeFirstLetter(cardInfo.courseSubject)}</p>
+          </div>
+          <div className="flex gap-2 items-center text-sm">
+            <SignalHigh size={20} className="stroke-blue-800" />
+            <p className="text-blue-700">{levelToString(cardInfo.courseLevel)}</p>
+          </div>
+        </div>
       </CardHeader>
 
       <CardFooter className="justify-between w-full">

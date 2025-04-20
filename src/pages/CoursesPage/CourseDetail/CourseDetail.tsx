@@ -17,11 +17,14 @@ import ICourseBE from "@/interfaces/ICourseBE";
 import TucourApi, { StatusError } from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 import { useAppSelector } from "@/hooks/reduxHook";
+import { capitalizeFirstLetter, levelToString } from "@/utils/utils";
 
 interface ICourseDetail {
   courseTitle: string;
   courseCode: string;
   learningDuration: number;
+  courseSubject: string;
+  courseLevel: string;
   courseDescription: Descendant[];
   courseOutline: CourseOutline[];
   coursePrice: number;
@@ -59,6 +62,8 @@ const CourseDetail = () => {
           participantNumber: res.participantNumber,
           courseId: res.courseId,
           imgUrl: res.courseImage,
+          courseLevel: res.courseLevel,
+          courseSubject: res.courseSubject,
         });
       } catch (error) {
         console.log(error);
@@ -80,14 +85,21 @@ const CourseDetail = () => {
       <section className="p-10 flex justify-between">
         <div>
           <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
-          <h2>{course?.courseCode} | {currentYear} - {currentYear + 1}</h2>
+          <h2>
+            {course?.courseCode} | {currentYear} - {currentYear + 1}
+          </h2>
           <div className="grid grid-cols-[160px_auto] mt-4 text-sm">
             <div>Learning Duration</div>
-            <div className="font-semibold">{course?.learningDuration} {course?.learningDuration > 1 ? "months" : "month"}</div>
-            {/* <div>Pre-registraiton Duration</div>
-            <div className="font-semibold">23/8/2024 - 23/12/2024</div>
-            <div>Pre-registraiton Number</div>
-            <div className="font-semibold">{course?.participantNumber}</div> */}
+            <div className="font-semibold">
+              {course?.learningDuration}{" "}
+              {course?.learningDuration > 1 ? "months" : "month"}
+            </div>
+            <div>Subject</div>
+            <div className="font-semibold">{capitalizeFirstLetter(course?.courseSubject ?? "")}</div>
+            <div>Difficulty</div>
+            <div className="font-semibold">
+              {levelToString(course?.courseLevel ?? "")}
+            </div>
           </div>
         </div>
         {user.role === "academic" && (

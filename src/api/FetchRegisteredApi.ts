@@ -1,3 +1,4 @@
+import { IClass } from "@/interfaces/IClass";
 import { IClassCard } from "@/interfaces/ICourse";
 import TucourApi from "@/utils/http";
 
@@ -12,22 +13,6 @@ export default class FetchRegisteredApi {
     } catch {
       throw new Error("Error fetching registered classes");
     }
-    return [
-      {
-        courseCode: "CS101",
-        courseTitle: "Computer Science 101",
-        classCode: "CS101-01",
-        classId: "12345",
-        courseId: "CS101",
-        courseImage: "https://example.com/image.jpg",
-        coursePrice: 1250000,
-        currentStudents: 20,
-        maxStudents: 30,
-        registrationEndDate: "2023-12-31",
-        registrationStartDate: "2023-01-01",
-        tutor: "Nguyen Van A",
-      },
-    ];
   }
 
   static async deleteTutorRegistration(tutorId: string, courseId: string) {
@@ -55,6 +40,23 @@ export default class FetchRegisteredApi {
       return res;
     } catch (error) {
       console.error(error);
+    }
+  }
+
+  static async getPaidAndDoneClassesFromStudent(): Promise<IClass[]> {
+    try {
+      const res = (await TucourApi.get("/student/view-registered-classes-simple")) as IClass[];
+      return res;
+    } catch {
+      return [];
+    }
+  }
+  static async getPaidAndDoneClassesFromTutor(): Promise<IClass[]> {
+    try {
+      const res = (await TucourApi.get("/student/view-registered-classes-simple")) as IClass[];
+      return res;
+    } catch {
+      return [];
     }
   }
 }

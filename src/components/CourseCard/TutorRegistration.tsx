@@ -61,10 +61,12 @@ const TutorRegistration = ({
       alert("Please select at least one schedule");
       return;
     }
-    await TutorApi.sendTeachingRequest(courseContent.courseId, scheduleList);
+    const result = await TutorApi.sendTeachingRequest(courseContent.courseId, scheduleList);
     setScheduleList([]);
     setStudyWeek(undefined);
     setStudyShift(undefined);
+    console.log(result);
+    alert(result);
     navigate(0);
   };
 

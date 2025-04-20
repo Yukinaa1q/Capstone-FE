@@ -74,14 +74,14 @@ const ClassForm = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        })) as { courseCode: string; courseTitle: string }[];
+        })) as { courseCode: string; courseTitle: string; courseLevel: string; courseSubject: string }[];
         const tutorListApi = (await TucourApi.call("/tutor/all-tutor", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        })) as { tutorCode: string; name: string; avatarUrl: string }[];
+        })) as { tutorCode: string; name: string; avatarUrl: string; allowedTeacing: [{subject: string; level: string}] }[];
         setTutorList(
           tutorListApi.map(
             (item: { tutorCode: string; name: string; avatarUrl: string }) => {

@@ -4,6 +4,8 @@ interface ICourseCard {
   courseId: string;
   coursePrice: number;
   courseImage: string;
+  courseSubject: string;
+  courseLevel: string;
 }
 
 interface IClassCard extends ICourseCard {

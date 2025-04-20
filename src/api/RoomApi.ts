@@ -1,5 +1,4 @@
 import TucourApi from "@/utils/http";
-import { createStaticRouter } from "react-router";
 
 export default class RoomApi {
   public static async getAllRooms() {
@@ -9,6 +8,7 @@ export default class RoomApi {
           "Content-Type": "application/json",
         },
       });
+      console.log(rooms)
       return rooms;
     } catch (error) {
       console.error(error);

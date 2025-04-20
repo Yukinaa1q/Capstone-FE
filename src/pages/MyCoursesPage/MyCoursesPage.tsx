@@ -1,4 +1,3 @@
-import ClassCard from "@/components/ClassCard";
 import {
   Select,
   SelectContent,
@@ -6,78 +5,80 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { IClass } from "@/interfaces/IClass";
-import { Link } from "react-router";
+import { useAppSelector } from "@/hooks/reduxHook";
+import StudentClassList from "./StudentClassList";
+import TutorClassList from "./TutorClassList";
 
-const myCoursesList: IClass[] = [
-  {
-    courseName: "Mathematics",
-    courseCode: "MATH 101",
-    tutor: "Dr. John Doe",
-    class: "A113",
-  },
-  {
-    courseName: "Physics",
-    courseCode: "PHYS 101",
-    tutor: "Dr. Jane Doe",
-    class: "B502",
-  },
-  {
-    courseName: "Computer Science",
-    courseCode: "CS 101",
-    tutor: "Dr. John Doe",
-    class: "C504",
-  },
-  {
-    courseName: "History",
-    courseCode: "HIST 101",
-    tutor: "Dr. Jane Doe",
-    class: "D101",
-  },
-  {
-    courseName: "Biology",
-    courseCode: "BIO 101",
-    tutor: "Dr. John Doe",
-    class: "E201",
-  },
-  {
-    courseName: "Chemistry",
-    courseCode: "CHEM 101",
-    tutor: "Dr. Jane Doe",
-    class: "F301",
-  },
-  {
-    courseName: "Geography",
-    courseCode: "GEOG 101",
-    tutor: "Dr. John Doe",
-    class: "G401",
-  },
-  {
-    courseName: "Economics",
-    courseCode: "ECON 101",
-    tutor: "Dr. Jane Doe",
-    class: "H501",
-  },
-  {
-    courseName: "English",
-    courseCode: "ENGL 101",
-    tutor: "Dr. John Doe",
-    class: "I601",
-  },
-  {
-    courseName: "Art",
-    courseCode: "ART 101",
-    tutor: "Dr. Jane Doe",
-    class: "J701",
-  },
-];
+// const myCoursesList: IClass[] = [
+//   {
+//     courseName: "Mathematics",
+//     courseCode: "MATH 101",
+//     tutor: "Dr. John Doe",
+//     class: "A113",
+//   },
+//   {
+//     courseName: "Physics",
+//     courseCode: "PHYS 101",
+//     tutor: "Dr. Jane Doe",
+//     class: "B502",
+//   },
+//   {
+//     courseName: "Computer Science",
+//     courseCode: "CS 101",
+//     tutor: "Dr. John Doe",
+//     class: "C504",
+//   },
+//   {
+//     courseName: "History",
+//     courseCode: "HIST 101",
+//     tutor: "Dr. Jane Doe",
+//     class: "D101",
+//   },
+//   {
+//     courseName: "Biology",
+//     courseCode: "BIO 101",
+//     tutor: "Dr. John Doe",
+//     class: "E201",
+//   },
+//   {
+//     courseName: "Chemistry",
+//     courseCode: "CHEM 101",
+//     tutor: "Dr. Jane Doe",
+//     class: "F301",
+//   },
+//   {
+//     courseName: "Geography",
+//     courseCode: "GEOG 101",
+//     tutor: "Dr. John Doe",
+//     class: "G401",
+//   },
+//   {
+//     courseName: "Economics",
+//     courseCode: "ECON 101",
+//     tutor: "Dr. Jane Doe",
+//     class: "H501",
+//   },
+//   {
+//     courseName: "English",
+//     courseCode: "ENGL 101",
+//     tutor: "Dr. John Doe",
+//     class: "I601",
+//   },
+//   {
+//     courseName: "Art",
+//     courseCode: "ART 101",
+//     tutor: "Dr. Jane Doe",
+//     class: "J701",
+//   },
+// ];
 
 const MyCoursesPage = () => {
+  const user = useAppSelector((state) => state.auths);
   return (
     <main className="px-8 pt-4">
       <div className="flex items-center gap-4">
-        <h3 className="font-semibold text-xl">Your Courses</h3>
-        <Select>
+        <h3 className="font-semibold text-xl">Your Classes</h3>
+        {/* <Select>
           <SelectTrigger className="w-40">
             <SelectValue placeholder="Semester" defaultValue={"241"} />
           </SelectTrigger>
@@ -87,15 +88,10 @@ const MyCoursesPage = () => {
             <SelectItem value="222">2022-2023 | II</SelectItem>
             <SelectItem value="221">2022-2023 | I</SelectItem>
           </SelectContent>
-        </Select>
+        </Select> */}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mt-4">
-        {myCoursesList.map((course, index) => (
-          <Link className="max-w-full cursor-pointer" key={index} to={`/classroom/${course.courseCode}`}>
-            <ClassCard key={index} classInfo={course} />
-          </Link>
-        ))}
-      </div>
+      {user.role === "student" && <StudentClassList />}
+      {user.role === "tutor" && <TutorClassList />}
     </main>
   );
 };

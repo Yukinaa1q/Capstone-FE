@@ -22,6 +22,9 @@ export default class StudentApi {
   public static async registerClass(classId: string) {
     try {
       await TucourApi.post("/student/register-class", {
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           classId: classId,
         }),
@@ -78,7 +81,7 @@ export default class StudentApi {
       phoneNumber: phone,
     };
     try {
-      await TucourApi.post("/student/update-student-profile/"+studentId, {
+      await TucourApi.post("/student/update-student-profile/" + studentId, {
         headers: {
           "Content-Type": "application/json",
         },
@@ -114,5 +117,14 @@ export default class StudentApi {
         userCode: "ST57984",
       },
     ];
+  }
+
+  public static async payment() {
+    try {
+      await TucourApi.get("/student/class-payment");
+    }
+    catch {
+      console.log("error when doing payment");
+    }
   }
 }

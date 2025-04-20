@@ -36,6 +36,7 @@ import getAllRegisteredClasses from "./pages/RegisteredClassesPage/RegisteredCla
 import TimetablePage from "./pages/TimetablePage/TimetablePage";
 import StudentEdit from "./pages/StudentsPage/StudentPage/EditStudent/StudentEditPage";
 import ScorePage from "./pages/ScorePage/ScorePage";
+import getInCartClassesLoader from "./pages/PaymentPage/paymentLoader";
 
 const router = createBrowserRouter([
   {
@@ -73,6 +74,7 @@ const router = createBrowserRouter([
       },
       {
         path: "payment",
+        loader: getInCartClassesLoader,
         element: (
           <RouteGuard allowed={["student"]}>
             <PaymentPage />

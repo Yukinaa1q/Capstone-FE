@@ -17,7 +17,7 @@ const ClassCard = ({ classInfo }: ClassCardProps) => {
   return (
     <Card className="p-2 md:p-1">
       <CardHeader>
-        <img src="" alt="" className="aspect-video bg-slate-200 rounded-sm"/>
+        <img src={classInfo.courseImg} alt="" className="aspect-video bg-slate-200 rounded-sm"/>
         <CardTitle className="mt-2">{classInfo.courseName}</CardTitle>
         <CardDescription>{classInfo.courseCode}</CardDescription>
       </CardHeader>
