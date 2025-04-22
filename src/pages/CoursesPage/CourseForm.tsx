@@ -67,7 +67,7 @@ const defaultForm: ICourseForm = {
   imgUrl: "",
 };
 
-const CourseForm = ({
+const  CourseForm = ({
   className,
   onSubmit,
   initialData = defaultForm,

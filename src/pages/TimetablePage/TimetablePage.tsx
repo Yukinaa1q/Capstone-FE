@@ -54,7 +54,7 @@ const TimetablePage = () => {
                   NO
                 </TableHead>
                 <TableHead className="text-white font-semibold">
-                  SUBJECT
+                  COURSE TITLE
                 </TableHead>
                 <TableHead className="text-white font-semibold">
                   STUDY WEEK
