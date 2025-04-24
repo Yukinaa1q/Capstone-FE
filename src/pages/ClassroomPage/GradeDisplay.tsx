@@ -14,6 +14,12 @@ import ShowAndInput from "./ShowAndInput";
 interface StudentGrade {
   studentName: string;
   studentId: string;
+  tutor: string;
+  courseTitle: string;
+  courseCode: string;
+  courseId: string;
+  classCode: string;
+  classId: string;
   homeworkScore: number;
   assignmentScore: number;
   midtermScore: number;
