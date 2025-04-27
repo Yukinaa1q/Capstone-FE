@@ -23,7 +23,6 @@ const classFormSchema = object({
   maxStudents: number()
     .min(1, "Class size cannot be smaller than 1")
     .required("Class size is required"),
-  classCode: string().required("Class code is required"),
   studyWeek: string<StudyWeek | "">().required("Study week is required"),
   studyShift: string<StudyShift | "">().required("Study shift is required"),
   isOnline: boolean().default(false),
@@ -37,7 +36,6 @@ const initValue: IClassForm = {
   courseTitle: "",
   courseCode: "",
   maxStudents: 0,
-  classCode: "",
   studyWeek: "",
   studyShift: "",
   isOnline: false,
@@ -57,13 +55,33 @@ const ClassForm = ({
   children?: React.ReactNode;
 }) => {
   const [codeList, setCodeList] = useState<ListItem[]>([]);
+  const [courseList, setCourseList] = useState<
+    {
+      courseCode: string;
+      courseTitle: string;
+      courseLevel: string;
+      courseSubject: string;
+    }[]
+  >([]);
+  const [chosenCourse, setChosenCourse] = useState<
+    | {
+        courseCode: string;
+        courseTitle: string;
+        courseLevel: string;
+        courseSubject: string;
+      }
+    | undefined
+  >(undefined);
   const [tutorList, setTutorList] = useState<ListItem[]>([]);
+
   const [studyWeek, setStudyWeek] = useState<StudyWeek | "">(""); // A workaround to reset the list of study shifts
   // Because the list can only be set when their is a rerender in ClassForm, however, useForm won't trigger a rerender
   const form = useForm({
     values: defaultValues,
     resolver: yupResolver(classFormSchema),
   });
+
+  console.log("Chosen course", chosenCourse);
 
   useEffect(() => {
     const fetchCourseCode = async () => {
@@ -74,27 +92,36 @@ const ClassForm = ({
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        })) as { courseCode: string; courseTitle: string; courseLevel: string; courseSubject: string }[];
+        })) as {
+          courseCode: string;
+          courseTitle: string;
+          courseLevel: string;
+          courseSubject: string;
+        }[];
         const tutorListApi = (await TucourApi.call("/tutor/all-tutor", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        })) as { tutorCode: string; name: string; avatarUrl: string; allowedTeacing: [{subject: string; level: string}] }[];
+        })) as {
+          tutorCode: string;
+          name: string;
+          avatarUrl: string;
+          qualifiedSubject: [{ subject: string; level: string }];
+        }[];
         setTutorList(
-          tutorListApi.map(
-            (item: { tutorCode: string; name: string; avatarUrl: string }) => {
-              return {
-                value: item.tutorCode,
-                label: item.name,
-                display: {
-                  tutorName: item.name,
-                  tutorImage: item.avatarUrl,
-                },
-              };
-            }
-          )
+          tutorListApi.map((item) => {
+            return {
+              value: item.tutorCode,
+              label: item.name,
+              display: {
+                tutorName: item.name,
+                tutorImage: item.avatarUrl,
+                qualifiedSubject: item.qualifiedSubject,
+              },
+            };
+          })
         );
         setCodeList(
           res.map((item) => {
@@ -108,6 +135,8 @@ const ClassForm = ({
             };
           })
         );
+
+        setCourseList(res);
       } catch (err) {
         console.error(err);
       }
@@ -143,11 +172,16 @@ const ClassForm = ({
                     list={codeList}
                     placeholder="Search"
                     onValueChange={(value) => {
+                      console.log("Choose course", value);
                       form.setValue(
                         "courseTitle",
                         codeList.find((item) => item.value === value)?.display
                           ?.courseTitle ?? ""
                       );
+                      setChosenCourse(
+                        courseList.find((course) => course.courseCode === value)
+                      );
+                      field.onChange(value);
                     }}
                     filterFn={(value, search) => {
                       const result = codeList.find(
@@ -204,15 +238,6 @@ const ClassForm = ({
                   type="number"
                   placeholder="Enter class size"
                 />
-              </RequiredInput>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="classCode"
-            render={({ field }) => (
-              <RequiredInput label="Class Code">
-                <Input className="" {...field} placeholder="Enter class code" />
               </RequiredInput>
             )}
           />
@@ -311,7 +336,22 @@ const ClassForm = ({
                 <SearchSelect
                   className=""
                   {...field}
-                  list={tutorList}
+                  list={tutorList.filter((tutor) => {
+                    return tutor.display.qualifiedSubject.some(
+                      (subject: { subject: string; level: string }) => {
+                        return (
+                          subject.subject === chosenCourse?.courseSubject &&
+                          parseInt(subject.level) >=
+                            parseInt(chosenCourse?.courseLevel ?? "0")
+                        );
+                      }
+                    );
+                  })}
+                  onValueChange={(value) => {
+                    console.log("Choose tutor", value);
+                    console.log(value);
+                    field.onChange(value);
+                  }}
                   placeholder="Search"
                   filterFn={(value, search) => {
                     const result = tutorList.find(

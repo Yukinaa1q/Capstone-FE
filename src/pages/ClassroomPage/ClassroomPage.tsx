@@ -5,26 +5,34 @@ import ContentLayout from "@/layouts/ContentLayout";
 import EditClass from "./components/EditClass";
 import GradeDisplay from "./GradeDisplay";
 import SectionDisplay from "./SectionDisplay";
+import { useLoaderData } from "react-router";
 
 const ClassroomPage = () => {
+  const classLoader = useLoaderData() as {
+    courseTitle: string;
+    courseCode: string;
+    classCode: string;
+    tutor: string;
+    studyRoom: string;
+  }
   return (
     <>
       <div className="bg-t_primary-700 text-white p-6 shadow-md relative">
-        <h2 className="text-2xl font-bold">Vật Lý 12</h2>
-        <p className="mb-4 font-semibold">PHYS001 | CC01</p>
+        <h2 className="text-2xl font-bold">{classLoader.courseTitle}</h2>
+        <p className="mb-4 font-semibold">{classLoader.courseCode} | {classLoader.classCode}</p>
 
         <div className="flex items-center mb-2">
           <span className="material-icons text-white mr-2">
             <GraduationCap />
           </span>
-          <p>Đỗ Kim Sang</p>
+          <p>{classLoader.tutor}</p>
         </div>
 
         <div className="flex items-center">
           <span className="material-icons text-white mr-2">
             <DoorOpen />
           </span>
-          <p>B402</p>
+          <p>{classLoader.studyRoom}</p>
         </div>
 
         <EditClass />

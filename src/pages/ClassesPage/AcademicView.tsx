@@ -56,11 +56,7 @@ const defaultColumns = [
   columnHelper.accessor("courseName", {
     header: () => <div className="">COURSENAME</div>,
     cell: (props) => {
-      return (
-        <div className="">
-          {props.row.original.courseName}
-        </div>
-      );
+      return <div className="">{props.row.original.courseName}</div>;
     },
   }),
   columnHelper.accessor("classRegisteredStudents", {
@@ -84,7 +80,19 @@ const defaultColumns = [
   columnHelper.accessor("room", {
     header: () => <div className="text-center">ROOM</div>,
     cell: (props) => {
-      return <div className="text-center">{props.row.original.room}</div>;
+      return props.row.original.room.startsWith("http") ? (
+        <div className="text-center">
+          <a
+            target="_blank"
+            href={props.row.original.room}
+            className="underline text-blue-500"
+          >
+            Online Room
+          </a>
+        </div>
+      ) : (
+        <div className="text-center">{props.row.original.room}</div>
+      );
     },
   }),
   columnHelper.accessor("tutorId", {

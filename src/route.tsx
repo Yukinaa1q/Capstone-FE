@@ -37,6 +37,7 @@ import TimetablePage from "./pages/TimetablePage/TimetablePage";
 import StudentEdit from "./pages/StudentsPage/StudentPage/EditStudent/StudentEditPage";
 import ScorePage from "./pages/ScorePage/ScorePage";
 import getInCartClassesLoader from "./pages/PaymentPage/paymentLoader";
+import getClassroom from "./pages/ClassroomPage/ClassroomDetail";
 
 const router = createBrowserRouter([
   {
@@ -236,6 +237,7 @@ const router = createBrowserRouter([
       },
       {
         path: "classroom/:classId",
+        loader: getClassroom,
         element: <ClassroomPage />,
       },
       {

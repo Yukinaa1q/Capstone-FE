@@ -11,5 +11,6 @@ export default interface ICourseBE {
     coursePrice: number;
     courseSubject: string;
     courseTitle: string;
-    participantNumber: number; 
+    totalStudentNumber: number;
+    totalClassNumber: number; 
 }

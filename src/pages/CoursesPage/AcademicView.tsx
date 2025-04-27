@@ -108,19 +108,19 @@ const AcademicView = () => {
   useEffect(() => {
     const getCourse = async () => {
       try {
-        const res: ICourseBE[] = await TucourApi.call("/course/all-course", {
+        const res = await TucourApi.call("/course/all-course", {
           method: "GET",
           headers: {
             Authorization: "Bearer " + window.localStorage.getItem("token"),
           },
-        });
+        }) as ICourseBE[];
         setCourseList(
           res.map((course) => ({
             courseId: course.courseCode,
             courseName: course.courseTitle,
             coursePrice: course.coursePrice,
-            classNumber: 0,
-            registrationNumber: course.participantNumber,
+            classNumber: course.totalClassNumber,
+            registrationNumber: course.totalStudentNumber,
           }))
         );
       } catch (error) {

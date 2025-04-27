@@ -4,6 +4,8 @@ interface IClass {
   tutor: string;
   class: string;
   courseImg: string;
+  classCode: string;
+  classId: string;
   classUrl: string;
 }
 

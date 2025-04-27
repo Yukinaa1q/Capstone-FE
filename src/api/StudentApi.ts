@@ -47,24 +47,22 @@ export default class StudentApi {
       | "studyRoom"
     >[]
   > {
-    return [
-      {
-        courseTitle: "Introduction to Computer Science",
-        courseCode: "CS101",
-        classCode: "CS101-01",
-        classSession: "2023-2024",
-        classShift: "Morning",
-        studyRoom: "Room 101",
-      },
-      {
-        courseTitle: "Data Structures and Algorithms",
-        courseCode: "CS102",
-        classCode: "CS102-01",
-        classSession: "2023-2024",
-        classShift: "Afternoon",
-        studyRoom: "Room 102",
-      },
-    ];
+    try {
+      const classHistory = (await TucourApi.get(
+        "/student/view-student-class-history/" + studentId
+      )) as Pick<
+        IClassDetail,
+        | "courseTitle"
+        | "courseCode"
+        | "classCode"
+        | "classSession"
+        | "classShift"
+        | "studyRoom"
+      >[];
+      return classHistory;
+    } catch {
+      return [];
+    }
   }
 
   public static async updateProfile(
@@ -122,8 +120,7 @@ export default class StudentApi {
   public static async payment() {
     try {
       await TucourApi.get("/student/class-payment");
-    }
-    catch {
+    } catch {
       console.log("error when doing payment");
     }
   }
