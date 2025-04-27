@@ -5,42 +5,27 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow
+  TableRow,
 } from "@/components/ui/table";
 import { Edit3Icon, Save } from "lucide-react";
 import React from "react";
 import ShowAndInput from "./ShowAndInput";
+import IGrade from "@/interfaces/IGrade";
+import { useLoaderData } from "react-router";
+import { calculateAverage } from "@/utils/utils";
 
 interface StudentGrade {
   studentName: string;
   studentId: string;
-  tutor: string;
-  courseTitle: string;
-  courseCode: string;
-  courseId: string;
-  classCode: string;
-  classId: string;
-  homeworkScore: number;
-  assignmentScore: number;
-  midtermScore: number;
-  finalScore: number;
+  studentCode: string;
+  grade: IGrade;
 }
-
-const gradings = [
-  {
-    studentName: "Mot Cai Ten Cuc Ky Dai",
-    studentId: "123456",
-    homeworkScore: NaN,
-    assignmentScore: 8,
-    midtermScore: 7,
-    finalScore: 8,
-  },
-];
 
 const GradeDisplay = () => {
   const [isEdit, setIsEdit] = React.useState(false);
+  const studentGradeList = useLoaderData().studentListGrade as StudentGrade[];
   const [studentListGrade, setStudentListGrade] =
-    React.useState<StudentGrade[]>(gradings);
+    React.useState<StudentGrade[]>(studentGradeList);
 
   function updateStudentScore(
     newScore: number,
@@ -59,16 +44,6 @@ const GradeDisplay = () => {
       });
       return newStudentListGrade;
     });
-  }
-
-  function calculateAverage(grade: StudentGrade) {
-    const { homeworkScore, assignmentScore, midtermScore, finalScore } = grade;
-    return (
-      homeworkScore * 0.1 +
-      assignmentScore * 0.2 +
-      midtermScore * 0.2 +
-      finalScore * 0.5
-    );
   }
 
   return (
@@ -111,7 +86,7 @@ const GradeDisplay = () => {
             <TableCell className="text-center">
               <ShowAndInput
                 isEdit={isEdit}
-                value={student.homeworkScore.toString()}
+                value={student.grade.homework.toString()}
                 setValue={(score) =>
                   updateStudentScore(
                     parseFloat(score),
@@ -125,7 +100,7 @@ const GradeDisplay = () => {
             <TableCell className="text-center">
               <ShowAndInput
                 isEdit={isEdit}
-                value={student.assignmentScore.toString()}
+                value={student.grade.assignment.toString()}
                 setValue={(score) =>
                   updateStudentScore(
                     parseFloat(score),
@@ -138,7 +113,7 @@ const GradeDisplay = () => {
             <TableCell className="text-center">
               <ShowAndInput
                 isEdit={isEdit}
-                value={student.midtermScore.toString()}
+                value={student.grade.midterm.toString()}
                 setValue={(score) =>
                   updateStudentScore(
                     parseFloat(score),
@@ -151,7 +126,7 @@ const GradeDisplay = () => {
             <TableCell className="text-center">
               <ShowAndInput
                 isEdit={isEdit}
-                value={student.finalScore.toString()}
+                value={student.grade.final.toString()}
                 setValue={(score) =>
                   updateStudentScore(
                     parseFloat(score),
@@ -162,7 +137,7 @@ const GradeDisplay = () => {
               />
             </TableCell>
             <TableCell className="text-center">
-              {calculateAverage(student)}
+              {calculateAverage(student.grade)}
             </TableCell>
             <TableCell className="text-center"></TableCell>
           </TableRow>

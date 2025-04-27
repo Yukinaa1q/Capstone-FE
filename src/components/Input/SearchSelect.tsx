@@ -32,6 +32,7 @@ export type SearchSelectProps = {
   filterFn: (value: string, search: string, keywords?: string[]) => number;
   onValueChange?: (value: string) => void;
   className?: string;
+  disabled?: boolean;
 };
 
 export default function SearchSelect(props: SearchSelectProps) {
@@ -40,7 +41,7 @@ export default function SearchSelect(props: SearchSelectProps) {
   const [value, setValue] = useState<string>(props?.value ?? "");
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger asChild disabled={props.disabled ?? false}>
         <Button
           id={id}
           variant="outline"

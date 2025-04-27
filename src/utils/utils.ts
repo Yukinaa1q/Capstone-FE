@@ -1,4 +1,5 @@
 import { StudyWeek } from "@/interfaces/common";
+import IGrade from "@/interfaces/IGrade";
 
 export function shortName(name: string) {
   const wordList = name.split(" ");
@@ -107,4 +108,9 @@ export function formatDate(date: string | undefined) {
 
 export function capitalizeFirstLetter(val: string) {
   return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+}
+
+export function calculateAverage(grade: IGrade) {
+  const { homework, assignment, midterm, final } = grade;
+  return homework * 0.1 + assignment * 0.2 + midterm * 0.2 + final * 0.5;
 }

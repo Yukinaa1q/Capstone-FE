@@ -1,4 +1,4 @@
-import { ITimeTable } from "@/interfaces/ITimetabl";
+import { ITimeTable } from "@/interfaces/ITimetable";
 import { UserBrief } from "@/interfaces/UserProfile";
 
 export default class TimetableApi {

@@ -76,7 +76,6 @@ const EditClassPage = () => {
         setClassDetail({
           courseTitle: res.courseTitle,
           courseCode: res.courseCode,
-          classCode: res.classCode,
           maxStudents: res.classMaxStudents,
           isOnline: res.learningType,
           studentIdList: res.studentList?.map((student) => student.studentId) ?? [],

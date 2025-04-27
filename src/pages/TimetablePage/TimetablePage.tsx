@@ -9,7 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ITimeTable } from "@/interfaces/ITimetabl";
+import { ITimeTable } from "@/interfaces/ITimetable";
 import { UserBrief } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import { shortName, verboseStudyWeek } from "@/utils/utils";

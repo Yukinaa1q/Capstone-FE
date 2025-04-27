@@ -59,7 +59,7 @@ const CourseDetail = () => {
           courseDescription: courseDesc,
           courseOutline: res.courseOutline,
           coursePrice: res.coursePrice,
-          participantNumber: res.participantNumber,
+          participantNumber: res.totalStudentNumber,
           courseId: res.courseId,
           imgUrl: res.courseImage,
           courseLevel: res.courseLevel,
@@ -92,10 +92,14 @@ const CourseDetail = () => {
             <div>Learning Duration</div>
             <div className="font-semibold">
               {course?.learningDuration}{" "}
-              {course?.learningDuration > 1 ? "months" : "month"}
+              {course?.learningDuration && course?.learningDuration > 1
+                ? "months"
+                : "month"}
             </div>
             <div>Subject</div>
-            <div className="font-semibold">{capitalizeFirstLetter(course?.courseSubject ?? "")}</div>
+            <div className="font-semibold">
+              {capitalizeFirstLetter(course?.courseSubject ?? "")}
+            </div>
             <div>Difficulty</div>
             <div className="font-semibold">
               {levelToString(course?.courseLevel ?? "")}

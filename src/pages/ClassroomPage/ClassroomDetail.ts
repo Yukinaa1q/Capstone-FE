@@ -1,9 +1,8 @@
 import ClassApi from "@/api/ClassApi";
-import { IClass } from "@/interfaces/IClass";
-import { useParams } from "react-router";
 
-export default async function getClassroom({params}: {params: {classId: string}}) {
+export default async function getClassroom({params}) {
   try {
+    // Fetch class details
     const classroomDetail = await ClassApi.getClassroomDetail(params.classId) as {
       courseTitle: string;
       courseCode: string;
@@ -11,8 +10,11 @@ export default async function getClassroom({params}: {params: {classId: string}}
       tutor: string;
       studyRoom: string;
     };
+    // Fetch list of grade by students in the class
+    const studentListGrade = await ClassApi.getStudentGradeList(params.classId)
     return {
-      ...classroomDetail
+      classroomDetail,
+      studentListGrade,
     }
   }
   catch {

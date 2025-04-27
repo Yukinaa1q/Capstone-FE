@@ -81,7 +81,7 @@ const ClassForm = ({
     resolver: yupResolver(classFormSchema),
   });
 
-  console.log("Chosen course", chosenCourse);
+  console.log("default value", defaultValues);
 
   useEffect(() => {
     const fetchCourseCode = async () => {
@@ -135,7 +135,10 @@ const ClassForm = ({
             };
           })
         );
-
+        if (defaultValues)
+          setChosenCourse(
+            res.find((course) => course.courseCode == defaultValues.courseCode)
+          );
         setCourseList(res);
       } catch (err) {
         console.error(err);
@@ -167,6 +170,7 @@ const ClassForm = ({
               return (
                 <RequiredInput label="Course Code">
                   <SearchSelect
+                    disabled={defaultValues.courseCode ? true : false}
                     className=""
                     {...field}
                     list={codeList}
@@ -182,6 +186,7 @@ const ClassForm = ({
                         courseList.find((course) => course.courseCode === value)
                       );
                       field.onChange(value);
+                      form.setValue("tutorCode", "");
                     }}
                     filterFn={(value, search) => {
                       const result = codeList.find(
@@ -308,6 +313,7 @@ const ClassForm = ({
             render={({ field }) => (
               <RequiredInput label="Learning Type">
                 <RadioGroup
+                  disabled={defaultValues.isOnline ? true : false}
                   value={field.value ? "online" : "offline"}
                   onValueChange={(val) =>
                     field.onChange(val === "online" ? true : false)
@@ -334,7 +340,7 @@ const ClassForm = ({
             render={({ field }) => (
               <RequiredInput label="Tutor">
                 <SearchSelect
-                  className=""
+                  disabled={defaultValues.tutorCode ? true : false}
                   {...field}
                   list={tutorList.filter((tutor) => {
                     return tutor.display.qualifiedSubject.some(
