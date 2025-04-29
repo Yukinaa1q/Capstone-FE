@@ -19,7 +19,7 @@ const EditCoursePage = () => {
     async function fetchCourse() {
       setIsLoading(true);
       try {
-        const courseDetail: ICourseBE = await TucourApi.call(
+        const courseDetail: ICourseBE = (await TucourApi.call(
           "/course/" + params.id,
           {
             method: "GET",
@@ -27,7 +27,7 @@ const EditCoursePage = () => {
               Authorization: "Bearer " + window.localStorage.getItem("token"),
             },
           }
-        );
+        )) as ICourseBE;
 
         const convertDataType: ICourseForm = {
           courseTitle: courseDetail.courseTitle,

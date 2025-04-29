@@ -1,4 +1,4 @@
-import TucourApi, { StatusResponse } from "@/utils/http";
+import TucourApi from "@/utils/http";
 
 /**
  * Actually this code is against from developing like this,

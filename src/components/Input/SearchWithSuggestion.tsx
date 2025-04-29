@@ -21,7 +21,6 @@ const SearchWithSuggestion = <T,>({
   onSelect,
 }: SearchWithSuggestionProps<T>) => {
   const searchDebounce = debounce<string>(async (val) => {
-    console.log("searchDebounce", val);
     const recomList = await loadData(val);
     setRecomList(recomList);
   });

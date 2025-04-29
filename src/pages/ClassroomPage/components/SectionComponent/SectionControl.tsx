@@ -1,19 +1,18 @@
 import { Button } from "@/components/ui/button";
-import SectionCard from "./SectionCard";
-import { Plus, Save } from "lucide-react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import React from "react";
 import { ClassSection } from "@/interfaces/IClassroom";
+import { Plus, Save } from "lucide-react";
+import React from "react";
 import DragNDrop from "./DragNDrop";
-import { useParams } from "react-router";
+import SectionCard from "./SectionCard";
 
 const SectionControl = () => {
-  const classId = useParams().id; // classId to be used in api calls
+  // const classId = useParams().id; // classId to be used in api calls
   // An api call fetch all existing sections of a class
   const [sectionList, setSectionList] = React.useState<
     (Omit<ClassSection, "contents"> & { isEdit: boolean })[]

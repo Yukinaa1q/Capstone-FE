@@ -1,22 +1,17 @@
+import FetchUnregisteredAPI from "@/api/FetchUnregisteredApi";
 import CourseCard from "@/components/CourseCard/StudentClassCard";
+import SearchInput from "@/components/Input/SearchInput";
 import MyPagination, {
   PaginationGoto,
   PaginationNav,
 } from "@/components/Pagination";
-import SearchInput from "@/components/Input/SearchInput";
-import { useAppSelector } from "@/hooks/reduxHook";
-import { ICourseCard } from "@/interfaces/ICourse";
-import { coursesPhase1, coursesPhase2 } from "@/utils/fakeData";
+import { IClassCard } from "@/interfaces/ICourse";
 import { useEffect, useState } from "react";
-import FetchUnregisteredAPI from "@/api/FetchUnregisteredApi";
 
 const PRODUCTS_PER_PAGE = 5;
 
 const StudentView = () => {
-  const phase = useAppSelector((state) => state.phases.phase);
-  const [courseList, setCourseList] = useState<ICourseCard[]>(
-    phase === 1 ? coursesPhase1 : coursesPhase2
-  );
+  const [courseList, setCourseList] = useState<IClassCard[]>([]);
   const urlParams = new URLSearchParams(window.location.search);
   const myParam = urlParams.get("q");
   const [searchKey, setSearchKey] = useState(myParam || "");
@@ -25,7 +20,7 @@ const StudentView = () => {
 
   useEffect(() => {
     const getCourseList = async () => {
-      const courses = (await FetchUnregisteredAPI.getAllWithPagination(
+      const courses = (await FetchUnregisteredAPI.getAllClassWithPagination(
         searchKey,
         currentPage
       )) as {
@@ -35,7 +30,7 @@ const StudentView = () => {
           totalItems: number;
           totalPages: number;
         };
-        data: ICourseCard[];
+        data: IClassCard[];
       };
 
       setCourseList(courses.data);
@@ -54,7 +49,7 @@ const StudentView = () => {
           console.log("Search Key", searchValue);
           setSearchKey(searchValue);
           try {
-            const res = (await FetchUnregisteredAPI.getAllWithPagination(
+            const res = (await FetchUnregisteredAPI.getAllClassWithPagination(
               searchValue,
               currentPage
             )) as {
@@ -64,7 +59,7 @@ const StudentView = () => {
                 totalItems: number;
                 totalPages: number;
               };
-              data: ICourseCard[];
+              data: IClassCard[];
             };
             setCourseList(res.data);
             setTotalItems(res.meta.totalItems);
@@ -79,12 +74,12 @@ const StudentView = () => {
       <MyPagination
         size={PRODUCTS_PER_PAGE}
         total={totalItems}
-        onPageChange={async (pageInfo) => {
-          setCurrentPage(pageInfo.currentPage);
+        onPageChange={async (pageNumber) => {
+          setCurrentPage(pageNumber);
           try {
-            const courses = (await FetchUnregisteredAPI.getAllWithPagination(
+            const courses = (await FetchUnregisteredAPI.getAllClassWithPagination(
               searchKey,
-              pageInfo.currentPage
+              pageNumber
             )) as {
               meta: {
                 currentPage: number;
@@ -92,7 +87,7 @@ const StudentView = () => {
                 totalItems: number;
                 totalPages: number;
               };
-              data: ICourseCard[];
+              data: IClassCard[];
             };
 
             console.log(courses);

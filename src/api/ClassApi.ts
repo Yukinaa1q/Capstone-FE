@@ -17,46 +17,47 @@ export default class ClassApi {
     return res;
   }
 
-  public static async getStudentGradeList(classId: string): Promise<{
-    studentName: string;
-    studentId: string;
-    studentCode: string;
-    grade: IGrade;
-  }[]> {
-    return [
-      {
-        studentName: "Nguyen Van A",
-        studentId: "2157982",
-        studentCode: "2157982",
+  public static async getStudentGradeList(classId: string): Promise<
+    {
+      studentName: string;
+      studentId: string;
+      studentCode: string;
+      grade: IGrade;
+    }[]
+  > {
+    try {
+      const studentListGrade = (await TucourApi.get(
+        "/grade/class/" + classId
+      )) as {
+        studentGrades: {
+          name: string;
+          id: string;
+          studentCode: string;
+          grades: {
+            midtermScore: number;
+            finalScore: number;
+            homeworkScore: number;
+            assignmentScore: number;
+          }[];
+        }[];
+      };
+      console.log(studentListGrade);
+      const mapStudent = studentListGrade.studentGrades.map((studentGrade) => ({
+        studentName: studentGrade.name,
+        studentId: studentGrade.id,
+        studentCode: studentGrade.studentCode,
         grade: {
-          midterm: 8,
-          final: 9,
-          homework: 7,
-          assignment: 8,
+          midterm: studentGrade.grades[0].midtermScore,
+          final: studentGrade.grades[0].finalScore,
+          homework: studentGrade.grades[0].homeworkScore,
+          assignment: studentGrade.grades[0].assignmentScore,
         },
-      },
-      {
-        studentName: "Nguyen Van B",
-        studentId: "2157983",
-        studentCode: "2157983",
-        grade: {
-          midterm: 6,
-          final: 7,
-          homework: 8,
-          assignment: 9,
-        },
-      },
-      {
-        studentName: "Nguyen Van C",
-        studentId: "2157984",
-        studentCode: "2157984",
-        grade: {
-          midterm: 5,
-          final: 6,
-          homework: 7,
-          assignment: 8,
-        },
-      },
-    ];
+      }));
+      console.log(mapStudent);
+      return mapStudent;
+    } catch {
+      console.log("Error occur");
+      return [];
+    }
   }
 }

@@ -1,6 +1,5 @@
 import { IFileContent } from "@/interfaces/IClassroom";
 import { File } from "lucide-react";
-import React from "react";
 
 const FileDisplay = (info: IFileContent) => {
   const urlObj = URL.createObjectURL(info.file);

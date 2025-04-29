@@ -2,13 +2,12 @@ import {
   Select,
   SelectContent,
   SelectItem,
-  SelectTrigger,
-  SelectValue,
+  SelectTrigger
 } from "@/components/ui/select";
 import { Heading1, Heading2, Heading3, TypeIcon } from "lucide-react";
 
-import { ReactEditor, useSlate } from "slate-react";
 import React from "react";
+import { ReactEditor, useSlate } from "slate-react";
 import handleTextEditor from "../handleTextEditor";
 import { CustomElement } from "../type";
 

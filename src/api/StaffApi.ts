@@ -37,20 +37,23 @@ export default class StaffApi {
     }
   }
 
-  public static async getAllStaff() {
-    try {
-      const res = TucourApi.get("/staff/all-staff-table") as {
-        staffName: string;
-        staffId: string;
-        staffCode: string;
-        staffRole: string;
-        staffPhone: string;
-        staffEmail: string;
-      }
-      return res;
-    } catch (err) {
-      console.log(err);
-    }
+  public static async getAllStaff(): Promise<{
+    staffName: string;
+    staffId: string;
+    staffCode: string;
+    staffRole: string;
+    staffPhone: string;
+    staffEmail: string;
+  }> {
+    const res = await TucourApi.get("/staff/all-staff-table") as {
+      staffName: string;
+      staffId: string;
+      staffCode: string;
+      staffRole: string;
+      staffPhone: string;
+      staffEmail: string;
+    };
+    return res;
   }
 
   public static async deleteStaffAccount(id: string) {

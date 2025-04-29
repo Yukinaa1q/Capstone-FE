@@ -6,7 +6,6 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { useAppSelector } from "@/hooks/reduxHook";
 import { IClassCard } from "@/interfaces/ICourse";
 import TucourApi from "@/utils/http";
 import { useEffect, useState } from "react";
@@ -16,35 +15,7 @@ interface RecomCoursesLayoutProps {
 }
 
 const RecomCoursesLayout = ({ title }: RecomCoursesLayoutProps) => {
-  const user = useAppSelector((state) => state.auths);
-  const [cards, setCards] = useState<Array<IClassCard>>([
-    {
-      courseTitle: "Course Title",
-      courseCode: "Course Code",
-      courseId: "Course ID",
-      coursePrice: 1000000,
-      courseImage: "https://via.placeholder.com/150",
-      classId: "111",
-      registrationStartDate: "2023-01-01",
-      registrationEndDate: "2023-02-01",
-      tutor: "Tutor Name",
-      currentStudents: 10,
-      maxStudents: 30,
-    },
-    {
-      classId: "222",
-      courseTitle: "Course Title 2",
-      courseCode: "Course Code 2",
-      courseId: "Course ID 2",
-      coursePrice: 2000000,
-      courseImage: "https://via.placeholder.com/150",
-      registrationStartDate: "2023-01-01",
-      registrationEndDate: "2023-02-01",
-      tutor: "Tutor Name 2",
-      currentStudents: 20,
-      maxStudents: 40,
-    },
-  ]);
+  const [cards, setCards] = useState<Array<IClassCard>>([])
   useEffect(() => {
     const getRandomCourses = async () => {
       try {

@@ -1,6 +1,7 @@
 import TutorApi from "@/api/TutorApi";
 import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { TutorDetail } from "@/interfaces/UserProfile";
+import { Params } from "react-router";
 
 export interface TutorInitContent {
   qualifications: {
@@ -8,10 +9,22 @@ export interface TutorInitContent {
     level: string;
   }[];
   tutorDetail: TutorDetail;
-  classHistory: (Pick<IClassDetail, "courseTitle" | "courseCode" | "classCode" | "classSession" | "classShift" | "studyRoom"> & {pricePaid: number})[]
+  classHistory: (Pick<
+    IClassDetail,
+    | "courseTitle"
+    | "courseCode"
+    | "classCode"
+    | "classSession"
+    | "classShift"
+    | "studyRoom"
+  > & { pricePaid: number })[];
 }
 
-export default async function getTutorInitContent({ params }) {
+export default async function getTutorInitContent({
+  params,
+}: {
+  params: Params<"id">;
+}) {
   // console.log(params);
   const res = {} as TutorInitContent;
   try {
@@ -22,7 +35,7 @@ export default async function getTutorInitContent({ params }) {
     }[];
     // get tutors profile information
     const tutorDetail = await TutorApi.getTutorDetail(params.id);
-    // get tutor class history 
+    // get tutor class history
     const tutorClassHistory = await TutorApi.getClassHistory(params.id);
     res.tutorDetail = tutorDetail;
     res.qualifications = qualifications;

@@ -244,7 +244,7 @@ const TutorPage = () => {
                 <TableHead className="text-white">Classroom</TableHead>
                 <TableHead className="text-white">Study Week</TableHead>
                 <TableHead className="text-white">Study Shift</TableHead>
-                <TableHead className="text-white">Price Paid</TableHead>
+                <TableHead className="text-white">Price / month</TableHead>
                 <TableHead className="text-white rounded-e-md"></TableHead>
               </TableRow>
             </TableHeader>

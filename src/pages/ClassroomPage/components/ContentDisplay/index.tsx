@@ -4,10 +4,10 @@ import {
   ISubmissionContent,
   ITextContent,
 } from "@/interfaces/IClassroom";
+import React from "react";
 import FileDisplay from "./FileDisplay";
 import SubmissionDisplay from "./SubmissionDisplay";
 import TextDisplay from "./TextDisplay";
-import React, { JSX } from "react";
 
 const ContentFactory: Record<
   ContentType,

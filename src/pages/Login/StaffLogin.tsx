@@ -8,14 +8,12 @@ import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAppDispatch } from "@/hooks/reduxHook";
 import { setUser } from "@/store/authenSlice";
-import { StatusError } from "@/utils/http";
 import { jwtDecoder } from "@/utils/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { set } from "date-fns";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link, Navigate, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { InferType, object, string } from "yup";
 
 const staffLoginSchema = object({

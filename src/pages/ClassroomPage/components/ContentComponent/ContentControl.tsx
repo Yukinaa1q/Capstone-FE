@@ -5,20 +5,19 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { cn } from "@/lib/utils";
-import React from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import ChooseContentType from "./ChooseContent";
 import { ClassSection, ContentType } from "@/interfaces/IClassroom";
-import { useParams } from "react-router";
+import { cn } from "@/lib/utils";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import React from "react";
+import ChooseContentType from "./ChooseContent";
 import EditContent from "./EditContent";
 import NewContentCtx from "./NewContentCtx";
 
 export type SectionBrief = Omit<ClassSection, "contents">;
 
 const ContentControl = () => {
-  const classId = useParams().id; // used to call api
+  // const classId = useParams().id; // used to call api
   // 1. API to get all sections available in the class
   const [sectionsBrief] = React.useState<SectionBrief[]>([]);
   const [step, setStep] = React.useState(1);

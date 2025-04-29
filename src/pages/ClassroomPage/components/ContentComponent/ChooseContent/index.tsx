@@ -14,9 +14,10 @@ import { SectionBrief } from "../ContentControl";
 import NewContentCtx from "../NewContentCtx";
 
 const ChooseContentType = ({ sections }: { sections: SectionBrief[] }) => {
+  console.log(sections);
   const { contentType, setContentType } = React.useContext(NewContentCtx);
   // 1. An api to get all the contents in a section
-  const [fileList, setFileList] = React.useState<
+  const [fileList] = React.useState<
     Omit<Content, "contentDescription" | "content">[] | undefined
   >([
     {
@@ -48,10 +49,12 @@ const ChooseContentType = ({ sections }: { sections: SectionBrief[] }) => {
 
   const handleSelectSection = async (value: string) => {
     // Logic for trigger api 1.
+    return value;
   };
 
   const handleRemoveContent = async (id: string) => {
     // Logic to remove content from the section
+    return id;
   };
 
   const contentIcon = {

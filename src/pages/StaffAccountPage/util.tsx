@@ -1,3 +1,4 @@
+import StaffApi from "@/api/StaffApi";
 import PwdInput from "@/components/Input/PwdInput";
 import RequiredInput from "@/components/Input/RequiredInput";
 import { Button } from "@/components/ui/button";
@@ -16,52 +17,50 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IStaffAccount } from "@/interfaces/IStaffCRUD";
-import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { CellContext } from "@tanstack/react-table";
 import { Edit, LucideTrash } from "lucide-react";
-import { JSX, useContext } from "react";
+import { useContext } from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router";
 import { InferType, object, string } from "yup";
 import StaffAccountCtx from "./staffAccCtx";
 import { IsEditing } from "./StaffAccountPage";
-import StaffApi from "@/api/StaffApi";
-import { useNavigate } from "react-router";
 
-export const EditableCell = ({
-  cell,
-  className,
-  columnKey,
-  children,
-}: {
-  cell: CellContext<IStaffAccount & IsEditing, unknown>;
-  className?: string;
-  columnKey: keyof IStaffAccount;
-  children: JSX.Element;
-}) => {
-  const ctx = useContext(StaffAccountCtx);
-  const staff = ctx.data.find(
-    (staff) => staff.staffCode === cell.row.getValue("staffCode")
-  )!;
-  return staff.isEditing ? (
-    <Input
-      value={staff[columnKey]}
-      onChange={(e) => {
-        staff[columnKey] = e.target.value;
-        ctx.setData((prev) => {
-          const updateList = prev.map((staff) => ({ ...staff }));
-          return updateList;
-        });
-      }}
-      className={cn(
-        "px-0 border-0 shadow-none focus-visible:ring-0 rounded-none border-b focus-visible:border-b-t_primary-400",
-        className
-      )}
-    />
-  ) : (
-    children
-  );
-};
+// export const EditableCell = ({
+//   cell,
+//   className,
+//   columnKey,
+//   children,
+// }: {
+//   cell: CellContext<IStaffAccount & IsEditing, unknown>;
+//   className?: string;
+//   columnKey: keyof IStaffAccount;
+//   children: JSX.Element;
+// }) => {
+//   const ctx = useContext(StaffAccountCtx);
+//   const staff = ctx.data.find(
+//     (staff) => staff.staffCode === cell.row.getValue("staffCode")
+//   )!;
+//   return staff.isEditing ? (
+//     <Input
+//       value={staff[columnKey]}
+//       onChange={(e) => {
+//         staff[columnKey] = e.target.value;
+//         ctx.setData((prev) => {
+//           const updateList = prev.map((staff) => ({ ...staff }));
+//           return updateList;
+//         });
+//       }}
+//       className={cn(
+//         "px-0 border-0 shadow-none focus-visible:ring-0 rounded-none border-b focus-visible:border-b-t_primary-400",
+//         className
+//       )}
+//     />
+//   ) : (
+//     children
+//   );
+// };
 
 const EditStaffSchema = object({
   staffName: string(),

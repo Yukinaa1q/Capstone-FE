@@ -81,7 +81,13 @@ const TimetablePage = () => {
                   </TableCell>
                   <TableCell>{item.studyShift}</TableCell>
                   <TableCell>{item.room}</TableCell>
-                  <TableCell>{item.address}</TableCell>
+                  <TableCell>
+                    {item.address.startsWith("http") ? (
+                      <a href={item.address} className="underline text-blue-600">Online Classroom Link</a>
+                    ) : (
+                      item.address
+                    )}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>

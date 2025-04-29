@@ -76,7 +76,7 @@ export default class TutorApi {
       const res = (await TucourApi.get(
         "/tutor/detail/" + tutorId
       )) as TutorDetail;
-      console.log("res", res)
+      console.log("res", res);
       return res;
     } catch {
       return {} as TutorDetail;
@@ -118,35 +118,52 @@ export default class TutorApi {
       | "studyRoom"
     > & { pricePaid: number })[]
   > {
-    return [
-      {
-        classCode: "CS101",
-        classSession: "Monday",
-        classShift: "Morning",
-        courseCode: "CS101",
-        courseTitle: "Introduction to Computer Science",
-        studyRoom: "Room 101",
-        pricePaid: 1500000,
-      },
-      {
-        classCode: "CS102",
-        classSession: "Tuesday",
-        classShift: "Afternoon",
-        courseCode: "CS102",
-        courseTitle: "Data Structures and Algorithms",
-        studyRoom: "Room 102",
-        pricePaid: 1350000,
-      },
-      {
-        classCode: "CS103",
-        classSession: "Wednesday",
-        classShift: "Evening",
-        courseCode: "CS103",
-        courseTitle: "Database Management Systems",
-        studyRoom: "Room 103",
-        pricePaid: 800000,
-      },
-    ];
+    console.log("Call class history api");
+    try {
+      const res = (await TucourApi.get("/tutor/view-tutor-class-history/" + tutorId)) as (Pick<
+        IClassDetail,
+        | "courseTitle"
+        | "courseCode"
+        | "classCode"
+        | "classSession"
+        | "classShift"
+        | "studyRoom"
+      > & { pricePaid: number })[];
+      console.log("Return class history", res);
+      return res;
+    } catch {
+      console.log("Error occur when get class history", tutorId);
+      return [];
+    }
+    // return [
+    //   {
+    //     classCode: "CS101",
+    //     classSession: "Monday",
+    //     classShift: "Morning",
+    //     courseCode: "CS101",
+    //     courseTitle: "Introduction to Computer Science",
+    //     studyRoom: "Room 101",
+    //     pricePaid: 1500000,
+    //   },
+    //   {
+    //     classCode: "CS102",
+    //     classSession: "Tuesday",
+    //     classShift: "Afternoon",
+    //     courseCode: "CS102",
+    //     courseTitle: "Data Structures and Algorithms",
+    //     studyRoom: "Room 102",
+    //     pricePaid: 1350000,
+    //   },
+    //   {
+    //     classCode: "CS103",
+    //     classSession: "Wednesday",
+    //     classShift: "Evening",
+    //     courseCode: "CS103",
+    //     courseTitle: "Database Management Systems",
+    //     studyRoom: "Room 103",
+    //     pricePaid: 800000,
+    //   },
+    // ];
   }
 
   public static async updateProfile(

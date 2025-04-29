@@ -142,13 +142,13 @@ const AcademicView = () => {
 
   useEffect(() => {
     const getClassesList = async () => {
-      const res = await TucourApi.call("/class/view-class", {
+      const res = (await TucourApi.call("/class/view-class", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
-      });
+      })) as IClassTable[];
       setData(res);
     };
     getClassesList();

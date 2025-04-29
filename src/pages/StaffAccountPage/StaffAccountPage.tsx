@@ -1,5 +1,6 @@
-import ClearableSearch from "@/components/Input/ClearableSearch";
+import StaffApi from "@/api/StaffApi";
 import DataTable from "@/components/DataTable";
+import ClearableSearch from "@/components/Input/ClearableSearch";
 import PwdInput from "@/components/Input/PwdInput";
 import RequiredInput from "@/components/Input/RequiredInput";
 import { Button } from "@/components/ui/button";
@@ -22,14 +23,13 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { AnimatePresence, motion } from "motion/react";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
+import { useLoaderData, useNavigate } from "react-router";
 import { InferType, object, ref, string } from "yup";
 import StaffAccountCtx from "./staffAccCtx";
-import { ActionComponent, EditableCell } from "./util";
-import { AnimatePresence, motion } from "motion/react";
-import StaffApi from "@/api/StaffApi";
-import { useLoaderData, useNavigate } from "react-router";
+import { ActionComponent } from "./util";
 
 export interface IsEditing {
   isEditing: boolean;
@@ -47,11 +47,7 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
     accessorKey: "staffName",
     header: "STAFF NAME",
     cell: (props) => (
-      <div className="w-48">
-        <EditableCell cell={props} columnKey="staffName">
-          {props.row.getValue("staffName")}
-        </EditableCell>
-      </div>
+      <div className="w-48">{props.row.getValue("staffName")}</div>
     ),
   },
   {
@@ -68,11 +64,7 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
     accessorKey: "staffPhone",
     header: "PHONE NUMBER",
     cell: (props) => (
-      <div className="w-32">
-        <EditableCell cell={props} columnKey="staffPhone">
-          {props.row.getValue("staffPhone")}
-        </EditableCell>
-      </div>
+      <div className="w-32">{props.row.getValue("staffPhone")}</div>
     ),
   },
   {
@@ -99,7 +91,6 @@ const columns: ColumnDef<IStaffAccount & IsEditing>[] = [
       return <FormTrigger />;
     },
     cell: (props) => <ActionComponent cell={props} />,
-    
   },
 ];
 
@@ -144,8 +135,7 @@ const StaffAccountPage = () => {
     try {
       StaffApi.createStaff(sendData);
       navigate(0);
-    }
-    catch(err) {
+    } catch (err) {
       console.log(err);
     }
   };

@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Info } from "lucide-react";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { date, InferType, object, string } from "yup";
 

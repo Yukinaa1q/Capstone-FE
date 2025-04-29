@@ -23,7 +23,7 @@ const TutorClassList = () => {
         <Link
           className="max-w-full cursor-pointer"
           key={index}
-          to={`/classroom/${course.courseCode}`}
+          to={`/classroom/${course.classCode}`}
         >
           <ClassCard key={index} classInfo={course} />
         </Link>

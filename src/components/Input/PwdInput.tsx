@@ -5,8 +5,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
 interface PwdInputProps {
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  value: string;
+  onChange: (e: string | undefined) => void;
+  value: string | undefined;
 }
 
 export default function PwdInput({ onChange, value }: PwdInputProps) {
@@ -19,7 +19,7 @@ export default function PwdInput({ onChange, value }: PwdInputProps) {
       <Input
         className="pe-9"
         type={isVisible ? "text" : "password"}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         value={value}
       />
       <button

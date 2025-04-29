@@ -1,16 +1,16 @@
+import TutorApi from "@/api/TutorApi";
 import BasicInput from "@/components/Input/BasicInput";
 import DOBInput from "@/components/Input/DOBInput";
 import RequiredInput from "@/components/Input/RequiredInput";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
 import ContentLayout from "@/layouts/ContentLayout";
+import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link, useLoaderData, useNavigate, useParams } from "react-router";
+import { Link, useLoaderData, useParams } from "react-router";
 import { date, InferType, object, string } from "yup";
 import { TutorInitContent } from "../TutorLoader";
-import { cn } from "@/lib/utils";
-import TutorApi from "@/api/TutorApi";
 
 const TutorEditSchema = object({
   fullName: string().required(),
@@ -23,7 +23,6 @@ const TutorEditSchema = object({
 
 const TutorEdit = () => {
   const query: TutorInitContent = useLoaderData();
-  const navigate = useNavigate();
   const tutorId = useParams().id!;
   const form = useForm({
     resolver: yupResolver(TutorEditSchema),

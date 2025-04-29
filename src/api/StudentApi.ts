@@ -1,5 +1,6 @@
 import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { StudentDetail, UserBrief } from "@/interfaces/UserProfile";
+import { IScoreSheet } from "@/pages/ScorePage/scoreInterface";
 import TucourApi from "@/utils/http";
 
 export default class StudentApi {
@@ -95,26 +96,14 @@ export default class StudentApi {
   public static async getStudentBriefList(
     keyword: string
   ): Promise<UserBrief[]> {
-    return [
-      {
-        avatarUrl: "https://example.com/avatar1.jpg",
-        name: "Nguyen Van A",
-        userId: "2157982",
-        userCode: "ST27891",
-      },
-      {
-        avatarUrl: "https://example.com/avatar2.jpg",
-        name: "Nguyen Van B",
-        userId: "2157983",
-        userCode: "ST57983",
-      },
-      {
-        avatarUrl: "https://example.com/avatar3.jpg",
-        name: "Nguyen Van C",
-        userId: "2157984",
-        userCode: "ST57984",
-      },
-    ];
+    try {
+      const studentList = (await TucourApi.get(
+        `/grade/search?search=${encodeURIComponent(keyword)}`
+      )) as UserBrief[];
+      return studentList;
+    } catch {
+      return [];
+    }
   }
 
   public static async payment() {
@@ -122,6 +111,43 @@ export default class StudentApi {
       await TucourApi.get("/student/class-payment");
     } catch {
       console.log("error when doing payment");
+    }
+  }
+
+  public static async getStudentGradeList(
+    studentId: string
+  ): Promise<IScoreSheet[]> {
+    try {
+      const studentGradeList = (await TucourApi.get(
+        "/grade/student/" + studentId
+      )) as {
+        classroom: {
+          courseTitle: string;
+          courseCode: string;
+          courseId: string;
+        };
+        midtermScore: number;
+        finalScore: number;
+        homeworkScore: number;
+        assignmentScore: number;
+      }[];
+      console.log(studentGradeList);
+      const mapStudentGrades: IScoreSheet[] = studentGradeList!.map(
+        (studentGrade) => ({
+          courseTitle: studentGrade.classroom.courseTitle,
+          courseCode: studentGrade.classroom.courseCode,
+          courseId: studentGrade.classroom.courseId,
+          grade: {
+            midterm: studentGrade.midtermScore,
+            final: studentGrade.finalScore,
+            homework: studentGrade.homeworkScore,
+            assignment: studentGrade.assignmentScore,
+          },
+        })
+      );
+      return mapStudentGrades;
+    } catch {
+      return [];
     }
   }
 }

@@ -11,50 +11,19 @@ import {
 } from "@/components/ui/table";
 import { UserBrief } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
-import { shortName } from "@/utils/utils";
+import { calculateAverage, shortName } from "@/utils/utils";
 import React from "react";
-
-interface IScoreSheet {
-  courseTitle: string;
-  courseCode: string;
-  courseId: string;
-  homework: number;
-  midterm: number;
-  assignment: number;
-  final: number;
-}
+import { IScoreSheet } from "./scoreInterface";
 
 const ScorePage = () => {
-  const [scoreList, setScoreList] = React.useState<IScoreSheet[]>([
-    {
-      courseTitle: "Math",
-      courseCode: "MATH101",
-      courseId: "C001",
-      homework: 8,
-      midterm: 7,
-      assignment: 9,
-      final: 10,
-    },
-    {
-      courseTitle: "Physics",
-      courseCode: "PHYS101",
-      courseId: "C002",
-      homework: 8,
-      midterm: 7,
-      assignment: 9,
-      final: 10,
-    },
-    {
-      courseTitle: "Chemistry",
-      courseCode: "CHEM101",
-      courseId: "C003",
-      homework: 8,
-      midterm: 7,
-      assignment: 9,
-      final: 10,
-    },
-  ]);
+  const [scoreList, setScoreList] = React.useState<IScoreSheet[]>([]);
   const [chosenUser, setChosenUser] = React.useState<UserBrief | null>(null);
+
+  const getStudentGradeList = async (studentId: string) => {
+    const res = await StudentApi.getStudentGradeList(studentId);
+    setScoreList(res);
+  };
+
   return (
     <ContentLayout>
       <SearchWithSuggestion<UserBrief>
@@ -73,6 +42,7 @@ const ScorePage = () => {
         loadData={StudentApi.getStudentBriefList}
         onSelect={(user) => {
           setChosenUser(user);
+          getStudentGradeList(user.userId);
         }}
       />
       {chosenUser && (
@@ -119,20 +89,21 @@ const ScorePage = () => {
                   <TableCell>{score.courseTitle}</TableCell>
                   <TableCell>{score.courseCode}</TableCell>
                   <TableCell className="text-center">
-                    {score.homework}
+                    {score.grade.homework}
                   </TableCell>
-                  <TableCell className="text-center">{score.midterm}</TableCell>
                   <TableCell className="text-center">
-                    {score.assignment}
+                    {score.grade.midterm}
                   </TableCell>
-                  <TableCell className="text-center">{score.final}</TableCell>
                   <TableCell className="text-center">
-                    {score.homework * 0.1 +
-                      score.assignment * 0.2 +
-                      score.midterm * 0.2 +
-                      score.final * 0.5}
+                    {score.grade.assignment}
                   </TableCell>
-                </TableRow>
+                  <TableCell className="text-center">
+                    {score.grade.final}
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {calculateAverage(score.grade)}
+                  </TableCell>
+                </TableRow>   
               ))}
             </TableBody>
           </Table>

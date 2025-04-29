@@ -46,6 +46,12 @@ const GradeDisplay = () => {
     });
   }
 
+  // async function submitGrade(studentListGrade: StudentGrade[]) {
+  //   for (const studentGrade of studentListGrade) {
+
+  //   }
+  // }
+
   return (
     <Table className="hover:t_primary-600">
       <TableHeader className="bg-t_primary-600">
@@ -71,7 +77,10 @@ const GradeDisplay = () => {
               <Switch
                 id="airplane-mode"
                 className="data-[state=checked]:bg-t_primary-300"
-                onCheckedChange={(checked) => setIsEdit(checked)}
+                onCheckedChange={(checked) => {
+                  setIsEdit(checked);
+                  // submitGrade(studentListGrade);
+                }}
               />
               <Edit3Icon size={16} />
             </div>
@@ -82,7 +91,7 @@ const GradeDisplay = () => {
         {studentListGrade.map((student) => (
           <TableRow key={student.studentName}>
             <TableCell className="font-medium">{student.studentName}</TableCell>
-            <TableCell className="font-medium">{student.studentId}</TableCell>
+            <TableCell className="font-medium">{student.studentCode}</TableCell>
             <TableCell className="text-center">
               <ShowAndInput
                 isEdit={isEdit}

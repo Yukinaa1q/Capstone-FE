@@ -53,7 +53,7 @@ export default class FetchRegisteredApi {
   }
   static async getPaidAndDoneClassesFromTutor(): Promise<IClass[]> {
     try {
-      const res = (await TucourApi.get("/student/view-registered-classes-simple")) as IClass[];
+      const res = (await TucourApi.get("/tutor/view-registered-classes-simple")) as IClass[];
       return res;
     } catch {
       return [];

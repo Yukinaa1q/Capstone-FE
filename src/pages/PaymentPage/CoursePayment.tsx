@@ -2,7 +2,7 @@ import FetchRegisteredApi from "@/api/FetchRegisteredApi";
 import { Button } from "@/components/ui/button";
 import { IClassCard } from "@/interfaces/ICourse";
 import toVND from "@/utils/currencyFormat";
-import { GraduationCap, KeyRound, Tags, Trash2 } from "lucide-react";
+import { GraduationCap, Tags, Trash2 } from "lucide-react";
 
 const CoursePayment = ({ item }: { item: IClassCard }) => {
   const handleUnregisterClass = async () => {
