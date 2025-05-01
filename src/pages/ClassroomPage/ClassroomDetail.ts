@@ -8,6 +8,7 @@ export default async function getClassroom({params}: {params: Params<"classId">}
       courseTitle: string;
       courseCode: string;
       classCode: string;
+      classId: string;
       tutor: string;
       studyRoom: string;
     };

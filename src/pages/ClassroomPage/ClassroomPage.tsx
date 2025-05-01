@@ -13,6 +13,7 @@ const ClassroomPage = () => {
   const classLoader= useLoaderData().classroomDetail as {
     courseTitle: string;
     courseCode: string;
+    classId: string;
     classCode: string;
     tutor: string;
     studyRoom: string;

@@ -1,3 +1,4 @@
+import ClassApi from "@/api/ClassApi";
 import { Switch } from "@/components/ui/switch";
 import {
   Table,
@@ -7,37 +8,51 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Edit3Icon, Save } from "lucide-react";
-import React from "react";
-import ShowAndInput from "./ShowAndInput";
 import IGrade from "@/interfaces/IGrade";
-import { useLoaderData } from "react-router";
 import { calculateAverage } from "@/utils/utils";
-
-interface StudentGrade {
-  studentName: string;
-  studentId: string;
-  studentCode: string;
-  grade: IGrade;
-}
+import { Edit3Icon, Save } from "lucide-react";
+import React, { useEffect } from "react";
+import { useLoaderData, useParams } from "react-router";
+import StudentGrade from "./IStudentGrade";
+import ShowAndInput from "./ShowAndInput";
 
 const GradeDisplay = () => {
+  const classCode = useParams().classId as string;
+  const currentClassInfo = useLoaderData().classroomDetail as {
+    courseTitle: string;
+    courseCode: string;
+    classId: string;
+    classCode: string;
+    tutor: string;
+    studyRoom: string;
+  };
+  console.log("Current class info", currentClassInfo);
   const [isEdit, setIsEdit] = React.useState(false);
   const studentGradeList = useLoaderData().studentListGrade as StudentGrade[];
   const [studentListGrade, setStudentListGrade] =
     React.useState<StudentGrade[]>(studentGradeList);
 
+  useEffect(() => {
+    async function fetchStudentGradeList() {
+      setStudentListGrade(await ClassApi.getStudentGradeList(classCode!));
+    }
+    fetchStudentGradeList();
+  }, [classCode]);
+
   function updateStudentScore(
     newScore: number,
     studentId: string,
-    type: string
+    type: keyof IGrade
   ) {
     setStudentListGrade((old) => {
       const newStudentListGrade = old.map((student) => {
         if (student.studentId === studentId) {
           return {
             ...student,
-            [type]: newScore,
+            grade: {
+              ...student.grade,
+              [type]: newScore,
+            },
           };
         }
         return student;
@@ -46,11 +61,21 @@ const GradeDisplay = () => {
     });
   }
 
-  // async function submitGrade(studentListGrade: StudentGrade[]) {
-  //   for (const studentGrade of studentListGrade) {
-
-  //   }
-  // }
+  async function submitGrade(studentListGrade: StudentGrade[]) {
+    try {
+      await ClassApi.updateStudentGradesInClass(
+        studentListGrade.map((studentGrade) => ({
+          ...studentGrade,
+          classId: currentClassInfo.classId,
+        }))
+      );
+      // window.location.reload();
+      setStudentListGrade(await ClassApi.getStudentGradeList(classCode!));
+    } catch {
+      alert("Something went wrong when submitting the grade list");
+    }
+    // console.log("Submitting list of grade for student in class: " + classCode, studentListGrade)
+  }
 
   return (
     <Table className="hover:t_primary-600">
@@ -79,7 +104,7 @@ const GradeDisplay = () => {
                 className="data-[state=checked]:bg-t_primary-300"
                 onCheckedChange={(checked) => {
                   setIsEdit(checked);
-                  // submitGrade(studentListGrade);
+                  if (!checked) submitGrade(studentListGrade);
                 }}
               />
               <Edit3Icon size={16} />
@@ -96,13 +121,14 @@ const GradeDisplay = () => {
               <ShowAndInput
                 isEdit={isEdit}
                 value={student.grade.homework.toString()}
-                setValue={(score) =>
+                setValue={(score) => {
+                  console.log("The score to be updated is", score);
                   updateStudentScore(
                     parseFloat(score),
                     student.studentId,
-                    "homeworkScore"
-                  )
-                }
+                    "homework"
+                  );
+                }}
               />
               {/* {student.homeworkScore} */}
             </TableCell>
@@ -114,7 +140,7 @@ const GradeDisplay = () => {
                   updateStudentScore(
                     parseFloat(score),
                     student.studentId,
-                    "assignmentScore"
+                    "assignment"
                   )
                 }
               />
@@ -127,7 +153,7 @@ const GradeDisplay = () => {
                   updateStudentScore(
                     parseFloat(score),
                     student.studentId,
-                    "midtermScore"
+                    "midterm"
                   )
                 }
               />
@@ -140,13 +166,13 @@ const GradeDisplay = () => {
                   updateStudentScore(
                     parseFloat(score),
                     student.studentId,
-                    "finalScore"
+                    "final"
                   )
                 }
               />
             </TableCell>
             <TableCell className="text-center">
-              {calculateAverage(student.grade)}
+              {calculateAverage(student.grade).toPrecision(3)}
             </TableCell>
             <TableCell className="text-center"></TableCell>
           </TableRow>

@@ -18,27 +18,27 @@ const StudentView = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalItems, setTotalItems] = useState(10);
 
-  useEffect(() => {
-    const getCourseList = async () => {
-      const courses = (await FetchUnregisteredAPI.getAllClassWithPagination(
-        searchKey,
-        currentPage
-      )) as {
-        meta: {
-          currentPage: number;
-          itemsPerPage: number;
-          totalItems: number;
-          totalPages: number;
-        };
-        data: IClassCard[];
+  const getCourseList = async (searchKeyword: string, page: number) => {
+    const courses = (await FetchUnregisteredAPI.getAllClassWithPagination(
+      searchKeyword,
+      page
+    )) as {
+      meta: {
+        currentPage: number;
+        itemsPerPage: number;
+        totalItems: number;
+        totalPages: number;
       };
-
-      setCourseList(courses.data);
-      setTotalItems(courses.meta.totalItems);
+      data: IClassCard[];
     };
 
-    getCourseList();
-  }, []);
+    setCourseList(courses.data);
+    setTotalItems(courses.meta.totalItems);
+  };
+
+  useEffect(() => {
+    getCourseList(searchKey, currentPage);
+  }, [searchKey, currentPage]);
 
   return (
     <div className="py-4">
@@ -49,20 +49,7 @@ const StudentView = () => {
           console.log("Search Key", searchValue);
           setSearchKey(searchValue);
           try {
-            const res = (await FetchUnregisteredAPI.getAllClassWithPagination(
-              searchValue,
-              currentPage
-            )) as {
-              meta: {
-                currentPage: number;
-                itemsPerPage: number;
-                totalItems: number;
-                totalPages: number;
-              };
-              data: IClassCard[];
-            };
-            setCourseList(res.data);
-            setTotalItems(res.meta.totalItems);
+            getCourseList(searchValue, 1);
           } catch (err) {
             console.log(err);
           }
@@ -77,23 +64,7 @@ const StudentView = () => {
         onPageChange={async (pageNumber) => {
           setCurrentPage(pageNumber);
           try {
-            const courses = (await FetchUnregisteredAPI.getAllClassWithPagination(
-              searchKey,
-              pageNumber
-            )) as {
-              meta: {
-                currentPage: number;
-                itemsPerPage: number;
-                totalItems: number;
-                totalPages: number;
-              };
-              data: IClassCard[];
-            };
-
-            console.log(courses);
-
-            setCourseList(courses.data);
-            setTotalItems(courses.meta.totalItems);
+            getCourseList(searchKey, pageNumber);
           } catch (err) {
             console.log(err);
           }

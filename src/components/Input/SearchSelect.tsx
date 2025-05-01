@@ -33,6 +33,7 @@ export type SearchSelectProps = {
   onValueChange?: (value: string) => void;
   className?: string;
   disabled?: boolean;
+  notFoundText?: string;
 };
 
 export default function SearchSelect(props: SearchSelectProps) {
@@ -72,7 +73,7 @@ export default function SearchSelect(props: SearchSelectProps) {
         <Command filter={props.filterFn}>
           <CommandInput placeholder="Search keyword ..." />
           <CommandList>
-            <CommandEmpty>No result found.</CommandEmpty>
+            <CommandEmpty className="px-2 text-sm py-2 text-gray-400">{props.notFoundText}</CommandEmpty>
             <CommandGroup>
               {props.list.map((item) => (
                 <CommandItem

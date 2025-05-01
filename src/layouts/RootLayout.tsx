@@ -3,6 +3,8 @@ import { useAppDispatch, useAppSelector } from "@/hooks/reduxHook";
 import { setUser } from "@/store/authenSlice";
 import { jwtDecoder } from "@/utils/utils";
 import { Navigate, Outlet } from "react-router";
+import { Toaster } from "@/components/ui/sonner"
+
 
 const RootLayout = () => {
   const user = useAppSelector((state) => state.auths);
@@ -20,6 +22,7 @@ const RootLayout = () => {
     return (
       <SidebarFactory>
         <Outlet />
+        <Toaster />
       </SidebarFactory>
     );
   }

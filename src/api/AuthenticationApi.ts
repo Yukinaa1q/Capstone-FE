@@ -28,7 +28,7 @@ export default class AuthenAPI extends TucourApi {
       // return res.token;
       return true;
     }
-    catch (err) {
+    catch {
       return false;
     }
   }

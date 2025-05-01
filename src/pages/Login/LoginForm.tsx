@@ -1,21 +1,21 @@
 import { GoogleIcon, XIcon } from "@/assets/icons";
 import PwdInput from "@/components/Input/PwdInput";
 import RequiredInput from "@/components/Input/RequiredInput";
+import RoleInput from "@/components/Input/RoleInput";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Form, FormField } from "@/components/ui/form";
-import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import TucourApi, { StatusError } from "@/utils/http";
-import { jwtDecoder } from "@/utils/utils";
 import { useAppDispatch } from "@/hooks/reduxHook";
 import { AuthState, setUser } from "@/store/authenSlice";
+import TucourApi from "@/utils/http";
+import { jwtDecoder } from "@/utils/utils";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { AlertCircle } from "lucide-react";
 import { useState } from "react";
-import RoleInput from "@/components/Input/RoleInput";
+import { useForm } from "react-hook-form";
+import { Link, useNavigate } from "react-router";
+import * as yup from "yup";
 
 const loginSchema = yup
   .object({
@@ -71,10 +71,8 @@ const LoginForm = () => {
       );
       window.localStorage.setItem("token", res.token);
       navigate("/");
-    } catch (err) {
-      if (err instanceof StatusError) {
-        setErrorMsg("Incorrect Username or Password");
-      }
+    } catch {
+      setErrorMsg("Incorrect Username or Password");
     }
   };
 

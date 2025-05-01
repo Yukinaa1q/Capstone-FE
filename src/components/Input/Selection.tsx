@@ -24,6 +24,7 @@ const Selection = ({
   display?: (value: string) => React.ReactNode;
   className?: string;
 }) => {
+  console.log("Receive value", value);
   return (
     <Select value={value} onValueChange={onSelect} disabled={disabled}>
       <SelectTrigger className={className}>

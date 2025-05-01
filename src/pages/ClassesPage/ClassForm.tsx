@@ -22,6 +22,7 @@ const classFormSchema = object({
   courseCode: string().required("Course code is required"),
   maxStudents: number()
     .min(1, "Class size cannot be smaller than 1")
+    
     .required("Class size is required"),
   studyWeek: string<StudyWeek | "">().required("Study week is required"),
   studyShift: string<StudyShift | "">().required("Study shift is required"),
@@ -32,20 +33,9 @@ const classFormSchema = object({
 
 export type IClassForm = InferType<typeof classFormSchema>;
 
-const initValue: IClassForm = {
-  courseTitle: "",
-  courseCode: "",
-  maxStudents: 0,
-  studyWeek: "",
-  studyShift: "",
-  isOnline: false,
-  tutorCode: "",
-  studentIdList: [],
-};
-
 const ClassForm = ({
   className,
-  defaultValues = initValue,
+  defaultValues,
   onSubmit,
   children,
 }: {
@@ -81,7 +71,7 @@ const ClassForm = ({
     resolver: yupResolver(classFormSchema),
   });
 
-  console.log("default value", defaultValues);
+  console.log("Form values", form.getValues());
 
   useEffect(() => {
     const fetchCourseCode = async () => {
@@ -170,7 +160,7 @@ const ClassForm = ({
               return (
                 <RequiredInput label="Course Code">
                   <SearchSelect
-                    disabled={defaultValues.courseCode ? true : false}
+                    disabled={defaultValues ? true : false}
                     className=""
                     {...field}
                     list={codeList}
@@ -251,35 +241,39 @@ const ClassForm = ({
           <FormField
             control={form.control}
             name="studyWeek"
-            render={({ field }) => (
-              <RequiredInput label="Study Weekdays">
-                <Selection
-                  placeholder="Study Weekdays"
-                  selectList={["2-4", "4-6", "3-5", "7", "8"]}
-                  value={studyWeek as string}
-                  onSelect={(val) => {
-                    field.onChange(val);
-                    setStudyWeek(val as StudyWeek); // A workaround to reset the list of study shifts
-                  }}
-                  display={(weekdays) => {
-                    switch (weekdays) {
-                      case "2-4":
-                        return "Mon - Wed";
-                      case "4-6":
-                        return "Wed - Fri";
-                      case "3-5":
-                        return "Tue - Thur";
-                      case "7":
-                        return "Sat";
-                      case "8":
-                        return "Sun";
-                      default:
-                        return "";
-                    }
-                  }}
-                />
-              </RequiredInput>
-            )}
+            render={({ field }) => {
+              console.log("Study week field", field);
+              return (
+                <RequiredInput label="Study Weekdays">
+                  <Selection
+                    disabled={defaultValues ? true : false}
+                    placeholder="Study Weekdays"
+                    selectList={["2-4", "4-6", "3-5", "7", "8"]}
+                    value={field.value}
+                    onSelect={(val) => {
+                      field.onChange(val);
+                      setStudyWeek(val as StudyWeek); // A workaround to reset the list of study shifts
+                    }}
+                    display={(weekdays) => {
+                      switch (weekdays) {
+                        case "2-4":
+                          return "Mon - Wed";
+                        case "4-6":
+                          return "Wed - Fri";
+                        case "3-5":
+                          return "Tue - Thur";
+                        case "7":
+                          return "Sat";
+                        case "8":
+                          return "Sun";
+                        default:
+                          return "";
+                      }
+                    }}
+                  />
+                </RequiredInput>
+              );
+            }}
           />
 
           <FormField
@@ -289,17 +283,21 @@ const ClassForm = ({
               <RequiredInput label="Study Shift">
                 <Selection
                   value={field.value}
-                  disabled={!form.getValues("studyWeek")}
+                  disabled={defaultValues ? true : false}
                   placeholder="Time Shift"
                   selectList={
-                    ["7", "8"].includes(form.getValues("studyWeek").toString())
-                      ? [
-                          "08h00 - 11h00",
-                          "13h00 - 16h00",
-                          "16h15 - 19h15",
-                          "19h30 - 21h30",
-                        ]
-                      : ["17h45 - 19h15", "19h30 - 21h00"]
+                    form.getValues("studyWeek")
+                      ? ["7", "8"].includes(
+                          form.getValues("studyWeek").toString()
+                        )
+                        ? [
+                            "08h00 - 11h00",
+                            "13h00 - 16h00",
+                            "16h15 - 19h15",
+                            "19h30 - 21h30",
+                          ]
+                        : ["17h45 - 19h15", "19h30 - 21h00"]
+                      : []
                   }
                   onSelect={field.onChange}
                 />
@@ -313,7 +311,7 @@ const ClassForm = ({
             render={({ field }) => (
               <RequiredInput label="Learning Type">
                 <RadioGroup
-                  disabled={defaultValues.isOnline ? true : false}
+                  disabled={defaultValues ? true : false}
                   value={field.value ? "online" : "offline"}
                   onValueChange={(val) =>
                     field.onChange(val === "online" ? true : false)
@@ -340,7 +338,9 @@ const ClassForm = ({
             render={({ field }) => (
               <RequiredInput label="Tutor">
                 <SearchSelect
-                  disabled={defaultValues.tutorCode ? true : false}
+                  disabled={defaultValues ? true : false}
+                  notFoundText="No tutor found or qualified for this course"
+                  className="px-2"
                   {...field}
                   list={tutorList.filter((tutor) => {
                     return tutor.display.qualifiedSubject.some(
@@ -397,7 +397,7 @@ const ClassForm = ({
             render={({ field }) => (
               <RequiredInput label="Students" isRequired={false}>
                 <StudentInput
-                  value={field.value}
+                  value={field.value ?? []}
                   onValueChange={(newVal) => field.onChange(newVal)}
                 />
               </RequiredInput>

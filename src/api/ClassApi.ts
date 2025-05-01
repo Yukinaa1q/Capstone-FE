@@ -1,4 +1,5 @@
 import IGrade from "@/interfaces/IGrade";
+import StudentGrade from "@/pages/ClassroomPage/IStudentGrade";
 import TucourApi from "@/utils/http";
 
 export default class ClassApi {
@@ -18,12 +19,7 @@ export default class ClassApi {
   }
 
   public static async getStudentGradeList(classId: string): Promise<
-    {
-      studentName: string;
-      studentId: string;
-      studentCode: string;
-      grade: IGrade;
-    }[]
+    StudentGrade[]
   > {
     try {
       const studentListGrade = (await TucourApi.get(
@@ -41,11 +37,11 @@ export default class ClassApi {
           }[];
         }[];
       };
-      console.log(studentListGrade);
       const mapStudent = studentListGrade.studentGrades.map((studentGrade) => ({
         studentName: studentGrade.name,
         studentId: studentGrade.id,
         studentCode: studentGrade.studentCode,
+        classId: studentListGrade.studentGrades[0].id,
         grade: {
           midterm: studentGrade.grades[0].midtermScore,
           final: studentGrade.grades[0].finalScore,
@@ -53,11 +49,35 @@ export default class ClassApi {
           assignment: studentGrade.grades[0].assignmentScore,
         },
       }));
-      console.log(mapStudent);
       return mapStudent;
     } catch {
       console.log("Error occur");
       return [];
+    }
+  }
+
+  public static async updateStudentGradesInClass(studentGradeList: StudentGrade[]) {
+    try {
+      const marshalJson = studentGradeList.map(student => ({
+        classroomId: student.classId,
+        studentId: student.studentId,
+        assignmentScore: student.grade.assignment,
+        midtermScore: student.grade.midterm,
+        finalScore: student.grade.final,
+        homeworkScore: student.grade.homework,
+      }))
+
+      console.log("The data to be updated is", marshalJson);
+
+      await TucourApi.post("/grade/update", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(marshalJson),
+      })
+    }
+    catch {
+      console.log("Error");
     }
   }
 }

@@ -6,6 +6,7 @@ import TucourApi from "@/utils/http";
 import { Skeleton } from "@/components/ui/skeleton";
 import { CourseOutline } from "@/components/Input/CourseOutlineInput";
 import { StudyShift, StudyWeek } from "@/interfaces/common";
+import { toast } from "sonner";
 
 interface ViewClassDetailDTO {
   courseTitle: string;
@@ -78,7 +79,8 @@ const EditClassPage = () => {
           courseCode: res.courseCode,
           maxStudents: res.classMaxStudents,
           isOnline: res.learningType,
-          studentIdList: res.studentList?.map((student) => student.studentId) ?? [],
+          studentIdList:
+            res.studentList?.map((student) => student.studentId) ?? [],
           studyShift: res.classShift,
           studyWeek: res.classSession,
           tutorCode: res.tutorId,
@@ -104,7 +106,14 @@ const EditClassPage = () => {
       });
       navigate("/classes");
     } catch (err) {
-      console.log(err);
+      const errMsg = err as { message: string };
+      // alert(errMsg.message)
+      toast.error(errMsg.message, {
+        style: {
+          backgroundColor: "#ed6161",
+          color: "#fff",
+        },
+      });
     }
   };
 
