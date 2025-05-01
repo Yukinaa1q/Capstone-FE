@@ -41,32 +41,38 @@ const NewCoursePage = () => {
   };
 
   return (
-    <section className="relative px-8 py-4">
+    <div className="relative overflow-hidden">
       {isLoading && (
-        <div className="absolute w-full h-full top-0 left-0 bg-gray-100/40">
+        <div className="absolute h-full bg-gray-300/50 z-50 w-full">
           <LoaderCircle
             size={80}
             className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           />
         </div>
       )}
-      <h1 className="text-center font-bold text-2xl">ADD NEW COURSE</h1>
-      <CourseForm onSubmit={onSubmit}>
-        <Button
-          className="bg-t_primary-400 hover:bg-t_primary-500"
-          type="submit"
-          disabled={isLoading}
-        >
-          Create Course
-        </Button>
-        <Link
-          to={"/courses"}
-          className={buttonVariants({ variant: "destructive" })}
-        >
-          Cancel
-        </Link>
-      </CourseForm>
-    </section>
+
+      <section
+        className="px-8 py-4 overflow-y-scroll"
+        style={{ height: "calc(100vh - 3.35rem)" }}
+      >
+        <h1 className="text-center font-bold text-2xl">ADD NEW COURSE</h1>
+        <CourseForm onSubmit={onSubmit}>
+          <Button
+            className="bg-t_primary-400 hover:bg-t_primary-500"
+            type="submit"
+            disabled={isLoading}
+          >
+            Create Course
+          </Button>
+          <Link
+            to={"/courses"}
+            className={buttonVariants({ variant: "destructive" })}
+          >
+            Cancel
+          </Link>
+        </CourseForm>
+      </section>
+    </div>
   );
 };
 

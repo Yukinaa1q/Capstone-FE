@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, LoaderCircle, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
 import { Descendant } from "slate";
@@ -40,6 +40,7 @@ const CourseDetail = () => {
   const [showFull, setShowFull] = useState(false);
   const [course, setCourse] = useState<ICourseDetail>();
   const currentYear = new Date().getFullYear();
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   useEffect(() => {
     const getCourse = async () => {
@@ -73,16 +74,25 @@ const CourseDetail = () => {
   }, []);
 
   return (
-    <section
-      className="text-white"
-      style={{
-        backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.imgUrl}')`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      <section className="p-10 flex justify-between">
+    <section className="text-white relative" style={{ height: "calc(100vh - 3.35rem)" }}>
+      {loadingDelete && (
+        <div className="absolute bg-gray-300/50 left-0 right-0 h-full z-50">
+          <LoaderCircle
+            size={80}
+            className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+          />
+        </div>
+      )}
+      <section
+        className="p-10 flex justify-between bg-transparent"
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.imgUrl}')`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          // backgroundAttachment: "local, fixed",
+        }}
+      >
         <div>
           <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
           <h2>
@@ -122,6 +132,7 @@ const CourseDetail = () => {
               variant="destructive"
               className="w-24 ml-4"
               onClick={async () => {
+                setLoadingDelete(true);
                 try {
                   const jwtToken = window.localStorage.getItem("token");
                   await TucourApi.call(`/course/delete/${course?.courseId}`, {
@@ -147,7 +158,7 @@ const CourseDetail = () => {
           </div>
         )}
       </section>
-      <section className="p-10 bg-white text-black flex gap-10 justify-between">
+      <section className="p-10 text-black flex gap-10 justify-between">
         <div className="grow">
           <CourseInfo title="Course Description">
             <div

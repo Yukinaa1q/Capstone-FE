@@ -18,7 +18,7 @@ import toVND from "@/utils/currencyFormat";
 import TucourApi from "@/utils/http";
 import { shortName } from "@/utils/utils";
 import { Edit, Trash2 } from "lucide-react";
-import { formatDate } from "@/utils/utils"
+import { formatDate } from "@/utils/utils";
 import ClassApi from "@/api/ClassApi";
 
 const ClassDetail = () => {
@@ -55,23 +55,25 @@ const ClassDetail = () => {
     getClassDetail();
   }, [params.id]);
   return (
-    <section
-      className="text-white bg-fixed"
-      style={{
-        background: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.courseImage}')`,
-        backgroundPosition: "center",
-        backgroundSize: "cover",
-        backgroundAttachment: "fixed",
-      }}
-    >
-      <section className="p-10 flex justify-between">
+    <section className="text-white bg-fixed">
+      <section
+        className="p-10 flex justify-between"
+          style={{
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.courseImage}')`,
+            backgroundPosition: "center",
+            backgroundSize: "cover",
+            backgroundRepeat: "no-repeat",
+            // backgroundAttachment: "scroll, local",
+          }}
+      >
         <div>
           <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
           <h2>{course?.courseCode} | 2024 - 2025</h2>
           <div className="grid grid-cols-[240px_auto] mt-4 text-sm">
             <div>Registration Duration</div>
             <div className="font-semibold">
-              {formatDate(course?.registrationStartDate)} - {formatDate(course?.registrationEndDate)}
+              {formatDate(course?.registrationStartDate)} -{" "}
+              {formatDate(course?.registrationEndDate)}
             </div>
             <div>Learning Duration</div>
             <div className="font-semibold">
