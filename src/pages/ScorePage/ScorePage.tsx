@@ -14,6 +14,7 @@ import ContentLayout from "@/layouts/ContentLayout";
 import { calculateAverage, shortName } from "@/utils/utils";
 import React from "react";
 import { IScoreSheet } from "./scoreInterface";
+import { ChartColumnBig } from "lucide-react";
 
 const ScorePage = () => {
   const [scoreList, setScoreList] = React.useState<IScoreSheet[]>([]);
@@ -45,7 +46,7 @@ const ScorePage = () => {
           getStudentGradeList(user.userId);
         }}
       />
-      {chosenUser && (
+      {chosenUser ? (
         <div className="mt-10 relative">
           <h1 className="text-xl font-semibold text-center">
             {chosenUser?.name} - {chosenUser?.userCode}
@@ -107,6 +108,15 @@ const ScorePage = () => {
               ))}
             </TableBody>
           </Table>
+        </div>
+      ) : (
+        <div className="absolute bottom-0 top-16 left-0 right-0 flex flex-col justify-center">
+          <div className="size-fit bg-gray-100 mx-auto rounded-full p-6">
+            <ChartColumnBig size={80} strokeWidth={1} className="stroke-gray-400" />
+          </div>
+          <p className="text-center font-medium text-gray-400 mt-4">
+            Please search for a student to view their scores
+          </p>
         </div>
       )}
     </ContentLayout>

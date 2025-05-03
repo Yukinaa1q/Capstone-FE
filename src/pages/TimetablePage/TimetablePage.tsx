@@ -13,6 +13,7 @@ import { ITimeTable } from "@/interfaces/ITimetable";
 import { UserBrief } from "@/interfaces/UserProfile";
 import ContentLayout from "@/layouts/ContentLayout";
 import { shortName, verboseStudyWeek } from "@/utils/utils";
+import { CalendarX } from "lucide-react";
 import React from "react";
 
 const TimetablePage = () => {
@@ -42,7 +43,7 @@ const TimetablePage = () => {
         }}
       />
 
-      {timetable.length !== 0 && (
+      {timetable.length !== 0 ? (
         <div className="mt-10 relative">
           <h1 className="text-xl font-semibold text-center">
             {chosenUser?.name} - {chosenUser?.userCode}
@@ -83,7 +84,12 @@ const TimetablePage = () => {
                   <TableCell>{item.room}</TableCell>
                   <TableCell>
                     {item.address.startsWith("http") ? (
-                      <a href={item.address} className="underline text-blue-600">Online Classroom Link</a>
+                      <a
+                        href={item.address}
+                        className="underline text-blue-600"
+                      >
+                        Online Classroom Link
+                      </a>
                     ) : (
                       item.address
                     )}
@@ -92,6 +98,15 @@ const TimetablePage = () => {
               ))}
             </TableBody>
           </Table>
+        </div>
+      ) : (
+        <div className="absolute bottom-0 top-16 left-0 right-0 flex flex-col justify-center">
+          <div className="size-fit bg-gray-100 mx-auto rounded-full p-6">
+            <CalendarX size={80} strokeWidth={1} className="stroke-gray-400" />
+          </div>
+          <p className="text-center font-medium text-gray-400 mt-4">
+            Please search for a user to view their timetable
+          </p>
         </div>
       )}
     </ContentLayout>

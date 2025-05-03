@@ -15,10 +15,10 @@ import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { PlusCircleIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
-import { boolean, InferType, object, string } from "yup";
+import { InferType, object, string } from "yup";
 
 const NewRoomSchema = object({
-  isOnline: boolean().required().default(false),
+  // isOnline: boolean().required().default(false),
   roomCode: string().when("isOnline", {
     is: false,
     then: (schema) => schema.required("Room Code is required"),
@@ -32,7 +32,7 @@ const NewRoomSchema = object({
 const NewRoom = () => {
   const form = useForm({
     defaultValues: {
-      isOnline: false,
+      // isOnline: false,
       roomCode: "",
       roomAddress: "",
     },
@@ -64,23 +64,6 @@ const NewRoom = () => {
                 className="space-y-4"
                 onSubmit={form.handleSubmit(onSubmit)}
               >
-                <FormField
-                  name="isOnline"
-                  control={form.control}
-                  render={({ field }) => (
-                    <RequiredInput
-                      label="Is Online"
-                      isRequired={false}
-                      orientation="horizontal"
-                    >
-                      <Checkbox
-                        onCheckedChange={(val) => field.onChange(val)}
-                        className="data-[state=checked]:bg-t_primary-400"
-                      />
-                    </RequiredInput>
-                  )}
-                />
-
                 <FormField
                   name="roomCode"
                   control={form.control}

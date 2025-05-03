@@ -51,7 +51,7 @@ const CourseDetail = () => {
             Authorization: "Bearer " + window.localStorage.getItem("token"),
           },
         })) as ICourseBE;
-        console.log(res);
+
         const courseDesc = JSON.parse(res.courseDescription) as Descendant[];
         setCourse({
           courseTitle: res.courseTitle,

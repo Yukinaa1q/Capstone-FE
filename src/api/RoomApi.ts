@@ -16,17 +16,17 @@ export default class RoomApi {
   }
 
   public static async addRoom(data: {
-    isOnline: boolean;
+    // isOnline: boolean;
     roomCode?: string;
     roomAddress?: string;
   }) {
-    console.log("data given in addRoom", data);
+    // console.log("data given in addRoom", data);
     try {
       const res = await TucourApi.post("/room/create", {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({...data, isOnline: false}),
       });
       return res;
     } catch (error) {
