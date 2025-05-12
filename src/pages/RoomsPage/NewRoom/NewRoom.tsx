@@ -2,6 +2,7 @@ import RoomApi from "@/api/RoomApi";
 import RequiredInput from "@/components/Input/RequiredInput";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -13,9 +14,10 @@ import {
 import { Form, FormField } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { PlusCircleIcon } from "lucide-react";
+import { AlertCircle, PlusCircleIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { InferType, object, string } from "yup";
+import { useState } from "react";
 
 const NewRoomSchema = object({
   // isOnline: boolean().required().default(false),
@@ -30,6 +32,7 @@ const NewRoomSchema = object({
 });
 
 const NewRoom = () => {
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const form = useForm({
     defaultValues: {
       // isOnline: false,
@@ -46,6 +49,7 @@ const NewRoom = () => {
       window.location.reload();
     } catch (err) {
       console.log(err);
+      setErrorMsg((err as { message: string }).message);
     }
   };
 
@@ -58,6 +62,15 @@ const NewRoom = () => {
         <DialogHeader>
           <DialogTitle>Create New Room</DialogTitle>
           <DialogDescription></DialogDescription>
+          {errorMsg && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>
+                {errorMsg}
+              </AlertDescription>
+            </Alert>
+          )}
           <div>
             <Form {...form}>
               <form

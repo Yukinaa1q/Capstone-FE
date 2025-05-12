@@ -2,6 +2,7 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import ClassForm, { IClassForm } from "../ClassForm";
 import { Link, useNavigate } from "react-router";
 import TucourApi from "@/utils/http";
+import { toast } from "sonner";
 
 const NewClassPage = () => {
   const navigate = useNavigate();
@@ -18,7 +19,13 @@ const NewClassPage = () => {
       });
       navigate("/classes");
     } catch (e) {
-      console.error(e);
+      console.log(e);
+      toast.error((e as { message: string }).message, {
+        style: {
+          backgroundColor: "#d14960",
+          color: "#fff",
+        },
+      });
     }
   };
   return (

@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { Link, useLoaderData, useNavigate, useParams } from "react-router";
+import { toast } from "sonner";
 import { date, InferType, object, string } from "yup";
 
 const StudentEditSchema = object({
@@ -35,12 +36,27 @@ const StudentEdit = () => {
   const studentId = useParams().id!;
   const navigate = useNavigate();
   const onSubmit = async (data: InferType<typeof StudentEditSchema>) => {
-    const result = await StudentApi.updateProfile(studentId, data.fullName, data.email, data.dob, data.phoneNumber)
-    if (result) {
-      alert("Update successfully");
-      navigate("/students/" + studentDetail.userId);
-    } else {
-      alert("Update failed");
+    try {
+      const result = await StudentApi.updateProfile(
+        studentId,
+        data.fullName,
+        data.email,
+        data.dob,
+        data.phoneNumber
+      );
+      if (result) {
+        alert("Update successfully");
+        navigate("/students/" + studentDetail.userId);
+      } else {
+        alert("Update failed");
+      }
+    } catch (err) {
+      toast.error((err as { message: string }).message, {
+        style: {
+          backgroundColor: "#f8d7da",
+          color: "#721c24",
+        },
+      });
     }
   };
   return (
@@ -51,7 +67,7 @@ const StudentEdit = () => {
           onSubmit={form.handleSubmit(onSubmit)}
         >
           <h3 className="font-semibold text-2xl text-center">
-            Update Tutor {studentDetail.userCode}
+            Update Student {studentDetail.userCode}
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <BasicInput form={form} field="fullName" label="Full Name" />

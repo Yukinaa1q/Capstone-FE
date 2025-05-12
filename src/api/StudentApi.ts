@@ -79,18 +79,14 @@ export default class StudentApi {
       dob: dob,
       phoneNumber: phone,
     };
-    try {
-      await TucourApi.post("/student/update-student-profile/" + studentId, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(sendingData),
-      });
-      return true;
-    } catch {
-      return false;
-    }
-    alert("update profile " + sendingData);
+
+    await TucourApi.post("/student/update-student-profile/" + studentId, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(sendingData),
+    });
+    return true;
   }
 
   public static async getStudentBriefList(

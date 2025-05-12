@@ -8,7 +8,7 @@ export default class RoomApi {
           "Content-Type": "application/json",
         },
       });
-      console.log(rooms)
+      console.log(rooms);
       return rooms;
     } catch (error) {
       console.error(error);
@@ -21,17 +21,14 @@ export default class RoomApi {
     roomAddress?: string;
   }) {
     // console.log("data given in addRoom", data);
-    try {
-      const res = await TucourApi.post("/room/create", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({...data, isOnline: false}),
-      });
-      return res;
-    } catch (error) {
-      console.error(error);
-    }
+
+    const res = await TucourApi.post("/room/create", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ ...data, isOnline: false }),
+    });
+    return res;
   }
 
   public static async deleteRoom(roomId: string) {

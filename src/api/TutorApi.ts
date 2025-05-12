@@ -87,22 +87,18 @@ export default class TutorApi {
     courseId: string,
     scheduleList: TutorRegistrationSchedule[]
   ) {
-    try {
-      await TucourApi.post("/phase1_register/new-tutor-register-class", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          courseId: courseId,
-          registrationList: scheduleList.map((schedule) => ({
-            ...schedule,
-            online: schedule.isOnline,
-          })),
-        }),
-      });
-    } catch {
-      alert("Error sending teaching request");
-    }
+    await TucourApi.post("/phase1_register/new-tutor-register-class", {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        courseId: courseId,
+        registrationList: scheduleList.map((schedule) => ({
+          ...schedule,
+          online: schedule.isOnline,
+        })),
+      }),
+    });
   }
 
   public static async getClassHistory(
@@ -120,7 +116,9 @@ export default class TutorApi {
   > {
     console.log("Call class history api");
     try {
-      const res = (await TucourApi.get("/tutor/view-tutor-class-history/" + tutorId)) as (Pick<
+      const res = (await TucourApi.get(
+        "/tutor/view-tutor-class-history/" + tutorId
+      )) as (Pick<
         IClassDetail,
         | "courseTitle"
         | "courseCode"
@@ -181,17 +179,14 @@ export default class TutorApi {
       tutorSSN: tutorSSN,
       phoneNumber: phone,
     };
-    try {
-      await TucourApi.post("/tutor/update-tutor-profile/" + tutorId, {
-        headers: {
-          "Content-Type": "application/json",
-        },
 
-        body: JSON.stringify(sendingData),
-      });
-      return true;
-    } catch {
-      return false;
-    }
+    await TucourApi.post("/tutor/update-tutor-profile/" + tutorId, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+
+      body: JSON.stringify(sendingData),
+    });
+    return true;
   }
 }

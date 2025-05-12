@@ -20,11 +20,12 @@ import {
 import { StudyShift, StudyWeek } from "@/interfaces/common";
 import { ICourseCard } from "@/interfaces/ICourse";
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
-import { PlusIcon, SendHorizonal, Trash2 } from "lucide-react";
+import { AlertCircle, PlusIcon, SendHorizonal, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import Selection from "../Input/Selection";
 import { Button } from "../ui/button";
 import { useNavigate } from "react-router";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const TutorRegistration = ({
   courseContent,
@@ -42,6 +43,8 @@ const TutorRegistration = ({
   const [studyShift, setStudyShift] = React.useState<StudyShift | undefined>(
     undefined
   );
+
+  const [errMsg, setErrMsg] = useState<string | null>(null);
 
   const [isOnline, setIsOnline] = useState(false);
 
@@ -61,13 +64,15 @@ const TutorRegistration = ({
       alert("Please select at least one schedule");
       return;
     }
-    const result = await TutorApi.sendTeachingRequest(courseContent.courseId, scheduleList);
-    setScheduleList([]);
-    setStudyWeek(undefined);
-    setStudyShift(undefined);
-    console.log(result);
-    alert(result);
-    navigate(0);
+    try {
+      await TutorApi.sendTeachingRequest(courseContent.courseId, scheduleList);
+      setScheduleList([]);
+      setStudyWeek(undefined);
+      setStudyShift(undefined);
+      navigate(0);
+    } catch (error) {
+      setErrMsg((error as { message: string }).message as string);
+    }
   };
 
   return (
@@ -87,6 +92,13 @@ const TutorRegistration = ({
           <p className="text-sm font-semibold">{courseContent.courseCode}</p>
         </div>
         <div>
+          {errMsg && (
+            <Alert variant="destructive">
+              <AlertCircle className="h-4 w-4" />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>{errMsg}</AlertDescription>
+            </Alert>
+          )}
           <h3 className="font-semibold text-sm">Teaching Schedule</h3>
           <Table>
             <TableHeader className="sticky top-0">
@@ -152,8 +164,10 @@ const TutorRegistration = ({
                           setScheduleList((prev) => [
                             ...prev.filter(
                               (schedule) =>
-                                !(schedule.studyWeek == studyWeek &&
-                                schedule.studyShift == studyShift)
+                                !(
+                                  schedule.studyWeek == studyWeek &&
+                                  schedule.studyShift == studyShift
+                                )
                             ),
                             { studyShift, studyWeek, isOnline },
                           ]);

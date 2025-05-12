@@ -8,9 +8,10 @@ import ContentLayout from "@/layouts/ContentLayout";
 import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link, useLoaderData, useParams } from "react-router";
+import { Link, useLoaderData, useNavigate, useParams } from "react-router";
 import { date, InferType, object, string } from "yup";
 import { TutorInitContent } from "../TutorLoader";
+import { toast } from "sonner";
 
 const TutorEditSchema = object({
   fullName: string().required(),
@@ -22,6 +23,7 @@ const TutorEditSchema = object({
 });
 
 const TutorEdit = () => {
+  const navigate = useNavigate();
   const query: TutorInitContent = useLoaderData();
   const tutorId = useParams().id!;
   const form = useForm({
@@ -35,19 +37,23 @@ const TutorEdit = () => {
     },
   });
   const onSubmit = async (data: InferType<typeof TutorEditSchema>) => {
-    const res = await TutorApi.updateProfile(
-      tutorId,
-      data.fullName,
-      data.email,
-      data.dob,
-      data.ssid,
-      data.phoneNumber
-    );
-    if (res) {
-      alert("Update successfully");
-      window.location.href = "/tutors/"+tutorId
-    } else {
-      alert("Update failed");
+    try {
+      await TutorApi.updateProfile(
+        tutorId,
+        data.fullName,
+        data.email,
+        data.dob,
+        data.ssid,
+        data.phoneNumber
+      );
+      navigate("/tutors/" + tutorId);
+    } catch (err) {
+      toast.error((err as { message: string }).message, {
+        style: {
+          backgroundColor: "#f8d7da",
+          color: "#721c24",
+        },
+      });
     }
   };
   return (

@@ -4,6 +4,7 @@ import TucourApi from "@/utils/http";
 import CourseForm, { ICourseForm } from "../CourseForm";
 import { useState } from "react";
 import { LoaderCircle } from "lucide-react";
+import { toast } from "sonner";
 
 const NewCoursePage = () => {
   const navigate = useNavigate();
@@ -36,7 +37,13 @@ const NewCoursePage = () => {
       setIsLoading(false);
       navigate("/courses");
     } catch (err) {
-      console.log(err);
+      toast.error((err as { message: string }).message, {
+        style: {
+          backgroundColor: "#d14960",
+          color: "#fff"
+        },
+      });
+      setIsLoading(false);
     }
   };
 

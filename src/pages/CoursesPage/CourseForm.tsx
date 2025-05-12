@@ -67,7 +67,7 @@ const defaultForm: ICourseForm = {
   imgUrl: "",
 };
 
-const  CourseForm = ({
+const CourseForm = ({
   className,
   onSubmit,
   initialData = defaultForm,
@@ -108,7 +108,13 @@ const  CourseForm = ({
             name="courseCode"
             render={({ field }) => (
               <RequiredInput label="Course Code">
-                <Input {...field} className="" />
+                <Input
+                  {...field}
+                  className=""
+                  disabled={
+                    (form.getValues("courseCode") as string).length !== 0
+                  }
+                />
               </RequiredInput>
             )}
           />
@@ -156,7 +162,9 @@ const  CourseForm = ({
                     className="border-none focus-visible:outline-none focus-visible:ring-0"
                   />
                   <div className="flex items-center bg-gray-100 px-2">
-                    <p className="text-sm font-medium text-gray-700">month(s)</p>
+                    <p className="text-sm font-medium text-gray-700">
+                      month(s)
+                    </p>
                   </div>
                 </div>
               </RequiredInput>

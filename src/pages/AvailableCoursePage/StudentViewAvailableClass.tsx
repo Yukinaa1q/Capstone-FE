@@ -18,7 +18,7 @@ const StudentViewAvailableClass = () => {
       >
         <SearchInput />
       </form>
-      <RecomCoursesLayout title="Upcoming Courses" />
+      <RecomCoursesLayout title="Upcoming Classes" />
     </div>
   );
 };

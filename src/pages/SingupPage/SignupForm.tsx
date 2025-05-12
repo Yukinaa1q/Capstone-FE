@@ -10,6 +10,9 @@ import PhoneInp from "@/components/Input/PhoneInput";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import TucourApi from "@/utils/http";
+import { useState } from "react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 interface SignUpData {
   role: string;
@@ -35,6 +38,7 @@ const signupSchema = yup
   .required();
 
 const SignupForm = () => {
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const form = useForm<SignUpData>({
     defaultValues: {
       name: "",
@@ -71,7 +75,8 @@ const SignupForm = () => {
       }
       navigate("/login");
     } catch (error) {
-      console.error(error);
+      const signupError = error as { message: string };
+      setErrorMsg(signupError.message);
     }
   };
 
@@ -81,6 +86,13 @@ const SignupForm = () => {
         <h1 className="font-bold text-3xl">Sign Up Now!</h1>
         <h2 className="font-medium">To not miss our latest features</h2>
       </div>
+      {errorMsg && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Sign Up Error!</AlertTitle>
+          <AlertDescription>{errorMsg}</AlertDescription>
+        </Alert>
+      )}
       <Form {...form}>
         <form
           className="mt-4 space-y-4"
