@@ -80,12 +80,9 @@ const ClassDetail = () => {
               {course?.studyStartDate} - {course?.studyEndDate}
             </div>
             <div>Tutor</div>
-            <Link
-              to={`/tutors/${course?.tutorId}`}
-              className="font-semibold hover:underline"
-            >
+            <p>
               {course?.tutor}
-            </Link>
+            </p>
           </div>
         </div>
         {user.role === "academic" && (

@@ -34,7 +34,6 @@ const StudentEdit = () => {
     },
   });
   const studentId = useParams().id!;
-  const navigate = useNavigate();
   const onSubmit = async (data: InferType<typeof StudentEditSchema>) => {
     try {
       const result = await StudentApi.updateProfile(
@@ -45,8 +44,7 @@ const StudentEdit = () => {
         data.phoneNumber
       );
       if (result) {
-        alert("Update successfully");
-        navigate("/students/" + studentDetail.userId);
+        window.location.replace("/students/" + studentDetail.userId);
       } else {
         alert("Update failed");
       }

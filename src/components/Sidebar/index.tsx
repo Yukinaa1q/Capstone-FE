@@ -42,8 +42,8 @@ const SidebarFactory = ({ children }: SidebarFactoryProps) => {
   const url = useLocation();
   const userRole = useAppSelector((state) => state.auths.role);
   return (
-    <SidebarProvider>
-      <Sidebar>
+    <SidebarProvider className="bg-blue-100">
+      <Sidebar className="bg-blue-100">
         <SidebarHeader className="mx-auto">
           <Link to="/">
             <BrandLogo size="md" />

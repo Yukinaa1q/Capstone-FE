@@ -90,7 +90,6 @@ const CourseDetail = () => {
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
-          // backgroundAttachment: "local, fixed",
         }}
       >
         <div>

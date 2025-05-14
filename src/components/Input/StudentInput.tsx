@@ -8,7 +8,8 @@ import TucourApi from "@/utils/http";
 
 interface StudentInputProps {
   value: string[];
-  onValueChange?: (newValue: string[]) => void;
+  onValueChange: (newValue: string[]) => string[];
+  onRemoveStudent: (studentIdList: string[]) => string[];
 }
 
 interface StudentItem {
@@ -18,11 +19,14 @@ interface StudentItem {
   studentAvatar: string;
 }
 
-const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
+const StudentInput = ({
+  value,
+  onValueChange,
+  onRemoveStudent,
+}: StudentInputProps) => {
   const [isDisplay, setDisplay] = React.useState(false);
   const [searchKey, setSearchKey] = React.useState("");
-  const [idList, setIdList] =
-    React.useState<string[]>(value); // Must not change because it is an interface for outer component
+  const [idList, setIdList] = React.useState<string[]>(value); // Must not change because it is an interface for outer component
   const [studentList, setStudentList] = React.useState<StudentItem[]>([]);
   const inputRef = React.useRef<HTMLInputElement>(null);
   const listRef = React.useRef<HTMLDivElement>(null);
@@ -116,12 +120,12 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
                   let newArr: string[] = [];
                   if (prev.includes(student.studentId)) {
                     newArr = [...prev];
-                    if (onValueChange) onValueChange(newArr);
-                    return [...prev];
+                    const satisfiedArray = onValueChange(newArr);
+                    console.log("Satisfied array: ", satisfiedArray);
+                    return satisfiedArray;
                   }
                   newArr = [...prev, student.studentId];
-                  if (onValueChange) onValueChange(newArr);
-                  return newArr;
+                  return onValueChange(newArr);
                 });
               }}
             >
@@ -147,7 +151,11 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
             key={studentIden}
             className="flex w-fit bg-t_primary-700 text-white rounded-sm px-2 py-1 text-sm items-center"
           >
-            {studentList.find(student => student.studentId === studentIden)?.studentCode}{" "}
+            {studentList.find((student) => student.studentId === studentIden)
+              ?.studentName +
+              "-" +
+              studentList.find((student) => student.studentId === studentIden)
+                ?.studentCode}{" "}
             <X
               size={16}
               strokeWidth={3}
@@ -155,8 +163,7 @@ const StudentInput = ({ value, onValueChange }: StudentInputProps) => {
               onClick={() =>
                 setIdList((old) => {
                   const newArr = old.filter((oldid) => oldid !== studentIden);
-                  if (onValueChange) onValueChange(newArr);
-                  return newArr;
+                  return onRemoveStudent(newArr);
                 })
               }
             />

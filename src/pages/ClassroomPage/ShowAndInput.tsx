@@ -13,7 +13,7 @@ const ShowAndInput = ({
     <Input
       type="number"
       value={value}
-      max={10}
+      max={10.0}
       step={0.5}
       onChange={(e) => {
         console.log("On change triggered", e.target.value);

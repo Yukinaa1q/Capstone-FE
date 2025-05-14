@@ -38,6 +38,8 @@ import StudentEdit from "./pages/StudentsPage/StudentPage/EditStudent/StudentEdi
 import ScorePage from "./pages/ScorePage/ScorePage";
 import getInCartClassesLoader from "./pages/PaymentPage/paymentLoader";
 import getClassroom from "./pages/ClassroomPage/ClassroomDetail";
+import UserTimeTable from "./pages/ProfilePage/UserTimeTable";
+import getUserTimetableLoader from "./pages/ProfilePage/useTimetableLoader";
 
 const router = createBrowserRouter([
   {
@@ -231,7 +233,8 @@ const router = createBrowserRouter([
           },
           {
             path: "time-table",
-            element: <div>Time Table Page</div>,
+            element: <UserTimeTable />,
+            loader: getUserTimetableLoader,
           },
         ],
       },

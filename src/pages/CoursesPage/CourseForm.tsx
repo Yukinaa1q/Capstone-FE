@@ -21,16 +21,19 @@ import { useForm } from "react-hook-form";
 import { Descendant } from "slate";
 import * as yup from "yup";
 import CourseDetailPlaceholder from "./NewCoursePage/CourseDetailPlaceholder";
+import { Worker, Viewer } from "@react-pdf-viewer/core";
+// Import the styles
+import "@react-pdf-viewer/core/lib/styles/index.css";
 
 export interface ICourseForm {
   courseTitle: string;
-  courseCode: string;
+  // courseCode: string;
   courseSubject: string;
   courseLevel: string;
   coursePrice: number;
   duration: number;
   courseDescription: Descendant[];
-  courseOutline: CourseOutline[];
+  courseOutline: File;
   courseImage?: File;
   imgUrl?: string;
 }
@@ -38,7 +41,7 @@ export interface ICourseForm {
 const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
   .object({
     courseTitle: yup.string().required("Course title is required"),
-    courseCode: yup.string().required("Course code is required"),
+    // courseCode: yup.string().required("Course code is required"),
     courseSubject: yup.string().required("Course subject is required"),
     courseLevel: yup.string().required("Course level is required"),
     duration: yup.number().required("Learning duration is required"),
@@ -50,27 +53,15 @@ const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
     courseDescription: yup
       .array<Descendant>()
       .default([{ type: "p", children: [{ text: "" }] }]),
-    courseOutline: yup.array().default([]),
+    courseOutline: yup.mixed<File>().required(),
     imgUrl: yup.string().optional(),
   })
   .required();
 
-const defaultForm: ICourseForm = {
-  courseTitle: "",
-  courseCode: "",
-  courseSubject: "",
-  courseLevel: "",
-  coursePrice: 0,
-  duration: 0,
-  courseDescription: [{ type: "p", children: [{ text: "" }] }],
-  courseOutline: [],
-  imgUrl: "",
-};
-
 const CourseForm = ({
   className,
   onSubmit,
-  initialData = defaultForm,
+  initialData,
   children,
 }: {
   className?: string;
@@ -83,8 +74,19 @@ const CourseForm = ({
     resolver: yupResolver(courseFormSchema),
   });
   const [imagePreview, setImagePreview] = useState<string>(
-    initialData.imgUrl || ""
+    initialData?.imgUrl ?? ""
   );
+
+  const [courseOutlineFile, setCourseOutlineFile] = useState<File | null>(null);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      console.log(file);
+      setCourseOutlineFile(file);
+    }
+  };
+
   return (
     <Form {...form}>
       <form
@@ -104,20 +106,18 @@ const CourseForm = ({
           )}
         />
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <FormField
+          {/* <FormField
             name="courseCode"
             render={({ field }) => (
               <RequiredInput label="Course Code">
                 <Input
                   {...field}
                   className=""
-                  disabled={
-                    (form.getValues("courseCode") as string).length !== 0
-                  }
+                  disabled={!!initialData?.courseCode}
                 />
               </RequiredInput>
             )}
-          />
+          /> */}
           <FormField
             name="courseSubject"
             render={({ field }) => (
@@ -196,7 +196,7 @@ const CourseForm = ({
               render={({ field }) => (
                 <RequiredInput label="Price">
                   <PriceInput
-                    initValue={field.value}
+                    initValue={field.value ?? 0}
                     handleFormChange={(value) => field.onChange(value)}
                   />
                 </RequiredInput>
@@ -225,18 +225,30 @@ const CourseForm = ({
         />
         <FormField
           name="courseOutline"
-          render={({ field }) => (
+          render={() => (
             <RequiredInput label="Course Outline">
-              <CourseOutlineInput
+              {/* <CourseOutlineInput
                 key={field.value}
-                initValue={field.value}
+                initValue={field.value ?? []}
                 onCourseOutlineChange={(courseOutline) =>
                   field.onChange(courseOutline)
                 }
+              /> */}
+              <Input
+                type="file" 
+                accept="application/pdf"
+                onChange={handleFileChange}
               />
             </RequiredInput>
           )}
         />
+        {courseOutlineFile && (
+          <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+            <div className="h-[640px] w-full">
+              <Viewer fileUrl={URL.createObjectURL(courseOutlineFile)}></Viewer>
+            </div>
+          </Worker>
+        )}
         {/* {children} */}
         <div className="flex justify-end gap-4">{children}</div>
       </form>

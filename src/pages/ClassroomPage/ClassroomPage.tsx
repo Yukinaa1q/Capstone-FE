@@ -10,12 +10,13 @@ import { useAppSelector } from "@/hooks/reduxHook";
 
 const ClassroomPage = () => {
   const user = useAppSelector((state) => state.auths);
-  const classLoader= useLoaderData().classroomDetail as {
+  const classLoader = useLoaderData().classroomDetail as {
     courseTitle: string;
     courseCode: string;
     classId: string;
     classCode: string;
     tutor: string;
+    classUrl: string;
     studyRoom: string;
   };
   return (
@@ -37,10 +38,15 @@ const ClassroomPage = () => {
           <span className="material-icons text-white mr-2">
             <DoorOpen />
           </span>
-          <p>{classLoader.studyRoom}</p>
+          <p>
+            {classLoader.classUrl.startsWith("http") ? (
+              <a className="underline" target="_blank" href={classLoader.classUrl}>Online Link</a>
+            ) : (
+              classLoader.classUrl
+            )}
+          </p>
         </div>
-
-        <EditClass />
+        {user.role === "tutor" && <EditClass />}
       </div>
       <ContentLayout>
         <Tabs defaultValue="content" className="">

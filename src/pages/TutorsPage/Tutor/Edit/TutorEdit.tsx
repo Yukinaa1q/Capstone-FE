@@ -37,6 +37,7 @@ const TutorEdit = () => {
     },
   });
   const onSubmit = async (data: InferType<typeof TutorEditSchema>) => {
+    console.log(data);
     try {
       await TutorApi.updateProfile(
         tutorId,
@@ -46,7 +47,8 @@ const TutorEdit = () => {
         data.ssid,
         data.phoneNumber
       );
-      navigate("/tutors/" + tutorId);
+      window.location.replace("/tutors/" + tutorId);
+      // navigate("/tutors/" + tutorId);
     } catch (err) {
       toast.error((err as { message: string }).message, {
         style: {

@@ -22,7 +22,7 @@ const classFormSchema = object({
   courseCode: string().required("Course code is required"),
   maxStudents: number()
     .min(1, "Class size cannot be smaller than 1")
-    
+
     .required("Class size is required"),
   studyWeek: string<StudyWeek | "">().required("Study week is required"),
   studyShift: string<StudyShift | "">().required("Study shift is required"),
@@ -70,8 +70,6 @@ const ClassForm = ({
     values: defaultValues,
     resolver: yupResolver(classFormSchema),
   });
-
-  console.log("Form values", form.getValues());
 
   useEffect(() => {
     const fetchCourseCode = async () => {
@@ -135,7 +133,7 @@ const ClassForm = ({
       }
     };
     fetchCourseCode();
-  }, []);
+  }, [defaultValues]);
 
   return (
     <Form {...form}>
@@ -166,7 +164,6 @@ const ClassForm = ({
                     list={codeList}
                     placeholder="Search"
                     onValueChange={(value) => {
-                      console.log("Choose course", value);
                       form.setValue(
                         "courseTitle",
                         codeList.find((item) => item.value === value)?.display
@@ -242,7 +239,6 @@ const ClassForm = ({
             control={form.control}
             name="studyWeek"
             render={({ field }) => {
-              console.log("Study week field", field);
               return (
                 <RequiredInput label="Study Weekdays">
                   <Selection
@@ -354,8 +350,6 @@ const ClassForm = ({
                     );
                   })}
                   onValueChange={(value) => {
-                    console.log("Choose tutor", value);
-                    console.log(value);
                     field.onChange(value);
                   }}
                   placeholder="Search"
@@ -398,7 +392,37 @@ const ClassForm = ({
               <RequiredInput label="Students" isRequired={false}>
                 <StudentInput
                   value={field.value ?? []}
-                  onValueChange={(newVal) => field.onChange(newVal)}
+                  onValueChange={(newVal) => {
+                    form.clearErrors("studentIdList");
+                    const maxStudents = form.getValues("maxStudents");
+                    console.log("Max students: ", maxStudents);
+                    if (!maxStudents || maxStudents === 0) {
+                      form.setError("studentIdList", {
+                        type: "validate",
+                        message: "Please enter max students first",
+                      });
+                      return [];
+                    }
+                    if ((field.value?.length ?? 0) >= maxStudents) {
+                      form.setError("studentIdList", {
+                        type: "validate",
+                        message:
+                          "You cannot add more than " +
+                          maxStudents.toString() +
+                          (maxStudents === 1 ? " student" : " students"),
+                      });
+                      newVal.pop();
+                      return [...newVal];
+                    } else {
+                      field.onChange(newVal);
+                      return newVal;
+                    }
+                  }}
+                  onRemoveStudent={(studenList) => {
+                    form.clearErrors("studentIdList");
+                    field.onChange(studenList);
+                    return studenList;
+                  }}
                 />
               </RequiredInput>
             )}

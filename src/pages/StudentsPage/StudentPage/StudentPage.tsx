@@ -63,9 +63,9 @@ const StudentPage = () => {
               <UserCog className="relative group-hover:animate-[zoom-in-out_0.5s_ease-in]" />{" "}
               Update
             </Link>
-            <Avatar className="size-24 border">
+            <Avatar className="size-24 border bg-gray-500">
               <AvatarImage src="#" />
-              <AvatarFallback> {shortName(profile.fullName)} </AvatarFallback>
+              <AvatarFallback className="bg-blue-200"> {shortName(profile.fullName)} </AvatarFallback>
             </Avatar>
           </div>
           <div>
