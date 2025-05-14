@@ -9,16 +9,15 @@ const NewClassPage = () => {
   const onSubmit = async (data: IClassForm) => {
     console.log("Sending data: ", data);
     try {
-      // await TucourApi.call("/class/create-class", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //     Authorization: `Bearer ${localStorage.getItem("token")}`,
-      //   },
-      //   body: JSON.stringify(data),
-      // });
-      // navigate("/classes");
-      
+      await TucourApi.call("/class/create-class", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify(data),
+      });
+      navigate("/classes");
     } catch (e) {
       console.log(e);
       toast.error((e as { message: string }).message, {

@@ -258,6 +258,32 @@ const ClassForm = ({
               </RequiredInput>
             )}
           />
+
+          <FormField
+            control={form.control}
+            name="isOnline"
+            render={({ field }) => (
+              <RequiredInput label="Learning Type">
+                <RadioGroup
+                  disabled={defaultValues ? true : false}
+                  value={field.value ? "online" : "offline"}
+                  onValueChange={(val) =>
+                    field.onChange(val === "online" ? true : false)
+                  }
+                  className="flex mt-2"
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="online" id="r1" />
+                    <Label htmlFor="r1">online</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="offline" id="r2" />
+                    <Label htmlFor="r2">offline</Label>
+                  </div>
+                </RadioGroup>
+              </RequiredInput>
+            )}
+          />
         </div>
         <div className="grid lg:grid-cols-3 gap-4">
           <FormField
@@ -332,33 +358,6 @@ const ClassForm = ({
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="isOnline"
-            render={({ field }) => (
-              <RequiredInput label="Learning Type">
-                <RadioGroup
-                  disabled={defaultValues ? true : false}
-                  value={field.value ? "online" : "offline"}
-                  onValueChange={(val) =>
-                    field.onChange(val === "online" ? true : false)
-                  }
-                  className="flex mt-2"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="online" id="r1" />
-                    <Label htmlFor="r1">online</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="offline" id="r2" />
-                    <Label htmlFor="r2">offline</Label>
-                  </div>
-                </RadioGroup>
-              </RequiredInput>
-            )}
-          />
-        </div>
-        <div className="grid lg:grid-cols-3 gap-4">
           <FormField
             control={form.control}
             name="tutorCode"
@@ -439,49 +438,48 @@ const ClassForm = ({
               </RequiredInput>
             )}
           />
-
-          <div className="lg:col-span-2">
-            <FormField
-              control={form.control}
-              name="studentIdList"
-              render={({ field }) => (
-                <RequiredInput label="Students" isRequired={false}>
-                  <StudentInput
-                    value={field.value ?? []}
-                    onValueChange={(newVal) => {
-                      form.clearErrors("studentIdList");
-                      const maxStudents = form.getValues("maxStudents");
-                      if (!maxStudents || maxStudents === 0) {
-                        form.setError("studentIdList", {
-                          type: "validate",
-                          message: "Please enter max students first",
-                        });
-                        return [];
-                      }
-                      if (newVal.length > maxStudents) {
-                        form.setError("studentIdList", {
-                          type: "validate",
-                          message:
-                            `Exceed the class size (${maxStudents})`,
-                        });
-                        newVal.pop();
-                        return [...newVal];
-                      } else {
-                        field.onChange(newVal);
-                        return newVal;
-                      }
-                    }}
-                    onRemoveStudent={(studenList) => {
-                      form.clearErrors("studentIdList");
-                      field.onChange(studenList);
-                      return studenList;
-                    }}
-                  />
-                </RequiredInput>
-              )}
-            />
-          </div>
         </div>
+        <div className="grid gap-4">
+          <FormField
+            control={form.control}
+            name="studentIdList"
+            render={({ field }) => (
+              <RequiredInput label="Students" isRequired={false}>
+                <StudentInput
+                  value={field.value ?? []}
+                  onValueChange={(newVal) => {
+                    form.clearErrors("studentIdList");
+                    const maxStudents = form.getValues("maxStudents");
+                    if (!maxStudents || maxStudents === 0) {
+                      form.setError("studentIdList", {
+                        type: "validate",
+                        message: "Please enter max students first",
+                      });
+                      return [];
+                    }
+                    if (newVal.length > maxStudents) {
+                      form.setError("studentIdList", {
+                        type: "validate",
+                        message: `Exceed the class size (${maxStudents})`,
+                      });
+                      newVal.pop();
+                      return [...newVal];
+                    } else {
+                      field.onChange(newVal);
+                      return newVal;
+                    }
+                  }}
+                  onRemoveStudent={(studenList) => {
+                    form.clearErrors("studentIdList");
+                    field.onChange(studenList);
+                    return studenList;
+                  }}
+                />
+              </RequiredInput>
+            )}
+          />
+        </div>
+
         <div className="flex justify-end gap-4">{children}</div>
       </form>
     </Form>
