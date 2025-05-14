@@ -1,6 +1,3 @@
-import CourseOutlineInput, {
-  CourseOutline,
-} from "@/components/Input/CourseOutlineInput";
 import PriceInput from "@/components/Input/PriceInput";
 import RequiredInput from "@/components/Input/RequiredInput";
 import SubjectSelect from "@/components/Input/SubjectSelect";
@@ -16,12 +13,12 @@ import {
 } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Descendant } from "slate";
 import * as yup from "yup";
 import CourseDetailPlaceholder from "./NewCoursePage/CourseDetailPlaceholder";
-import { Worker, Viewer } from "@react-pdf-viewer/core";
 // Import the styles
 import "@react-pdf-viewer/core/lib/styles/index.css";
 

@@ -8,10 +8,10 @@ import ContentLayout from "@/layouts/ContentLayout";
 import { cn } from "@/lib/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
-import { Link, useLoaderData, useNavigate, useParams } from "react-router";
+import { Link, useLoaderData, useParams } from "react-router";
+import { toast } from "sonner";
 import { date, InferType, object, string } from "yup";
 import { TutorInitContent } from "../TutorLoader";
-import { toast } from "sonner";
 
 const TutorEditSchema = object({
   fullName: string().required(),
@@ -23,7 +23,6 @@ const TutorEditSchema = object({
 });
 
 const TutorEdit = () => {
-  const navigate = useNavigate();
   const query: TutorInitContent = useLoaderData();
   const tutorId = useParams().id!;
   const form = useForm({

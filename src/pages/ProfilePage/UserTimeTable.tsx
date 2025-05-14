@@ -2,7 +2,6 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { ITimeTable } from "@/interfaces/ITimetable";
 import ContentLayout from "@/layouts/ContentLayout";
 import { verboseStudyWeek } from "@/utils/utils";
-import React from "react";
 import { useLoaderData } from "react-router";
 
 const UserTimeTable = () => {
