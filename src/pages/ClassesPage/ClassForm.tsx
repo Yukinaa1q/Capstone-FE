@@ -12,10 +12,16 @@ import { cn } from "@/lib/utils";
 import TucourApi from "@/utils/http";
 import { shortName } from "@/utils/utils";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Check } from "lucide-react";
+import { Check, CircleAlert } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { array, boolean, InferType, number, object, string } from "yup";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 const classFormSchema = object({
   courseTitle: string(),
@@ -28,7 +34,13 @@ const classFormSchema = object({
   studyShift: string<StudyShift | "">().required("Study shift is required"),
   isOnline: boolean().default(false),
   tutorCode: string().required("Tutor is required"),
-  studentIdList: array().of(string().defined()).required().defined(),
+  studentIdList: array()
+    .of(string().defined())
+    .required()
+    .defined("At least one student is required")
+    .when(["maxStudents"], (maxStudents, schema) => {
+      return schema.max(maxStudents[0], "Students exceed class size");
+    }),
 }).required();
 
 export type IClassForm = InferType<typeof classFormSchema>;
@@ -64,16 +76,53 @@ const ClassForm = ({
   >(undefined);
   const [tutorList, setTutorList] = useState<ListItem[]>([]);
 
-  const [studyWeek, setStudyWeek] = useState<StudyWeek | "">(""); // A workaround to reset the list of study shifts
+  const [studyWeek, setStudyWeek] = useState<StudyWeek | undefined>(undefined); // A workaround to reset the list of study shifts
   // Because the list can only be set when their is a rerender in ClassForm, however, useForm won't trigger a rerender
+  const [studyShift, setStudyShift] = useState<StudyShift | undefined>(
+    undefined
+  );
+
   const form = useForm({
     values: defaultValues,
     resolver: yupResolver(classFormSchema),
   });
 
+  const fetchTutorList = async (
+    studyWeek: StudyWeek,
+    studyShift: StudyShift
+  ) => {
+    // API to get all available tutor.
+    const tutorListApi = (await TucourApi.call("/tutor/all-tutor", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })) as {
+      tutorCode: string;
+      name: string;
+      avatarUrl: string;
+      qualifiedSubject: [{ subject: string; level: string }];
+    }[];
+    setTutorList(
+      tutorListApi.map((item) => {
+        return {
+          value: item.tutorCode,
+          label: item.name,
+          display: {
+            tutorName: item.name,
+            tutorImage: item.avatarUrl,
+            qualifiedSubject: item.qualifiedSubject,
+          },
+        };
+      })
+    );
+  };
+
   useEffect(() => {
     const fetchCourseCode = async () => {
       try {
+        // API to get all available course.
         const res = (await TucourApi.call("/course/course-code-title", {
           method: "GET",
           headers: {
@@ -86,31 +135,7 @@ const ClassForm = ({
           courseLevel: string;
           courseSubject: string;
         }[];
-        const tutorListApi = (await TucourApi.call("/tutor/all-tutor", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        })) as {
-          tutorCode: string;
-          name: string;
-          avatarUrl: string;
-          qualifiedSubject: [{ subject: string; level: string }];
-        }[];
-        setTutorList(
-          tutorListApi.map((item) => {
-            return {
-              value: item.tutorCode,
-              label: item.name,
-              display: {
-                tutorName: item.name,
-                tutorImage: item.avatarUrl,
-                qualifiedSubject: item.qualifiedSubject,
-              },
-            };
-          })
-        );
+
         setCodeList(
           res.map((item) => {
             return {
@@ -282,7 +307,7 @@ const ClassForm = ({
                   disabled={defaultValues ? true : false}
                   placeholder="Time Shift"
                   selectList={
-                    form.getValues("studyWeek")
+                    studyWeek
                       ? ["7", "8"].includes(
                           form.getValues("studyWeek").toString()
                         )
@@ -295,7 +320,13 @@ const ClassForm = ({
                         : ["17h45 - 19h15", "19h30 - 21h00"]
                       : []
                   }
-                  onSelect={field.onChange}
+                  onSelect={(value) => {
+                    setStudyShift(value as StudyShift);
+                    field.onChange(value);
+                    // The logic will be, whenever academic affair choose study shift, trigger api to
+                    // fetch tutor list, because the all the requirements are met.
+                    fetchTutorList(studyWeek as StudyWeek, value as StudyShift);
+                  }}
                 />
               </RequiredInput>
             )}
@@ -332,101 +363,124 @@ const ClassForm = ({
             control={form.control}
             name="tutorCode"
             render={({ field }) => (
-              <RequiredInput label="Tutor">
-                <SearchSelect
-                  disabled={defaultValues ? true : false}
-                  notFoundText="No tutor found or qualified for this course"
-                  className="px-2"
-                  {...field}
-                  list={tutorList.filter((tutor) => {
-                    return tutor.display.qualifiedSubject.some(
-                      (subject: { subject: string; level: string }) => {
-                        return (
-                          subject.subject === chosenCourse?.courseSubject &&
-                          parseInt(subject.level) >=
-                            parseInt(chosenCourse?.courseLevel ?? "0")
-                        );
-                      }
-                    );
-                  })}
-                  onValueChange={(value) => {
-                    field.onChange(value);
-                  }}
-                  placeholder="Search"
-                  filterFn={(value, search) => {
-                    const result = tutorList.find(
-                      (item) => item.value === value
-                    );
-                    if (!result) return 0;
-                    if (
-                      result.display.tutorName
-                        .toLowerCase()
-                        .includes(search.toLowerCase())
-                    )
-                      return 1;
-                    return 0;
-                  }}
-                  renderChild={(item, value) => (
-                    <div className="flex items-center">
-                      <Avatar>
-                        <AvatarImage src={item.display.tutorImage} />
-                        <AvatarFallback>
-                          {shortName(item.display.tutorName)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <p className="ml-2">{item.display.tutorName}</p>
-                      {value === item.value && (
-                        <Check size={16} strokeWidth={2} className="ml-auto" />
-                      )}
-                    </div>
-                  )}
-                />
+              <RequiredInput label="Tutor" className="relative">
+                <div>
+                  <SearchSelect
+                    disabled={
+                      defaultValues !== undefined || !studyShift || !studyWeek
+                    }
+                    notFoundText="No tutor found or qualified for this course"
+                    className="px-2"
+                    {...field}
+                    list={tutorList.filter((tutor) => {
+                      return tutor.display.qualifiedSubject.some(
+                        (subject: { subject: string; level: string }) => {
+                          return (
+                            subject.subject === chosenCourse?.courseSubject &&
+                            parseInt(subject.level) >=
+                              parseInt(chosenCourse?.courseLevel ?? "0")
+                          );
+                        }
+                      );
+                    })}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                    }}
+                    placeholder="Search"
+                    filterFn={(value, search) => {
+                      const result = tutorList.find(
+                        (item) => item.value === value
+                      );
+                      if (!result) return 0;
+                      if (
+                        result.display.tutorName
+                          .toLowerCase()
+                          .includes(search.toLowerCase())
+                      )
+                        return 1;
+                      return 0;
+                    }}
+                    renderChild={(item, value) => (
+                      <div className="flex items-center">
+                        <Avatar>
+                          <AvatarImage src={item.display.tutorImage} />
+                          <AvatarFallback>
+                            {shortName(item.display.tutorName)}
+                          </AvatarFallback>
+                        </Avatar>
+                        <p className="ml-2">{item.display.tutorName}</p>
+                        {value === item.value && (
+                          <Check
+                            size={16}
+                            strokeWidth={2}
+                            className="ml-auto"
+                          />
+                        )}
+                      </div>
+                    )}
+                  />
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger
+                        asChild
+                        className="absolute top-1 right-0"
+                      >
+                        <CircleAlert size={14} className="stroke-gray-500" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>
+                          Select study week and study shift before choosing
+                          tutor
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                </div>
               </RequiredInput>
             )}
           />
 
-          <FormField
-            control={form.control}
-            name="studentIdList"
-            render={({ field }) => (
-              <RequiredInput label="Students" isRequired={false}>
-                <StudentInput
-                  value={field.value ?? []}
-                  onValueChange={(newVal) => {
-                    form.clearErrors("studentIdList");
-                    const maxStudents = form.getValues("maxStudents");
-                    console.log("Max students: ", maxStudents);
-                    if (!maxStudents || maxStudents === 0) {
-                      form.setError("studentIdList", {
-                        type: "validate",
-                        message: "Please enter max students first",
-                      });
-                      return [];
-                    }
-                    if ((field.value?.length ?? 0) >= maxStudents) {
-                      form.setError("studentIdList", {
-                        type: "validate",
-                        message:
-                          "You cannot add more than " +
-                          maxStudents.toString() +
-                          (maxStudents === 1 ? " student" : " students"),
-                      });
-                      newVal.pop();
-                      return [...newVal];
-                    } else {
-                      field.onChange(newVal);
-                      return newVal;
-                    }
-                  }}
-                  onRemoveStudent={(studenList) => {
-                    form.clearErrors("studentIdList");
-                    field.onChange(studenList);
-                    return studenList;
-                  }}
-                />
-              </RequiredInput>
-            )}
-          />
+          <div className="lg:col-span-2">
+            <FormField
+              control={form.control}
+              name="studentIdList"
+              render={({ field }) => (
+                <RequiredInput label="Students" isRequired={false}>
+                  <StudentInput
+                    value={field.value ?? []}
+                    onValueChange={(newVal) => {
+                      form.clearErrors("studentIdList");
+                      const maxStudents = form.getValues("maxStudents");
+                      if (!maxStudents || maxStudents === 0) {
+                        form.setError("studentIdList", {
+                          type: "validate",
+                          message: "Please enter max students first",
+                        });
+                        return [];
+                      }
+                      if (newVal.length > maxStudents) {
+                        form.setError("studentIdList", {
+                          type: "validate",
+                          message:
+                            `Exceed the class size (${maxStudents})`,
+                        });
+                        newVal.pop();
+                        return [...newVal];
+                      } else {
+                        field.onChange(newVal);
+                        return newVal;
+                      }
+                    }}
+                    onRemoveStudent={(studenList) => {
+                      form.clearErrors("studentIdList");
+                      field.onChange(studenList);
+                      return studenList;
+                    }}
+                  />
+                </RequiredInput>
+              )}
+            />
+          </div>
         </div>
         <div className="flex justify-end gap-4">{children}</div>
       </form>

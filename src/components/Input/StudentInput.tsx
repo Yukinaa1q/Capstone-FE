@@ -125,7 +125,8 @@ const StudentInput = ({
                     return satisfiedArray;
                   }
                   newArr = [...prev, student.studentId];
-                  return onValueChange(newArr);
+                  const satisfiedArr = onValueChange(newArr);
+                  return satisfiedArr;
                 });
               }}
             >
@@ -149,13 +150,24 @@ const StudentInput = ({
         {idList.map((studentIden) => (
           <span
             key={studentIden}
-            className="flex w-fit bg-t_primary-700 text-white rounded-sm px-2 py-1 text-sm items-center"
+            className="flex w-fit bg-t_secondary-300 text-white rounded-sm px-2 py-1 text-sm items-center"
           >
-            {studentList.find((student) => student.studentId === studentIden)
-              ?.studentName +
-              "-" +
-              studentList.find((student) => student.studentId === studentIden)
-                ?.studentCode}{" "}
+            <div>
+              <p className="font-medium">
+                {
+                  studentList.find(
+                    (student) => student.studentId === studentIden
+                  )?.studentName
+                }
+              </p>
+              <p className="text-xs">
+                {
+                  studentList.find(
+                    (student) => student.studentId === studentIden
+                  )?.studentCode
+                }
+              </p>
+            </div>
             <X
               size={16}
               strokeWidth={3}

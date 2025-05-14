@@ -57,7 +57,7 @@ const EditCoursePage = () => {
     console.log("Edit Data: ", data);
     try {
       const formdata = new FormData();
-      formdata.append("courseCode", data.courseCode);
+      // formdata.append("courseCode", data.courseCode);
       formdata.append("courseTitle", data.courseTitle);
       formdata.append("courseSubject", data.courseSubject);
       formdata.append("courseLevel", data.courseLevel);
@@ -73,7 +73,7 @@ const EditCoursePage = () => {
 
       const sendData = JSON.stringify({
         courseTitle: data.courseTitle,
-        courseCode: data.courseCode,
+        // courseCode: data.courseCode,
         courseSubject: data.courseSubject,
         courseLevel: data.courseLevel,
         coursePrice: data.coursePrice,

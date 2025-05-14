@@ -39,6 +39,7 @@ interface IClassTable {
   tutorId: string;
   tutor: string;
 }
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const columnHelper = createColumnHelper<IClassTable>();
 
@@ -170,7 +171,16 @@ const AcademicView = () => {
         }}
         className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-4"
       />
-      <DataTable columns={defaultColumns} table={table} />
+      <Tabs defaultValue="current" className="">
+        <TabsList className="grid w-full grid-cols-2">
+          <TabsTrigger value="current">Current Classes</TabsTrigger>
+          <TabsTrigger value="request">Request Classes</TabsTrigger>
+        </TabsList>
+        <TabsContent value="current">
+          <DataTable columns={defaultColumns} table={table} />
+        </TabsContent>
+        <TabsContent value="request"></TabsContent>
+      </Tabs>
     </section>
   );
 };

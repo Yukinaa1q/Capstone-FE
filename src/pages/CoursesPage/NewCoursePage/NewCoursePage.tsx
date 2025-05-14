@@ -14,7 +14,7 @@ const NewCoursePage = () => {
     setIsLoading(true);
     try {
       const formdata = new FormData();
-      formdata.append("courseCode", data.courseCode);
+      // formdata.append("courseCode", data.courseCode);
       formdata.append("courseTitle", data.courseTitle);
       formdata.append("courseSubject", data.courseSubject);
       formdata.append("courseLevel", data.courseLevel);
@@ -63,7 +63,7 @@ const NewCoursePage = () => {
         style={{ height: "calc(100vh - 3.35rem)" }}
       >
         <h1 className="text-center font-bold text-2xl">ADD NEW COURSE</h1>
-        <CourseForm onSubmit={onSubmit}>
+        <CourseForm initialData={undefined} onSubmit={onSubmit}>
           <Button
             className="bg-t_primary-400 hover:bg-t_primary-500"
             type="submit"
