@@ -64,4 +64,8 @@ export default class StaffApi {
       console.log(err);
     }
   }
+
+  public static async openClass() {
+    alert("open class");
+  }
 }

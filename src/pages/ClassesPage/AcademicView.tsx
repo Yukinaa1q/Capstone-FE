@@ -40,6 +40,7 @@ interface IClassTable {
   tutor: string;
 }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import RequestClasses from "./RequestClasses";
 
 const columnHelper = createColumnHelper<IClassTable>();
 
@@ -164,22 +165,24 @@ const AcademicView = () => {
   });
   return (
     <section className="px-8 py-4">
-      <AddNewClass />
-      <ClearableSearch
-        handleChange={(e) => {
-          table.setGlobalFilter(e);
-        }}
-        className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-4"
-      />
       <Tabs defaultValue="current" className="">
         <TabsList className="grid w-full grid-cols-2">
           <TabsTrigger value="current">Current Classes</TabsTrigger>
           <TabsTrigger value="request">Request Classes</TabsTrigger>
         </TabsList>
         <TabsContent value="current">
+          <AddNewClass />
+          <ClearableSearch
+            handleChange={(e) => {
+              table.setGlobalFilter(e);
+            }}
+            className="mt-4 w-full md:w-3/4 lg:w-1/2 mx-auto mb-4"
+          />
           <DataTable columns={defaultColumns} table={table} />
         </TabsContent>
-        <TabsContent value="request"></TabsContent>
+        <TabsContent value="request">
+          <RequestClasses />
+        </TabsContent>
       </Tabs>
     </section>
   );
