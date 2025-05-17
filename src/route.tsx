@@ -40,6 +40,7 @@ import getInCartClassesLoader from "./pages/PaymentPage/paymentLoader";
 import getClassroom from "./pages/ClassroomPage/ClassroomDetail";
 import UserTimeTable from "./pages/ProfilePage/UserTimeTable";
 import getUserTimetableLoader from "./pages/ProfilePage/useTimetableLoader";
+import FinStatPage from "./pages/FinancePage/FinStatPage";
 
 const router = createBrowserRouter([
   {
@@ -250,6 +251,10 @@ const router = createBrowserRouter([
       {
         path: "scores",
         element: <ScorePage />,
+      },
+      {
+        path: "/financial-statistics",
+        element: <FinStatPage />,
       },
     ],
   },

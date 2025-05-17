@@ -7,6 +7,7 @@ import {
   BackpackIcon,
   BookMarkedIcon,
   Calendar,
+  ChartNoAxesCombined,
   DoorOpen,
   Gauge,
   GraduationCapIcon,
@@ -43,6 +44,11 @@ const itemList: IMenuItem[] = [
     icon: <Gauge />,
     prefixUrl: "/scores",
   },
+  {
+    title: "Financial Statistics",
+    icon: <ChartNoAxesCombined/>,
+    prefixUrl: "/financial-statistics",
+  }
 ];
 
 const AcademicSidebarGroup = ({ label }: { label?: string }) => {

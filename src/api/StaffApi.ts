@@ -68,4 +68,8 @@ export default class StaffApi {
   public static async openClass() {
     alert("open class");
   }
+
+  public static async rejectClass(requestId: string, reason: string) {
+    alert("reject class");
+  }
 }

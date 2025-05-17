@@ -11,7 +11,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { CalendarRange, Check, Clock, Globe, X } from "lucide-react";
-import React from "react";
+import React, { ReactNode } from "react";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import StaffApi from "@/api/StaffApi";
+import { Textarea } from "@/components/ui/textarea";
 
 interface IClassRequest {
   tutor: string;
@@ -103,9 +104,11 @@ const defaultColumns = [
               <Check className="stroke-green-500" />
             </Button>
           </RequestConfirmationPopover>
-          <Button size="icon" variant={"ghost"} className="hover:bg-red-200">
-            <X className="stroke-red-500" />
-          </Button>
+          <RequestRejectionPopover>
+            <Button size="icon" variant={"ghost"} className="hover:bg-red-200">
+              <X className="stroke-red-500" />
+            </Button>
+          </RequestRejectionPopover>
         </div>
       );
     },
@@ -153,7 +156,7 @@ const RequestConfirmationPopover = ({
 
   const handleOpenClass = async () => {
     StaffApi.openClass();
-  }
+  };
 
   return (
     <Dialog>
@@ -212,7 +215,49 @@ const RequestConfirmationPopover = ({
           </div>
         </div>
         <DialogFooter>
-          <Button onClick={handleOpenClass} type="submit" className="bg-t_primary-500 hover:bg-t_primary-600/70">Open Class</Button>
+          <Button
+            onClick={handleOpenClass}
+            type="submit"
+            className="bg-t_primary-500 hover:bg-t_primary-600/70"
+          >
+            Open Class
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const RequestRejectionPopover = ({ children }: { children: ReactNode }) => {
+  const [reason, setReason] = React.useState<string>("");
+  const handleRejectRequest = async () => {
+    await StaffApi.rejectClass("12", "jkj jkj")
+  };
+  return (
+    <Dialog>
+      <DialogTrigger asChild>{children}</DialogTrigger>
+      <DialogContent className="max-w-full md:max-w-1/2 lg:max-w-1/3">
+        <DialogHeader>
+          <DialogTitle>Request Open Class Rejection</DialogTitle>
+          <DialogDescription>
+            You are about to reject this request.
+          </DialogDescription>
+        </DialogHeader>
+        <Textarea
+          placeholder="Please provide a reason for rejection"
+          value={reason}
+          onChange={(e) => {
+            setReason(e.target.value);
+          }}
+        />
+        <DialogFooter>
+          <Button
+            onClick={handleRejectRequest}
+            type="submit"
+            variant={"destructive"}
+          >
+            Reject
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

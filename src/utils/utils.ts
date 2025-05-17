@@ -107,7 +107,12 @@ export function formatDate(date: string | undefined) {
 }
 
 export function capitalizeFirstLetter(val: string) {
-  return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+  const multiwordStr = val.split(" ");
+  for (let idx = 0; idx < multiwordStr.length; ++idx) {
+    multiwordStr[idx] = multiwordStr[idx].charAt(0).toUpperCase() + multiwordStr[idx].slice(1);
+  }
+  // return String(val).charAt(0).toUpperCase() + String(val).slice(1);
+  return multiwordStr.join(" ");
 }
 
 export function calculateAverage(grade: IGrade) {
