@@ -21,11 +21,9 @@ import {
 import { StudyShift, StudyWeek } from "@/interfaces/common";
 import { ICourseCard } from "@/interfaces/ICourse";
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
-import { verboseStudyWeek } from "@/utils/utils";
 import { AlertCircle, PlusIcon, SendHorizonal, Trash2 } from "lucide-react";
 import React, { useState } from "react";
 import { useNavigate } from "react-router";
-import { toast } from "sonner";
 import Selection from "../Input/Selection";
 import { Button } from "../ui/button";
 

@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/chart";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
-import subjectList from "@/interfaces/Subject";
 import ContentLayout from "@/layouts/ContentLayout";
 import SectionLayout from "@/layouts/SectionLayout";
 import { capitalizeFirstLetter } from "@/utils/utils";

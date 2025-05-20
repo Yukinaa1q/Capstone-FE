@@ -37,7 +37,7 @@ const EditCoursePage = () => {
           coursePrice: courseDetail.coursePrice,
           duration: courseDetail.duration,
           courseDescription: JSON.parse(courseDetail.courseDescription),
-          courseOutline: courseDetail.courseOutline,
+          courseOutline: courseDetail.courseOutline as File,
           courseImage: new File([], "courseImage"),
           imgUrl: courseDetail.courseImage,
         };
@@ -50,7 +50,7 @@ const EditCoursePage = () => {
     }
 
     fetchCourse();
-  }, []);
+  }, [params.id]);
 
   const onSubmit = async (data: ICourseForm) => {
     setIsSubmitting(true);
