@@ -27,7 +27,7 @@ const Selection = ({
   return (
     <Select value={value} onValueChange={onSelect} disabled={disabled}>
       <SelectTrigger className={className}>
-        <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder} defaultValue={value} />
       </SelectTrigger>
       <SelectContent>
         {selectList.map((item, index) => (

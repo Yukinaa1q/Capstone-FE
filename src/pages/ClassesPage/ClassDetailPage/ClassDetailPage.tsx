@@ -36,7 +36,6 @@ const ClassDetail = () => {
         )) as Omit<IClassDetail, "courseDescription"> & {
           courseDescription: string;
         };
-        console.log(res);
         setCourse({
           ...res,
           courseDescription: JSON.parse(res.courseDescription),

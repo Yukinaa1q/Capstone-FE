@@ -30,8 +30,8 @@ const classFormSchema = object({
     .min(1, "Class size cannot be smaller than 1")
 
     .required("Class size is required"),
-  studyWeek: string<StudyWeek | "">().required("Study week is required"),
-  studyShift: string<StudyShift | "">().required("Study shift is required"),
+  studyWeek: string<StudyWeek>().required("Study week is required"),
+  studyShift: string<StudyShift>().required("Study shift is required"),
   isOnline: boolean().default(false),
   tutorCode: string().required("Tutor is required"),
   studentIdList: array()
@@ -76,14 +76,26 @@ const ClassForm = ({
   >(undefined);
   const [tutorList, setTutorList] = useState<ListItem[]>([]);
 
-  const [studyWeek, setStudyWeek] = useState<StudyWeek | undefined>(undefined); // A workaround to reset the list of study shifts
+  const [studyWeek, setStudyWeek] = useState<StudyWeek | undefined>(
+    defaultValues?.studyWeek
+  ); // A workaround to reset the list of study shifts
   // Because the list can only be set when their is a rerender in ClassForm, however, useForm won't trigger a rerender
   const [studyShift, setStudyShift] = useState<StudyShift | undefined>(
-    undefined
+    defaultValues?.studyShift
   );
 
   const form = useForm({
-    values: defaultValues,
+    // values: defaultValues,
+    defaultValues: {
+      courseTitle: defaultValues?.courseTitle,
+      courseCode: defaultValues?.courseCode,
+      maxStudents: defaultValues?.maxStudents,
+      studyWeek: defaultValues?.studyWeek,
+      studyShift: defaultValues?.studyShift,
+      isOnline: defaultValues?.isOnline,
+      tutorCode: defaultValues?.tutorCode,
+      studentIdList: defaultValues?.studentIdList ?? [],
+    },
     resolver: yupResolver(classFormSchema),
   });
 
@@ -127,6 +139,7 @@ const ClassForm = ({
   };
 
   useEffect(() => {
+    // Get the list of all available course code and title
     const fetchCourseCode = async () => {
       try {
         // API to get all available course.
@@ -303,7 +316,7 @@ const ClassForm = ({
                     disabled={defaultValues ? true : false}
                     placeholder="Study Weekdays"
                     selectList={["2-4", "4-6", "3-5", "7", "8"]}
-                    value={field.value}
+                    {...field}
                     onSelect={(val) => {
                       field.onChange(val);
                       setStudyWeek(val as StudyWeek); // A workaround to reset the list of study shifts
@@ -389,6 +402,7 @@ const ClassForm = ({
                         }
                       );
                     })}
+                    value={defaultValues?.tutorCode}
                     onValueChange={(value) => {
                       field.onChange(value);
                     }}

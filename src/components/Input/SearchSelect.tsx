@@ -1,6 +1,5 @@
 "use client";
 
-import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -15,8 +14,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 import { ChevronDown } from "lucide-react";
-import { JSX, useId, useState } from "react";
+import { JSX, useState } from "react";
 
 export interface ListItem {
   value: string;
@@ -37,14 +37,18 @@ export type SearchSelectProps = {
 };
 
 export default function SearchSelect(props: SearchSelectProps) {
-  const id = useId();
   const [open, setOpen] = useState<boolean>(false);
   const [value, setValue] = useState<string>(props?.value ?? "");
+
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild disabled={props.disabled ?? false}>
+      <PopoverTrigger
+        asChild
+        disabled={props.disabled ?? false}
+        defaultValue={value}
+      >
         <Button
-          id={id}
+          // id={id}
           variant="outline"
           role="combobox"
           aria-expanded={open}
@@ -55,7 +59,7 @@ export default function SearchSelect(props: SearchSelectProps) {
         >
           <span className={cn("truncate", !value && "text-muted-foreground")}>
             {value
-              ? props.list.find((item) => item.value === value)?.label
+              ? props.list.find((item) => item.value === value)?.label ?? value
               : props.placeholder}
           </span>
           <ChevronDown
@@ -73,7 +77,9 @@ export default function SearchSelect(props: SearchSelectProps) {
         <Command filter={props.filterFn}>
           <CommandInput placeholder="Search keyword ..." />
           <CommandList>
-            <CommandEmpty className="px-2 text-sm py-2 text-gray-400">{props.notFoundText}</CommandEmpty>
+            <CommandEmpty className="px-2 text-sm py-2 text-gray-400">
+              {props.notFoundText}
+            </CommandEmpty>
             <CommandGroup>
               {props.list.map((item) => (
                 <CommandItem

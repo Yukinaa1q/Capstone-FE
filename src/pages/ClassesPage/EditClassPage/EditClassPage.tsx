@@ -58,9 +58,7 @@ const EditClassPage = () => {
 
   const [classId, setClassId] = useState<string>("");
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
   useEffect(() => {
-    setIsLoading(true);
     const getClassDetail = async () => {
       try {
         const res = (await TucourApi.call(
@@ -85,14 +83,13 @@ const EditClassPage = () => {
           studyWeek: res.classSession,
           tutorCode: res.tutorId,
         });
-        setIsLoading(false);
       } catch (err) {
         console.log(err);
       }
     };
 
     getClassDetail();
-  }, []);
+  }, [params.id]);
 
   const onSubmit = async (data: IClassForm) => {
     try {
@@ -120,7 +117,7 @@ const EditClassPage = () => {
   return (
     <section className="px-8 py-4">
       <h1 className="text-center font-bold text-2xl">EDIT CLASS</h1>
-      {isLoading ? (
+      {classDetail === undefined ? (
         <div className="h-full mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2 space-y-4">
           <Skeleton className="w-full h-8" />
           <Skeleton className="w-full h-8" />
