@@ -1,12 +1,7 @@
-import ContentLayout from "@/layouts/ContentLayout";
 import StudentView from "../ClassesPage/StudentView";
 
 const StudentViewAvailableClass = () => {
-  return (
-    <ContentLayout>
-      <StudentView />
-    </ContentLayout>
-  );
+  return <StudentView />;
 };
 
 export default StudentViewAvailableClass;

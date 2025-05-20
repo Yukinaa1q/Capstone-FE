@@ -1,7 +1,7 @@
-import ClientSidebarGroup from "./SidebarGroup/ClientSidebarGroup";
+import StudentSidebarGroup from "./SidebarGroup/StudentSidebarGroup";
 
 const StudentSidebar = () => {
-  return <ClientSidebarGroup />;
+  return <StudentSidebarGroup />;
 };
 
 export default StudentSidebar;

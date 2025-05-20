@@ -6,12 +6,12 @@ import { useAppSelector } from "@/hooks/reduxHook";
 import { IMenuItem } from "./Interface";
 
 const subMenuList: Omit<IMenuItem, "icon">[] = [
-  { title: "Available Courses", prefixUrl: "/" },
+  { title: "Available Classes", prefixUrl: "/" },
   { title: "Registered Classes", prefixUrl: "/registered-classes" },
   { title: "My Classes", prefixUrl: "/my-classes" },
 ];
 
-const ClientSidebarGroup = ({ label }: { label?: string }) => {
+const StudentSidebarGroup = ({ label }: { label?: string }) => {
   const role = useAppSelector((state) => state.auths.role);
   return (
     <SidebarGroup>
@@ -20,7 +20,7 @@ const ClientSidebarGroup = ({ label }: { label?: string }) => {
         <SubSidebarMenuItem
           prefixUrl="/"
           icon={<LibraryBig />}
-          title="Course"
+          title="Class"
           subMenuList={subMenuList}
         />
         <TC_SidebarMenuItem
@@ -45,4 +45,4 @@ const ClientSidebarGroup = ({ label }: { label?: string }) => {
   );
 };
 
-export default ClientSidebarGroup;
+export default StudentSidebarGroup;
