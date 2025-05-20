@@ -1,25 +1,11 @@
-import SearchInput from "@/components/Input/SearchInput";
-import { useNavigate } from "react-router";
-import RecomCoursesLayout from "./RecomCoursesLayout";
+import ContentLayout from "@/layouts/ContentLayout";
+import StudentView from "../ClassesPage/StudentView";
 
 const StudentViewAvailableClass = () => {
-  const navigate = useNavigate();
   return (
-    <div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          const searchValue = (e.currentTarget[0] as HTMLInputElement).value;
-          console.log(searchValue);
-          navigate(
-            "/classes?" + new URLSearchParams({ q: searchValue }).toString()
-          ); // make searchValue compatible with base64Url
-        }}
-      >
-        <SearchInput />
-      </form>
-      <RecomCoursesLayout title="Upcoming Classes" />
-    </div>
+    <ContentLayout>
+      <StudentView />
+    </ContentLayout>
   );
 };
 

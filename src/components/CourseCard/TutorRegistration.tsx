@@ -1,4 +1,5 @@
 import TutorApi from "@/api/TutorApi";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import {
   Dialog,
   DialogContent,
@@ -20,12 +21,13 @@ import {
 import { StudyShift, StudyWeek } from "@/interfaces/common";
 import { ICourseCard } from "@/interfaces/ICourse";
 import { TutorRegistrationSchedule } from "@/interfaces/TutorRegistrationSchedule";
+import { verboseStudyWeek } from "@/utils/utils";
 import { AlertCircle, PlusIcon, SendHorizonal, Trash2 } from "lucide-react";
 import React, { useState } from "react";
+import { useNavigate } from "react-router";
+import { toast } from "sonner";
 import Selection from "../Input/Selection";
 import { Button } from "../ui/button";
-import { useNavigate } from "react-router";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const TutorRegistration = ({
   courseContent,
@@ -65,7 +67,27 @@ const TutorRegistration = ({
       return;
     }
     try {
-      await TutorApi.sendTeachingRequest(courseContent.courseId, scheduleList);
+      const failRequests = (await TutorApi.sendTeachingRequest(
+        courseContent.courseId,
+        scheduleList
+      )) as {
+        studyWeek: StudyWeek;
+        studyShift: StudyShift;
+        noRoom: boolean;
+        overlapTime: boolean;
+      }[];
+      // if (failRequests.length > 0) {
+      //   for (const failRequest of failRequests) {
+      //     toast.info(
+      //       `Cannot register class on ${verboseStudyWeek(
+      //         failRequest.studyWeek,
+      //         true
+      //       )} ${failRequest.studyShift} \n Reason: ${
+      //         failRequest.noRoom ? "No Available Room" : "Overlapping Time"
+      //       }`
+      //     );
+      //   }
+      // }
       setScheduleList([]);
       setStudyWeek(undefined);
       setStudyShift(undefined);
@@ -161,16 +183,19 @@ const TutorRegistration = ({
                       className="gap-0 group"
                       onClick={() => {
                         if (studyWeek && studyShift) {
-                          setScheduleList((prev) => [
-                            ...prev.filter(
-                              (schedule) =>
-                                !(
-                                  schedule.studyWeek == studyWeek &&
-                                  schedule.studyShift == studyShift
-                                )
-                            ),
-                            { studyShift, studyWeek, isOnline },
-                          ]);
+                          // Only add time if the scheduleList is less than 14
+                          if (scheduleList.length < 14) {
+                            setScheduleList((prev) => [
+                              ...prev.filter(
+                                (schedule) =>
+                                  !(
+                                    schedule.studyWeek == studyWeek &&
+                                    schedule.studyShift == studyShift
+                                  )
+                              ),
+                              { studyShift, studyWeek, isOnline },
+                            ]);
+                          }
                         }
                       }}
                     >

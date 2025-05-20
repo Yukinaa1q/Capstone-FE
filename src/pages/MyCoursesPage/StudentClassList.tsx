@@ -24,7 +24,11 @@ const StudentClassList = () => {
         <Link
           className="max-w-full cursor-pointer"
           key={index}
-          to={`/classroom/${course.classCode}`}
+          to={
+            course.status === "open" || course.status === "payment"
+              ? `/classroom/${course.classCode}`
+              : "#"
+          }
         >
           <ClassCard key={index} classInfo={course} />
         </Link>

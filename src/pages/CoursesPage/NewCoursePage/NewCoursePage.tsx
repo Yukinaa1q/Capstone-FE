@@ -24,9 +24,10 @@ const NewCoursePage = () => {
         JSON.stringify(data.courseDescription)
       );
       formdata.append("duration", data.duration.toString());
-      formdata.append("courseOutline", JSON.stringify(data.courseOutline));
+      formdata.append("courseOutline", data.courseOutline as Blob);
       formdata.append("courseImage", data.courseImage as Blob);
 
+      // console.log("Form data", formdata.get("courseSubject"));
       await TucourApi.call("course/create-course", {
         method: "POST",
         body: formdata,

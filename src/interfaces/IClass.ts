@@ -7,6 +7,7 @@ interface IClass {
   classCode: string;
   classId: string;
   classUrl: string;
+  status: string;
 }
 
 export type { IClass };

@@ -1,3 +1,4 @@
+import FinancialStatApi from "@/api/FinancialStatApi";
 import Selection from "@/components/Input/Selection";
 import {
   ChartConfig,
@@ -13,8 +14,7 @@ import subjectList from "@/interfaces/Subject";
 import ContentLayout from "@/layouts/ContentLayout";
 import SectionLayout from "@/layouts/SectionLayout";
 import { capitalizeFirstLetter } from "@/utils/utils";
-import { Monitor } from "lucide-react";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 
 const months = [
@@ -34,68 +34,23 @@ const months = [
 
 const FinStatPage = () => {
   const [yearlyChecked, setYearlyChecked] = React.useState(false);
-  const chartData = [
-    {
-      month: "January",
-      income: 25000000,
-      outcome: 15000000,
-    },
-    {
-      month: "February",
-      income: 30000000,
-      outcome: 20000000,
-    },
-    {
-      month: "March",
-      income: 35000000,
-      outcome: 25000000,
-    },
-    {
-      month: "April",
-      income: 40000000,
-      outcome: 30000000,
-    },
-    {
-      month: "May",
-      income: 45000000,
-      outcome: 35000000,
-    },
-    {
-      month: "June",
-      income: 50000000,
-      outcome: 40000000,
-    },
-    {
-      month: "July",
-      income: 55000000,
-      outcome: 45000000,
-    },
-    {
-      month: "August",
-      income: 60000000,
-      outcome: 50000000,
-    },
-    {
-      month: "September",
-      income: 65000000,
-      outcome: 55000000,
-    },
-    {
-      month: "October",
-      income: 70000000,
-      outcome: 60000000,
-    },
-    {
-      month: "November",
-      income: 75000000,
-      outcome: 65000000,
-    },
-    {
-      month: "December",
-      income: 80000000,
-      outcome: 70000000,
-    },
-  ];
+
+  const [chartData, setChartData] = React.useState<
+    { month: string; income: number; outcome: number }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const res = (await FinancialStatApi.getIncomeOutcomeOverYear()) as {
+        month: string;
+        income: number;
+        outcome: number;
+      }[];
+      // setChartData(res);
+      setChartData(res);
+    };
+    fetchData();
+  }, []);
 
   const chartConfig = {
     income: {
@@ -108,10 +63,20 @@ const FinStatPage = () => {
     },
   } satisfies ChartConfig;
 
-  const subjectIncomeData = subjectList.map((subject) => ({
-    subject,
-    income: Math.floor(Math.random() * 1000000),
-  }));
+  const [subjectIncomeData, setSubjectIncomeData] = useState<
+    { subject: string; income: number }[]
+  >([]);
+
+  useEffect(() => {
+    const fetchSubjectIncomeData = async () => {
+      const res = (await FinancialStatApi.getIncomePerSubject()) as {
+        subject: string;
+        income: number;
+      }[];
+      setSubjectIncomeData(res);
+    };
+    fetchSubjectIncomeData();
+  });
 
   const subjectChartConfig = {
     income: {
@@ -180,11 +145,7 @@ const FinStatPage = () => {
             <ChartTooltip content={<ChartTooltipContent hideLabel={true} />} />
             <ChartLegend content={<ChartLegendContent />} />
 
-            <Bar
-              dataKey="income"
-              fill="var(--color-income)"
-              radius={4}
-            />
+            <Bar dataKey="income" fill="var(--color-income)" radius={4} />
           </BarChart>
         </ChartContainer>
       </SectionLayout>

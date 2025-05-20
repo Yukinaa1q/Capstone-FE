@@ -2,13 +2,8 @@ import { Button, buttonVariants } from "@/components/ui/button";
 import { ReactNode, useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router";
 
+import ClassApi from "@/api/ClassApi";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useAppSelector } from "@/hooks/reduxHook";
@@ -16,10 +11,9 @@ import { IClassDetail } from "@/interfaces/ICourseDetail";
 import { cn } from "@/lib/utils";
 import toVND from "@/utils/currencyFormat";
 import TucourApi from "@/utils/http";
-import { shortName } from "@/utils/utils";
+import { formatDate, shortName } from "@/utils/utils";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 import { Edit, Trash2 } from "lucide-react";
-import { formatDate } from "@/utils/utils";
-import ClassApi from "@/api/ClassApi";
 
 const ClassDetail = () => {
   const params = useParams();
@@ -58,13 +52,13 @@ const ClassDetail = () => {
     <section className="text-white bg-fixed">
       <section
         className="p-10 flex justify-between"
-          style={{
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.courseImage}')`,
-            backgroundPosition: "center",
-            backgroundSize: "cover",
-            backgroundRepeat: "no-repeat",
-            // backgroundAttachment: "scroll, local",
-          }}
+        style={{
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('${course?.courseImage}')`,
+          backgroundPosition: "center",
+          backgroundSize: "cover",
+          backgroundRepeat: "no-repeat",
+          // backgroundAttachment: "scroll, local",
+        }}
       >
         <div>
           <h1 className="text-2xl font-semibold">{course?.courseTitle}</h1>
@@ -80,12 +74,10 @@ const ClassDetail = () => {
               {course?.studyStartDate} - {course?.studyEndDate}
             </div>
             <div>Tutor</div>
-            <p>
-              {course?.tutor}
-            </p>
+            <p>{course?.tutor}</p>
           </div>
         </div>
-        {user.role === "academic" && (
+        {user.role === "academic" && course?.status && (
           <div>
             <Link
               to={`/classes/${course?.classCode}/edit`}
@@ -138,26 +130,15 @@ const ClassDetail = () => {
               {!showFull ? "See More" : "See Less"}
             </Button>
           </CourseInfo>
-          <CourseInfo title="Course Outline">
-            <Accordion type="multiple">
-              {course?.courseOutline.map((outline, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="uppercase">
-                    {outline.sectionTitle}
-                  </AccordionTrigger>
-                  <AccordionContent className="space-y-4">
-                    {course?.courseOutline[index].subsections.map(
-                      (subsection, index) => (
-                        <div key={index} className="border rounded-md p-4">
-                          <h4>{subsection.subsectionTitle}</h4>
-                        </div>
-                      )
-                    )}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </CourseInfo>
+          {course?.courseOutline && (
+            <CourseInfo title="Course Outline">
+              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+                <div className="w-full h-[800px] mt-4">
+                  <Viewer fileUrl={course.courseOutline}></Viewer>
+                </div>
+              </Worker>
+            </CourseInfo>
+          )}
         </div>
         <div className="shrink-0 space-y-4">
           <div className="border rounded-lg h-fit p-4">

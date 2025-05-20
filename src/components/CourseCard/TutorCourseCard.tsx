@@ -19,22 +19,28 @@ const TutorCourseCard = ({ cardInfo }: { cardInfo: ICourseCard }) => {
         <img
           src={cardInfo.courseImage}
           alt="subject illustation"
-          className="aspect-video bg-slate-200 rounded-md object-cover"
+          className="bg-slate-200 rounded-md w-full h-40"
         />
-        <CardTitle className="flex justify-between items-center gap-4">
-          <p className="truncate">{cardInfo.courseTitle.toUpperCase()}</p>
-        </CardTitle>
-        <CardDescription className="flex justify-between text-xs">
-          <p>{cardInfo.courseCode}</p>
-        </CardDescription>
+        <div className="w-full overflow-hidden">
+          <CardTitle className="flex justify-between items-center gap-4 w-full overflow-hidden">
+            <p className="truncate">{cardInfo.courseTitle.toUpperCase()}</p>
+          </CardTitle>
+          <CardDescription className="flex justify-between text-sm">
+            <p>{cardInfo.courseCode}</p>
+          </CardDescription>
+        </div>
         <div>
           <div className="flex gap-2 items-center text-sm">
             <Book size={20} className="stroke-amber-500" />
-            <p className="text-amber-500">{capitalizeFirstLetter(cardInfo.courseSubject)}</p>
+            <p className="text-amber-500">
+              {capitalizeFirstLetter(cardInfo.courseSubject)}
+            </p>
           </div>
           <div className="flex gap-2 items-center text-sm">
             <SignalHigh size={20} className="stroke-blue-800" />
-            <p className="text-blue-700">{levelToString(cardInfo.courseLevel)}</p>
+            <p className="text-blue-700">
+              {levelToString(cardInfo.courseLevel)}
+            </p>
           </div>
         </div>
       </CardHeader>

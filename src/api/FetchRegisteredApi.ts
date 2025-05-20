@@ -15,6 +15,18 @@ export default class FetchRegisteredApi {
     }
   }
 
+  static async fetchPaymentClasses(): Promise<IClassCard[]> {
+    try {
+      const res = (await TucourApi.get(
+        "/student/filter-class-payment"
+      )) as IClassCard[];
+      console.log(res);
+      return res;
+    } catch {
+      throw new Error("Error fetching payment classes");
+    }
+  }
+
   static async deleteTutorRegistration(tutorId: string, courseId: string) {
     try {
       const res = await TucourApi.delete("/phase1_register/tutor/delete", {
@@ -45,7 +57,9 @@ export default class FetchRegisteredApi {
 
   static async getPaidAndDoneClassesFromStudent(): Promise<IClass[]> {
     try {
-      const res = (await TucourApi.get("/student/view-registered-classes-simple")) as IClass[];
+      const res = (await TucourApi.get(
+        "/student/view-registered-classes-simple"
+      )) as IClass[];
       return res;
     } catch {
       return [];
@@ -53,7 +67,9 @@ export default class FetchRegisteredApi {
   }
   static async getPaidAndDoneClassesFromTutor(): Promise<IClass[]> {
     try {
-      const res = (await TucourApi.get("/tutor/view-registered-classes-simple")) as IClass[];
+      const res = (await TucourApi.get(
+        "/tutor/view-registered-classes-simple"
+      )) as IClass[];
       return res;
     } catch {
       return [];

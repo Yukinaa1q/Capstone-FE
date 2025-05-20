@@ -87,18 +87,22 @@ export default class TutorApi {
     courseId: string,
     scheduleList: TutorRegistrationSchedule[]
   ) {
-    await TucourApi.post("/phase1_register/new-tutor-register-class", {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        courseId: courseId,
-        registrationList: scheduleList.map((schedule) => ({
-          ...schedule,
-          online: schedule.isOnline,
-        })),
-      }),
-    });
+    const failRequestList = await TucourApi.post(
+      "/phase1_register/new-class-request",
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          courseId: courseId,
+          registrationList: scheduleList.map((schedule) => ({
+            ...schedule,
+            online: schedule.isOnline,
+          })),
+        }),
+      }
+    );
+    return failRequestList;
   }
 
   public static async getClassHistory(

@@ -102,9 +102,17 @@ export default class StudentApi {
     }
   }
 
-  public static async payment() {
+
+  public static async payment(classIdList: string[]) {
     try {
-      await TucourApi.get("/student/class-payment");
+      await TucourApi.post("/student/class-payment", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          classPaid: classIdList,
+        }),
+      });
     } catch {
       console.log("error when doing payment");
     }

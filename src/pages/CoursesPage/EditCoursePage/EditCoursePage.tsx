@@ -31,7 +31,7 @@ const EditCoursePage = () => {
 
         const convertDataType: ICourseForm = {
           courseTitle: courseDetail.courseTitle,
-          courseCode: courseDetail.courseCode,
+          // courseCode: courseDetail.courseCode,
           courseSubject: courseDetail.courseSubject,
           courseLevel: courseDetail.courseLevel,
           coursePrice: courseDetail.coursePrice,
@@ -71,6 +71,9 @@ const EditCoursePage = () => {
       const imageFormData = new FormData();
       imageFormData.append("file", data.courseImage as Blob);
 
+      const outlineFormData = new FormData();
+      outlineFormData.append("file", data.courseOutline as Blob);
+
       const sendData = JSON.stringify({
         courseTitle: data.courseTitle,
         // courseCode: data.courseCode,
@@ -101,6 +104,16 @@ const EditCoursePage = () => {
           },
         });
       }
+
+      if (data.courseOutline && data.courseOutline.size > 0) {
+        await TucourApi.call("course/update-course-outline/" + courseId, {
+          method: "POST",
+          body: outlineFormData,
+          headers: {
+            Authorization: "Bearer " + window.localStorage.getItem("token"),
+          },
+        });
+      }
       setIsSubmitting(false);
       navigate("/courses");
     } catch (err) {
@@ -109,45 +122,50 @@ const EditCoursePage = () => {
   };
 
   return (
-    <section className="relative px-8 py-4">
+    <div className="relative overflow-hidden">
       {isSubmitting && (
-        <div className="absolute w-full h-full top-0 left-0 bg-gray-100/40">
+        <div className="absolute h-full bg-gray-300/50 z-50 w-full">
           <LoaderCircle
             size={80}
             className="animate-spin stroke-t_primary-700 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
           />
         </div>
       )}
-      <h1 className="text-center font-bold text-2xl">EDIT COURSE</h1>
-      {isLoading ? (
-        <div className="h-full mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2 space-y-4">
-          <Skeleton className="w-full h-8" />
-          <Skeleton className="w-full h-8" />
-          <Skeleton className="w-full h-8" />
-          <Skeleton className="w-full h-8" />
-          <Skeleton className="w-full h-8" />
-          <Skeleton className="w-full h-8" />
-          <Skeleton className="w-full h-32" />
-        </div>
-      ) : (
-        <CourseForm initialData={editCourse} onSubmit={onSubmit}>
-          <Button
-            type="submit"
-            className="bg-t_primary-400 hover:bg-t_primary-500"
-          >
-            Edit Course
-          </Button>
-          <Button
-            variant="destructive"
-            type="submit"
-            className="ml-4"
-            onClick={() => navigate("/courses")}
-          >
-            Cancel
-          </Button>
-        </CourseForm>
-      )}
-    </section>
+      <section
+        className="px-8 py-4 overflow-y-scroll"
+        style={{ height: "calc(100vh - 3.35rem)" }}
+      >
+        <h1 className="text-center font-bold text-2xl">EDIT COURSE</h1>
+        {isLoading ? (
+          <div className="h-full mx-auto md:w-3/5 ld:w-3/4 xl:w-1/2 space-y-4">
+            <Skeleton className="w-full h-8" />
+            <Skeleton className="w-full h-8" />
+            <Skeleton className="w-full h-8" />
+            <Skeleton className="w-full h-8" />
+            <Skeleton className="w-full h-8" />
+            <Skeleton className="w-full h-8" />
+            <Skeleton className="w-full h-32" />
+          </div>
+        ) : (
+          <CourseForm initialData={editCourse} onSubmit={onSubmit}>
+            <Button
+              type="submit"
+              className="bg-t_primary-400 hover:bg-t_primary-500"
+            >
+              Edit Course
+            </Button>
+            <Button
+              variant="destructive"
+              type="submit"
+              className="ml-4"
+              onClick={() => navigate("/courses")}
+            >
+              Cancel
+            </Button>
+          </CourseForm>
+        )}
+      </section>
+    </div>
   );
 };
 

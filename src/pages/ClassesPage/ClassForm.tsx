@@ -92,13 +92,20 @@ const ClassForm = ({
     studyShift: StudyShift
   ) => {
     // API to get all available tutor.
-    const tutorListApi = (await TucourApi.call("/tutor/all-tutor", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    })) as {
+    const tutorListApi = (await TucourApi.call(
+      "/class/check-tutor-availability",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+        body: JSON.stringify({
+          studyWeek,
+          studyShift,
+        }),
+      }
+    )) as {
       tutorCode: string;
       name: string;
       avatarUrl: string;

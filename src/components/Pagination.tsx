@@ -50,6 +50,8 @@ const MyPagination = ({
 }: PaginationProps) => {
   const MAX_PAGE = Math.ceil(total / size);
   const [currentPage, setCurrentPage] = useState(1);
+  console.log("Total: ", total, "Size: ", size);
+  console.log("currentPage: ", currentPage);
   return (
     <PaginationCtx.Provider
       value={{ currentPage, setCurrentPage, MAX_PAGE, onPageChange }}
@@ -63,7 +65,7 @@ export const PaginationNav = ({ className }: { className?: string }) => {
   const ctx = useContext(PaginationCtx);
   const startPage =
     ctx.currentPage - 2 > 0
-      ? ctx.currentPage + 1 >= ctx.MAX_PAGE
+      ? ctx.currentPage + 1 >= ctx.MAX_PAGE && ctx.currentPage > 4
         ? ctx.MAX_PAGE - 4
         : ctx.currentPage - 2
       : 1;
@@ -116,6 +118,7 @@ export const PaginationNav = ({ className }: { className?: string }) => {
             </PaginationLink>
           </PaginationItem>
         ))}
+        {/* Right Jump Navigation */}
         <PaginationItem>
           <Button
             variant={"ghost"}

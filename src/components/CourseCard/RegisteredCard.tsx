@@ -35,12 +35,14 @@ const RegisteredCard = ({ cardInfo }: { cardInfo: IClassCard }) => {
           alt="subject illustation"
           className="aspect-video bg-slate-200 rounded-md object-cover"
         />
-        <CardTitle className="flex justify-between items-center gap-4">
-          <p className="truncate">{cardInfo.courseTitle.toUpperCase()}</p>
-        </CardTitle>
-        <CardDescription className="flex justify-between text-xs">
-          <p>{cardInfo.courseCode}</p>
-        </CardDescription>
+        <div className="w-full overflow-hidden">
+          <CardTitle className="flex justify-between items-center gap-4">
+            <p className="truncate">{cardInfo.courseTitle.toUpperCase()}</p>
+          </CardTitle>
+          <CardDescription className="flex justify-between text-sm">
+            <p>{cardInfo.courseCode}</p>
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent className="w-full space-y-2">
         <div className="flex gap-2 items-center text-sm">

@@ -1,4 +1,5 @@
 import INewStaffAccount from "@/interfaces/IStaffCRUD";
+import { IClassRequest } from "@/pages/ClassesPage/RequestClasses";
 import TucourApi from "@/utils/http";
 
 export default class StaffApi {
@@ -45,7 +46,7 @@ export default class StaffApi {
     staffPhone: string;
     staffEmail: string;
   }> {
-    const res = await TucourApi.get("/staff/all-staff-table") as {
+    const res = (await TucourApi.get("/staff/all-staff-table")) as {
       staffName: string;
       staffId: string;
       staffCode: string;
@@ -65,11 +66,35 @@ export default class StaffApi {
     }
   }
 
-  public static async openClass() {
-    alert("open class");
+  public static async openClass(maxStudents: number, request: IClassRequest) {
+    await TucourApi.post(
+      "/phase1_register/new-academic-create-class/true/" + request.requestId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ ...request, maxStudents }),
+      }
+    );
   }
 
-  public static async rejectClass(requestId: string, reason: string) {
-    alert("reject class");
+  public static async rejectClass(request: IClassRequest, reason: string) {
+    const result = await TucourApi.post(
+      "/phase1_register/new-academic-create-class/false/" + request.requestId,
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ reason }),
+      }
+    );
+    console.log(result);
+  }
+
+  public static async getClassRequest(): Promise<IClassRequest[]> {
+    const res = (await TucourApi.get(
+      "/phase1_register/class-request"
+    )) as IClassRequest[];
+    return res;
   }
 }

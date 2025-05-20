@@ -11,7 +11,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import { CalendarRange, Check, Clock, Globe, X } from "lucide-react";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect } from "react";
 import {
   Dialog,
   DialogContent,
@@ -24,8 +24,9 @@ import {
 import { Input } from "@/components/ui/input";
 import StaffApi from "@/api/StaffApi";
 import { Textarea } from "@/components/ui/textarea";
+import { useNavigate } from "react-router";
 
-interface IClassRequest {
+export interface IClassRequest {
   tutor: string;
   tutorId: string;
   tutorCode: string;
@@ -37,6 +38,7 @@ interface IClassRequest {
   studyWeek: StudyWeek;
   studyShift: StudyShift;
   isOnline: boolean;
+  requestId: string;
 }
 
 const columnHelper = createColumnHelper<IClassRequest>();
@@ -104,7 +106,7 @@ const defaultColumns = [
               <Check className="stroke-green-500" />
             </Button>
           </RequestConfirmationPopover>
-          <RequestRejectionPopover>
+          <RequestRejectionPopover request={props.row.original}>
             <Button size="icon" variant={"ghost"} className="hover:bg-red-200">
               <X className="stroke-red-500" />
             </Button>
@@ -116,21 +118,16 @@ const defaultColumns = [
 ] as ColumnDef<IClassRequest, unknown>[];
 
 const RequestClasses = () => {
-  const [data, setData] = React.useState<IClassRequest[]>([
-    {
-      tutor: "John Doe",
-      tutorId: "12345",
-      tutorCode: "TUT001",
-      courseTitle: "Introduction to Programming",
-      courseCode: "CS1221",
-      courseLevel: "1",
-      courseId: "C001",
-      courseSubject: "Computer Science",
-      studyWeek: "3-5",
-      studyShift: "17h45 - 19h15",
-      isOnline: true,
-    },
-  ]);
+  const [data, setData] = React.useState<IClassRequest[]>([]);
+
+  useEffect(() => {
+    const fetchRequestClasses = async () => {
+      const requestClasses = await StaffApi.getClassRequest();
+      console.log("Request Classes: ", requestClasses);
+      setData(requestClasses);
+    };
+    fetchRequestClasses();
+  }, []);
 
   const table = useReactTable({
     columns: defaultColumns,
@@ -152,10 +149,12 @@ const RequestConfirmationPopover = ({
   children: React.ReactNode;
   request: IClassRequest;
 }) => {
+  const navigate = useNavigate();
   const [maxStudents, setMaxStudents] = React.useState<number>(0);
 
   const handleOpenClass = async () => {
-    StaffApi.openClass();
+    await StaffApi.openClass(maxStudents, request);
+    navigate(0);
   };
 
   return (
@@ -228,10 +227,18 @@ const RequestConfirmationPopover = ({
   );
 };
 
-const RequestRejectionPopover = ({ children }: { children: ReactNode }) => {
+const RequestRejectionPopover = ({
+  children,
+  request,
+}: {
+  children: ReactNode;
+  request: IClassRequest;
+}) => {
+  const navigate = useNavigate();
   const [reason, setReason] = React.useState<string>("");
   const handleRejectRequest = async () => {
-    await StaffApi.rejectClass("12", "jkj jkj")
+    await StaffApi.rejectClass(request, reason);
+    navigate(0);
   };
   return (
     <Dialog>

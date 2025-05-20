@@ -16,12 +16,12 @@ interface ClassCardProps {
 const ClassCard = ({ classInfo }: ClassCardProps) => {
   console.log("ClassCard", classInfo);
   return (
-    <Card className="p-2 md:p-1">
+    <Card className="">
       <CardHeader>
         <img
           src={classInfo.courseImg}
           alt=""
-          className="aspect-video bg-slate-200 rounded-sm"
+          className="w-full bg-slate-200 rounded-sm aspect-video object-cover"
         />
         <CardTitle className="mt-2">{classInfo.courseName}</CardTitle>
         <CardDescription>{classInfo.courseCode}</CardDescription>

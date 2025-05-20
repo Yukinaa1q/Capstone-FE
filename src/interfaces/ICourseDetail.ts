@@ -1,4 +1,3 @@
-import { CourseOutline } from "@/components/Input/CourseOutlineInput";
 import { Descendant } from "slate";
 
 export interface ICourseDetail {
@@ -6,7 +5,7 @@ export interface ICourseDetail {
   courseCode: string;
   learningDuration: number;
   courseDescription: Descendant[];
-  courseOutline: CourseOutline[];
+  courseOutline: string;
   coursePrice: number;
   participantNumber: number;
   courseId: string;
@@ -25,7 +24,7 @@ export interface IClassDetail {
   tutorId: string;
   courseImage: string;
   courseDescription: Descendant[];
-  courseOutline: CourseOutline[];
+  courseOutline: string;
   coursePrice: number;
   classSession: string;
   classShift: string;
@@ -35,6 +34,7 @@ export interface IClassDetail {
   classStudents: number;
   classMaxStudents: number;
   studentList: StudentBrief[];
+  status: string;
 }
 
 export interface StudentBrief {

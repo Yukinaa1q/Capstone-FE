@@ -18,6 +18,7 @@ import TucourApi, { StatusError } from "@/utils/http";
 import HTMLConverter from "@/components/TextEditor/HTMLConverter";
 import { useAppSelector } from "@/hooks/reduxHook";
 import { capitalizeFirstLetter, levelToString } from "@/utils/utils";
+import { Viewer, Worker } from "@react-pdf-viewer/core";
 
 interface ICourseDetail {
   courseTitle: string;
@@ -26,7 +27,7 @@ interface ICourseDetail {
   courseSubject: string;
   courseLevel: string;
   courseDescription: Descendant[];
-  courseOutline: CourseOutline[];
+  courseOutline: string;
   coursePrice: number;
   participantNumber: number;
   courseId: string;
@@ -66,6 +67,7 @@ const CourseDetail = () => {
           courseLevel: res.courseLevel,
           courseSubject: res.courseSubject,
         });
+        console.log("Course", res);
       } catch (error) {
         console.log(error);
       }
@@ -74,7 +76,10 @@ const CourseDetail = () => {
   }, []);
 
   return (
-    <section className="text-white relative" style={{ height: "calc(100vh - 3.35rem)" }}>
+    <section
+      className="text-white relative"
+      style={{ height: "calc(100vh - 3.35rem)" }}
+    >
       {loadingDelete && (
         <div className="absolute bg-gray-300/50 left-0 right-0 h-full z-50">
           <LoaderCircle
@@ -180,26 +185,15 @@ const CourseDetail = () => {
               {!showFull ? "See More" : "See Less"}
             </Button>
           </CourseInfo>
-          <CourseInfo title="Course Outline">
-            <Accordion type="multiple">
-              {course?.courseOutline.map((outline, index) => (
-                <AccordionItem key={index} value={`item-${index}`}>
-                  <AccordionTrigger className="uppercase">
-                    {outline.sectionTitle}
-                  </AccordionTrigger>
-                  <AccordionContent className="space-y-4">
-                    {course?.courseOutline[index].subsections.map(
-                      (subsection, index) => (
-                        <div key={index} className="border rounded-md p-4">
-                          <h4>{subsection.subsectionTitle}</h4>
-                        </div>
-                      )
-                    )}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </CourseInfo>
+          {course?.courseOutline && (
+            <CourseInfo title="Course Outline">
+              <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
+                <div className="w-full h-[800px] mt-4">
+                  <Viewer fileUrl={course.courseOutline}></Viewer>
+                </div>
+              </Worker>
+            </CourseInfo>
+          )}
         </div>
         <div className="border rounded-lg h-fit p-4 w-48 shrink-0">
           <h3 className="text-sm">Price</h3>

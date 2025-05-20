@@ -34,8 +34,6 @@ export default class FetchUnregisteredAPI {
           totalPages: number;
         };
       };
-      console.log("course list: ", res);
-
       return res;
     } catch {
       return {

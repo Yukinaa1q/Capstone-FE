@@ -222,7 +222,7 @@ const CourseForm = ({
         />
         <FormField
           name="courseOutline"
-          render={() => (
+          render={({ field }) => (
             <RequiredInput label="Course Outline">
               {/* <CourseOutlineInput
                 key={field.value}
@@ -232,9 +232,12 @@ const CourseForm = ({
                 }
               /> */}
               <Input
-                type="file" 
+                type="file"
                 accept="application/pdf"
-                onChange={handleFileChange}
+                onChange={(e) => {
+                  handleFileChange(e);
+                  field.onChange(e.target.files?.[0]);
+                }}
               />
             </RequiredInput>
           )}

@@ -18,6 +18,7 @@ const TutorViewAvailableCourse = () => {
       searchKey,
       pageOffSet
     );
+    console.log("Pagination Courses: ", courses);
     setCourseList(courses.data);
     setTotalProducts(courses.meta.totalItems);
   };

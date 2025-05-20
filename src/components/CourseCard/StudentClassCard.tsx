@@ -25,9 +25,8 @@ const StudentClassCard = ({ courseContent }: CourseCardProps) => {
   const onRegisterClass = async () => {
     try {
       await StudentApi.registerClass(courseContent.classId);
-      navigate(0)
-    }
-    catch {
+      navigate(0);
+    } catch {
       console.log("Register class failed");
     }
   };
@@ -40,12 +39,16 @@ const StudentClassCard = ({ courseContent }: CourseCardProps) => {
           alt="subject illustation"
           className="aspect-video bg-slate-200 rounded-md object-cover"
         />
-        <CardTitle className="flex justify-between items-center gap-4">
-          <p className="truncate">{courseContent.courseTitle.toUpperCase()}</p>
-        </CardTitle>
-        <CardDescription className="flex justify-between text-xs">
-          <p>{courseContent.courseCode}</p>
-        </CardDescription>
+        <div className="w-full overflow-hidden">
+          <CardTitle className="flex justify-between items-center gap-4">
+            <p className="truncate">
+              {courseContent.courseTitle.toUpperCase()}
+            </p>
+          </CardTitle>
+          <CardDescription className="flex justify-between text-xs">
+            <p>{courseContent.courseCode}</p>
+          </CardDescription>
+        </div>
       </CardHeader>
       <CardContent className="w-full space-y-1">
         <div className="flex gap-2 items-center text-sm">
