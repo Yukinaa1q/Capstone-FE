@@ -37,7 +37,7 @@ const EditCoursePage = () => {
           coursePrice: courseDetail.coursePrice,
           duration: courseDetail.duration,
           courseDescription: JSON.parse(courseDetail.courseDescription),
-          courseOutline: courseDetail.courseOutline as File,
+          // courseOutline: courseDetail.courseOutline,
           courseImage: new File([], "courseImage"),
           imgUrl: courseDetail.courseImage,
         };
@@ -57,7 +57,7 @@ const EditCoursePage = () => {
     console.log("Edit Data: ", data);
     try {
       const formdata = new FormData();
-      // formdata.append("courseCode", data.courseCode);
+
       formdata.append("courseTitle", data.courseTitle);
       formdata.append("courseSubject", data.courseSubject);
       formdata.append("courseLevel", data.courseLevel);
@@ -67,22 +67,14 @@ const EditCoursePage = () => {
         "courseDescription",
         JSON.stringify(data.courseDescription)
       );
-      formdata.append("courseOutline", JSON.stringify(data.courseOutline));
-      const imageFormData = new FormData();
-      imageFormData.append("file", data.courseImage as Blob);
-
-      const outlineFormData = new FormData();
-      outlineFormData.append("file", data.courseOutline as Blob);
 
       const sendData = JSON.stringify({
         courseTitle: data.courseTitle,
-        // courseCode: data.courseCode,
         courseSubject: data.courseSubject,
         courseLevel: data.courseLevel,
         coursePrice: data.coursePrice,
         duration: data.duration,
         courseDescription: JSON.stringify(data.courseDescription),
-        courseOutline: data.courseOutline,
       });
       // Update textual data
       await TucourApi.call("course/update-course/" + courseId, {
@@ -95,6 +87,8 @@ const EditCoursePage = () => {
       });
 
       if (data.courseImage && data.courseImage.size > 0) {
+        const imageFormData = new FormData();
+        imageFormData.append("file", data.courseImage as Blob);
         // Update image file only if the size is greater than 0
         await TucourApi.call("course/update-course-image/" + courseId, {
           method: "POST",
@@ -106,6 +100,8 @@ const EditCoursePage = () => {
       }
 
       if (data.courseOutline && data.courseOutline.size > 0) {
+        const outlineFormData = new FormData();
+        outlineFormData.append("file", data.courseOutline as Blob);
         await TucourApi.call("course/update-course-outline/" + courseId, {
           method: "POST",
           body: outlineFormData,

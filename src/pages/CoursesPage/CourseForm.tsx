@@ -30,7 +30,7 @@ export interface ICourseForm {
   coursePrice: number;
   duration: number;
   courseDescription: Descendant[];
-  courseOutline: File;
+  courseOutline?: File;
   courseImage?: File;
   imgUrl?: string;
 }
@@ -50,7 +50,7 @@ const courseFormSchema: yup.ObjectSchema<ICourseForm> = yup
     courseDescription: yup
       .array<Descendant>()
       .default([{ type: "p", children: [{ text: "" }] }]),
-    courseOutline: yup.mixed<File>().required(),
+    courseOutline: yup.mixed<File>(),
     imgUrl: yup.string().optional(),
   })
   .required();

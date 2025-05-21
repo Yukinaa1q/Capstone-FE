@@ -5,6 +5,7 @@ import { jwtDecoder } from "@/utils/utils";
 import { Navigate, Outlet } from "react-router";
 import { Toaster } from "@/components/ui/sonner";
 import { useEffect } from "react";
+import { setHasNewMessage } from "@/store/notiSlice";
 
 const RootLayout = () => {
   const user = useAppSelector((state) => state.auths);
@@ -14,9 +15,16 @@ const RootLayout = () => {
   useEffect(() => {
     const sse = new EventSource(`http://localhost:8000/noti/sse`);
     sse.onmessage = (event) => {
-      console.log("New message every one second", JSON.parse(event.data));
+      // console.log("New message every one second", JSON.parse(event.data));
+      const serverMessage = JSON.parse(event.data);
+      // console.log("Server message", serverMessage);
+      if (serverMessage && serverMessage.receiverId === user.userId) {
+        console.log("This SSE is for you");
+        dispatch(setHasNewMessage({ hasNewMessage: true }));
+      } 
     };
-  }, []);
+  }, [user.userId, dispatch]);
+
   if (!token) {
     return <Navigate to="/login" replace={true} />;
   } else {

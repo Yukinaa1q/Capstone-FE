@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./authenSlice";
 import phaseReducer from "./phaseSlice";
+import notificationReducer from "./notiSlice";
 
 const store = configureStore({
   reducer: {
     auths: authReducer,
     phases: phaseReducer,
+    notifications: notificationReducer,
   },
 });
 

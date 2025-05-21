@@ -2,14 +2,16 @@
 
 "use client";
 
+import { NotificationApi } from "@/api/NotificationApi";
 import { Button } from "@/components/ui/button";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useAppSelector } from "@/hooks/reduxHook";
 import { Bell } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const initialNotifications = [
   {
@@ -79,10 +81,23 @@ function Dot({ className }: { className?: string }) {
 }
 
 export default function Notification() {
-  const [notifications, setNotifications] = useState(initialNotifications);
-  const unreadCount = notifications.filter((n) => n.unread).length;
+  const userId = useAppSelector((state) => state.auths.userId);
+  const hasNewMessage = useAppSelector(
+    (state) => state.notifications.hasNewMessage
+  );
+  const [notifications, setNotifications] = useState<
+    {
+      receiverId: string;
+      message: string;
+      isRead: boolean;
+      notificationId: string;
+    }[]
+  >([]);
 
-  const handleMarkAllAsRead = () => {
+  const unreadCount = notifications.filter((n) => !n.isRead).length;
+
+  const handleMarkAllAsRead = async () => {
+    await NotificationApi.markAllAsRead(userId);
     setNotifications(
       notifications.map((notification) => ({
         ...notification,
@@ -91,14 +106,31 @@ export default function Notification() {
     );
   };
 
-  const handleNotificationClick = (id: number) => {
+  const handleNotificationClick = async (
+    userId: string,
+    notificationId: string
+  ) => {
+    console.log("You clicked");
+    await NotificationApi.markAsRead(userId, notificationId);
     setNotifications(
-      notifications.map((notification) =>
-        notification.id === id
-          ? { ...notification, unread: false }
-          : notification
-      )
+      notifications.map((notification) => {
+        return notification.notificationId === notificationId
+          ? { ...notification, isRead: true }
+          : notification;
+      })
     );
+  };
+
+  const getNotifications = async () => {
+    const res = (await NotificationApi.getUserNotifications(userId)) as {
+      receiverId: string;
+      message: string;
+      isRead: boolean;
+      notificationId: string;
+    }[];
+
+    console.log("Notification", res);
+    setNotifications(res);
   };
 
   return (
@@ -109,6 +141,7 @@ export default function Notification() {
           variant="ghost"
           className="relative"
           aria-label="Open notifications"
+          onClick={getNotifications}
         >
           <Bell
             size={24}
@@ -116,15 +149,11 @@ export default function Notification() {
             aria-hidden="true"
             style={{ width: "24px", height: "24px" }}
           />
-          {unreadCount > 0 && (
+          {hasNewMessage && (
             <>
               <span className="animate-ping size-2 bg-blue-500 rounded-full absolute top-1 right-1"></span>
               <span className="size-2 bg-blue-500 rounded-full absolute top-1 right-1"></span>
             </>
-            // <Badge className="absolute -top-2 left-full -translate-x-1/2 text-sx p-1 text-white text-center size-6 rounded-full">
-
-            //   {/* <p className="mx-auto">{unreadCount > 99 ? "99+" : unreadCount}</p> */}
-            // </Badge>
           )}
         </Button>
       </PopoverTrigger>
@@ -147,29 +176,32 @@ export default function Notification() {
         ></div>
         {notifications.map((notification) => (
           <div
-            key={notification.id}
+            key={notification.notificationId}
             className="rounded-md px-3 py-2 text-sm transition-colors hover:bg-accent"
           >
             <div className="relative flex items-start pe-3">
               <div className="flex-1 space-y-1">
                 <button
                   className="text-left text-foreground/80 after:absolute after:inset-0"
-                  onClick={() => handleNotificationClick(notification.id)}
+                  onClick={() =>
+                    handleNotificationClick(userId, notification.notificationId)
+                  }
                 >
                   <span className="font-medium text-foreground hover:underline">
-                    {notification.user}
+                    {/* {notification.user} */}
+                    New Message:
                   </span>{" "}
-                  {notification.action}{" "}
-                  <span className="font-medium text-foreground hover:underline">
+                  {notification.message}
+                  {/* <span className="font-medium text-foreground hover:underline">
                     {notification.target}
-                  </span>
+                  </span> */}
                   .
                 </button>
-                <div className="text-xs text-muted-foreground">
+                {/* <div className="text-xs text-muted-foreground">
                   {notification.timestamp}
-                </div>
+                </div> */}
               </div>
-              {notification.unread && (
+              {!notification.isRead && (
                 <div className="absolute end-0 self-center">
                   <span className="sr-only">Unread</span>
                   <Dot />

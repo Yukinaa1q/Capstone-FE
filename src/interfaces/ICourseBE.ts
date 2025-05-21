@@ -4,7 +4,7 @@ export default interface ICourseBE {
   courseId: string;
   courseImage: string;
   courseLevel: string;
-  courseOutline: File | string;
+  courseOutline: string;
   duration: number;
   coursePrice: number;
   courseSubject: string;
